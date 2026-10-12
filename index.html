@@ -282,8 +282,8 @@ dialog.lb::backdrop{background:rgba(5,8,15,.82)}
   <main>
   <!-- 1 -->
   <section>
-    <h1>A class is the mold. An object is what comes out of it.</h1>
-    <p class="lede">Say "dog" and everyone pictures something with four legs that barks. That shared idea is a <b>class</b>: abstract, nobody can pet it. Rex the Dalmatian asleep on your sofa is an <b>object</b>: real, specific, with his own name and age. Build a few.</p>
+    <h1>A class is the plan. An object is the real thing made from it.</h1>
+    <p class="lede">When you hear the word "dog", you think of an animal with four legs that barks. That general idea is a <b>class</b>. It is not a real dog, so you cannot touch it. Rex, the Dalmatian sleeping on your sofa, is an <b>object</b>. He is a real dog, with his own name and age. Try making a few objects below.</p>
     <div class="refs" data-slides="5,6,7,9,10,11"></div>
 
     <div class="tabs" role="tablist" id="ftabs"></div>
@@ -292,7 +292,7 @@ dialog.lb::backdrop{background:rgba(5,8,15,.82)}
         <div class="klass"><pre id="kcode"></pre></div>
         <div id="finputs"></div>
         <div class="row" style="margin-top:14px"><button class="btn" id="fcreate">Create object</button><button class="btn ghost" id="fclear">Clear all</button></div>
-        <p class="hint">Dashed outline means class (a definition). Solid yellow means object (a real thing in memory).</p>
+        <p class="hint">A dashed border means a class (a plan). A solid yellow box means an object (a real thing in memory).</p>
       </div>
       <div>
         <div id="objs" class="objs"></div>
@@ -300,43 +300,43 @@ dialog.lb::backdrop{background:rgba(5,8,15,.82)}
       </div>
     </div>
 
-    <h3>Two terms the lecture separates</h3>
-    <p><b>Object orientation</b> is a way of thinking about and designing a solution: look at a problem and see the "things" in it. <b>Object-oriented programming</b> is the coding style that follows from it: a program built from objects, where each object holds data (called fields or attributes) and code (called methods). Not every language supports this. C, for example, doesn't have classes.</p>
+    <h3>Two terms that mean different things</h3>
+    <p><b>Object orientation</b> is a way of thinking. You look at a problem and find the "things" in it. <b>Object-oriented programming</b> is a way of writing code based on that idea. The program is made of objects. Each object has data (called fields or attributes) and code (called methods). Not every language can do this. For example, C has no classes.</p>
 
-    <h3>What you just did, in the lecture's words</h3>
+    <h3>What you just did, in the words of the lecture</h3>
     <ul class="rules">
-      <li><b>Everything is an object.</b> Dogs, cars, hotel rooms, bank accounts.</li>
-      <li><b>Every object has a type, its class.</b> The type of <code>dog1</code> is <code>Dog</code>.</li>
-      <li><b>The class defines characteristics and operations.</b> <code>Dog</code> lists name, breed, age, and the operations <code>bark()</code> and <code>birthday()</code>.</li>
-      <li><b>Every object holds its own exact values.</b> Rex is a Dalmatian, Bella is a Yorkshire Terrier. Same class, different values.</li>
-      <li><b>A program is objects telling each other what to do by sending messages.</b> Each method button sends a message, like <code>dog1.bark()</code>.</li>
-      <li><b>Each object has its own memory, and can be made of other objects.</b> Call <code>birthday()</code> on one dog and only that dog gets older. A Car could contain an Engine object.</li>
+      <li><b>Everything is an object.</b> Dogs, cars, hotel rooms and bank accounts are all objects.</li>
+      <li><b>Every object has a type, and that type is its class.</b> The type of <code>dog1</code> is <code>Dog</code>.</li>
+      <li><b>The class lists the characteristics and operations.</b> Characteristics are the data, like name, breed and age. Operations are the actions, like <code>bark()</code> and <code>birthday()</code>.</li>
+      <li><b>Every object has its own values.</b> Rex is a Dalmatian. Bella is a Yorkshire Terrier. They have the same class, but different values.</li>
+      <li><b>A program is a group of objects that send messages to each other.</b> A message asks an object to do something. Each button on an object card sends a message, like <code>dog1.bark()</code>.</li>
+      <li><b>Each object has its own memory, and it can be made of other objects.</b> If you call <code>birthday()</code> on one dog, only that dog gets older. A Car object can have an Engine object inside it.</li>
     </ul>
 
-    <h3>Anything can be modeled as an object</h3>
-    <p>Any system (legal, educational, economic, a computer system) is made of objects. The lecture's categories, each with a class you might write for it:</p>
+    <h3>Anything can be an object</h3>
+    <p>Every system is made of objects: a legal system, a school system, an economic system, or a computer system. Here are the groups from the lecture, with an example class for each:</p>
     <div class="cats" id="cats"></div>
     <div class="pager"></div>
   </section>
 
   <!-- 2 -->
   <section hidden>
-    <h2>Classes stack from general to specific</h2>
-    <p class="lede">The lecture's Vehicle diagram. Each level down adds detail, and everything a parent has, its children get automatically. Tap a class.</p>
+    <h2>Classes go from general to specific</h2>
+    <p class="lede">This is the Vehicle diagram from the lecture. Each level down adds more detail. A child class gets everything its parent has, automatically. Tap a class to see it.</p>
     <div class="refs" data-slides="6,8"></div>
     <div class="treewrap">
       <div class="tree"><svg id="tree" viewBox="0 0 600 300" role="group" aria-label="Vehicle class hierarchy"></svg></div>
       <div class="tpanel" id="tpanel" aria-live="polite"></div>
     </div>
-    <p style="margin-top:18px">Reading up the tree is <b>generalization</b>: Sedan and Hatchback share enough that you invent "Car" for what they have in common. Reading down is <b>specialization</b>: start broad, add detail. The slide writes "from generalization to specification"; it means specialization.</p>
-    <div class="callout"><p><b>Analogy:</b> job titles. "Employee" is general. "Engineer" is an Employee plus technical skills. "AI Engineer" is an Engineer plus ML. Each title carries everything above it. And you never meet "an Employee" in the abstract; you meet Sara, who happens to be one. Sara is the object.</p></div>
+    <p style="margin-top:18px">Going up the tree is called <b>generalization</b>. Sedan and Hatchback have a lot in common, so you make a new class, "Car", for the shared parts. Going down the tree is called <b>specialization</b>. You start general and add details. The slide says "from generalization to specification", but it means specialization.</p>
+    <div class="callout"><p><b>Real-life example:</b> job titles. "Employee" is general. An "Engineer" is an Employee with technical skills. An "AI Engineer" is an Engineer who also knows machine learning. Each title includes everything above it. But you never meet just "an Employee". You meet Sara, and Sara is an employee. Sara is the object.</p></div>
     <div class="pager"></div>
   </section>
 
   <!-- 3 -->
   <section hidden>
-    <h2>How programming got to objects</h2>
-    <p class="lede">Five stages, each fixing the previous one's biggest pain. To make the differences visible, every stage solves the same job: keep track of two bank accounts.</p>
+    <h2>How programming led to objects</h2>
+    <p class="lede">There are five stages. Each stage fixes the biggest problem of the stage before it. To make the differences easy to see, every stage does the same job: it keeps track of two bank accounts.</p>
     <div class="steps" role="tablist" id="steps"></div>
     <div id="stage"></div>
     <div class="pager"></div>
@@ -344,13 +344,13 @@ dialog.lb::backdrop{background:rgba(5,8,15,.82)}
 
   <!-- 4 -->
   <section hidden>
-    <h2>Abstract data types: the direct ancestor of classes</h2>
-    <p class="lede">An ADT is a new type you design yourself: a set of values plus the operations allowed on them, defined by <i>what they do</i>, not by how they're coded.</p>
+    <h2>Abstract data types: where classes came from</h2>
+    <p class="lede">An ADT (abstract data type) is a new type that you design yourself. It has a set of values and the operations you are allowed to use on them. It is described by <i>what it does</i>, not by how it is coded.</p>
     <div class="refs" data-slides="17,18,19,20,21"></div>
-    <div class="callout"><p><b>Analogy:</b> a vending machine. You know its operations: insert coin, choose item, get change. You know nothing about its wiring, and you don't need to. Any machine offering those same operations is "the same type" to you, whatever is inside.</p></div>
+    <div class="callout"><p><b>Real-life example:</b> a vending machine (a snack machine). You know what it can do: take a coin, let you choose an item, and give you change. You do not know how it works inside, and you do not need to. Any machine that does these same things is "the same type" for you, even if the inside is different.</p></div>
 
-    <h3>1. Abstraction: keep only what the purpose needs</h3>
-    <p>Abstraction means reducing a real thing to the information relevant for <i>a particular purpose</i>. A real person has thousands of details. Which ones belong in your system? Strike out what doesn't matter, then check. Then switch the purpose and try again: the same person gives a different model.</p>
+    <h3>1. Abstraction: keep only what you need</h3>
+    <p>Abstraction means keeping only the information you need for <i>one purpose</i>. A real person has thousands of details. Which ones does your system need? Tap the details that do not matter to remove them, then press "Check my model". Then change the purpose and try again. The same person gives a different model.</p>
     <div class="tabs" id="ctx"></div>
     <div class="gamegrid">
       <div>
@@ -359,22 +359,22 @@ dialog.lb::backdrop{background:rgba(5,8,15,.82)}
         <div class="result" id="result" aria-live="polite"></div>
       </div>
       <div>
-        <h4>2. The model you're building</h4>
+        <h4>2. The model you are building</h4>
         <div class="klass"><pre id="model"></pre></div>
-        <p class="hint">A model is the abstract view of the problem: the data that matters plus the operations on it. An ADT is a kind of model.</p>
+        <p class="hint">A model is a simple view of the problem: the data that matters and the operations on it. An ADT is one kind of model.</p>
       </div>
     </div>
 
     <h3>3. The three properties of an ADT</h3>
     <ol class="props">
-      <li><b>It's a well-defined entity</b> you can handle as one unit: "a BankClient", not loose variables floating around.</li>
-      <li><b>It defines the data structure</b> of its items: name, date of birth, ID, account number.</li>
-      <li><b>That data can only be accessed through defined operations:</b> createAccount, deposit, withdraw. No reaching in.</li>
+      <li><b>It is a well-defined entity.</b> This means it is one clear thing that you can use as a single unit, like "a BankClient", not many loose variables.</li>
+      <li><b>It defines the data structure of its items.</b> This means it lists the data that each item has: name, date of birth, ID, account number.</li>
+      <li><b>Its data can be used only through its defined operations:</b> createAccount, deposit, withdraw. You cannot change the data directly.</li>
     </ol>
-    <p>Anything with all three is an abstract data type.</p>
+    <p>If something has all three, it is an abstract data type.</p>
 
-    <h3>4. Encapsulation: data and operations sealed in one capsule</h3>
-    <p>Encapsulation bundles the data and its operations together and keeps the details away from whoever uses the ADT. Try breaking each account.</p>
+    <h3>4. Encapsulation: data and operations together in one capsule</h3>
+    <p>Encapsulation puts the data and its operations together in one unit. It also hides the details from the people who use the ADT. Try to break each account below.</p>
     <div class="duo">
       <div class="pane">
         <h4>Open box</h4>
@@ -393,13 +393,13 @@ dialog.lb::backdrop{background:rgba(5,8,15,.82)}
         <div class="msg" id="e2msg"></div>
       </div>
     </div>
-    <div class="callout"><p><b>Analogy:</b> an ATM. You never open the vault. You ask the machine to withdraw, and it checks the rules first. The vault is the private data; the ATM buttons are the public methods.</p></div>
-    <h4 style="margin-top:1.6em">Why bother</h4>
+    <div class="callout"><p><b>Real-life example:</b> an ATM (cash machine). You never open the safe where the money is kept. You ask the machine for money, and it checks the rules first. The safe is the private data. The ATM buttons are the public methods.</p></div>
+    <h4 style="margin-top:1.6em">Why this is useful</h4>
     <div class="uses">
       <div><b>Modularity</b>The Account can be built, tested and fixed on its own.</div>
       <div><b>Controlled access</b>Every change goes through a method that can say no.</div>
-      <div><b>Interface vs implementation</b>Rewrite the inside freely; code using <code>withdraw()</code> never notices.</div>
-      <div><b>Extends built-in types</b>Once defined, <code>Account a;</code> works like <code>int x;</code>.</div>
+      <div><b>Interface vs implementation</b>You can rewrite the code inside. Code that uses <code>withdraw()</code> does not need to change.</div>
+      <div><b>Extends built-in types</b>After you define it, <code>Account a;</code> works just like <code>int x;</code>.</div>
     </div>
     <div class="pager"></div>
   </section>
@@ -407,54 +407,54 @@ dialog.lb::backdrop{background:rgba(5,8,15,.82)}
   <!-- 5 -->
   <section hidden>
     <h2>Inside a class: the five parts</h2>
-    <p class="lede">The lecture's callout slide labels the parts of an object: data members, functions, access modifiers, constructor, destructor. Pick one to find it in real Java.</p>
+    <p class="lede">One slide in the lecture shows the parts of an object: data members, functions, access modifiers, constructor and destructor. Pick one to see where it is in real Java code.</p>
     <div class="refs" data-slides="24,25"></div>
     <div class="legend" id="legend"></div>
     <div class="ana">
       <pre class="code" id="anacode"></pre>
       <div class="anainfo" id="anainfo" aria-live="polite"></div>
     </div>
-    <p style="margin-top:18px">This is what "each object defines its own data, implements its own procedures, and specifies through its methods how the data is accessed and modified" looks like in practice. And instead of calling <code>deposit(handle, 50)</code>, you send the message straight to the object: <code>acc.deposit(50)</code>.</p>
+    <p style="margin-top:18px">The lecture says that "each object defines its own data, implements its own procedures, and specifies through its methods how the data is accessed and modified". The code above shows what this means. Also, you do not call <code>deposit(handle, 50)</code>. You send the message directly to the object: <code>acc.deposit(50)</code>.</p>
     <div class="pager"></div>
   </section>
 
   <!-- 6 -->
   <section hidden>
     <h2>The four pillars</h2>
-    <p class="lede">The lecture's ring diagram has six pieces: <b>class</b> and <b>object</b> are the building blocks; <b>encapsulation, abstraction, inheritance and polymorphism</b> are the four principles built on them.</p>
+    <p class="lede">The ring diagram in the lecture has six parts. <b>Class</b> and <b>object</b> are the basic building blocks. <b>Encapsulation, abstraction, inheritance and polymorphism</b> are the four main ideas built on top of them.</p>
     <div class="refs" data-slides="26,27,28,29"></div>
 
     <h3>Encapsulation vs abstraction</h3>
-    <p>These two get confused in every exam. Both hide things, but different things for different reasons.</p>
+    <p>Students often mix up these two in exams. Both hide things, but they hide different things for different reasons.</p>
     <div class="tablewrap"><table class="cmp">
       <thead><tr><th></th><th>Abstraction</th><th>Encapsulation</th></tr></thead>
       <tbody>
-        <tr><th>Hides</th><td>Irrelevant details</td><td>Internal data and how operations work</td></tr>
-        <tr><th>Level</th><td>Design level</td><td>Implementation level</td></tr>
+        <tr><th>Hides</th><td>Details you do not need</td><td>The data inside, and how the operations work</td></tr>
+        <tr><th>Level</th><td>Design level (planning)</td><td>Implementation level (coding)</td></tr>
         <tr><th>Question</th><td>What matters for this problem?</td><td>How do I protect the inside?</td></tr>
         <tr><th>Example</th><td>BankClient has no hair color</td><td><code>private balance</code>, changed only by <code>withdraw()</code></td></tr>
-        <tr><th>Car analogy</th><td>To a driver, a car is a wheel, pedals and a gear stick</td><td>The engine sits under a closed hood; you press the pedal, you don't inject fuel yourself</td></tr>
+        <tr><th>Car example</th><td>A driver only needs the steering wheel, the pedals and the gear stick</td><td>The engine is hidden under the hood. You press the pedal, and the car does the rest</td></tr>
       </tbody>
     </table></div>
-    <p>The lecture defines data abstraction as finding a class (the general type) from the real objects that represent it, which is what you did with the dogs and the vehicle tree.</p>
+    <p>The lecture defines data abstraction as looking at real objects and finding the class (the general type) they belong to. You did this with the dogs and with the vehicle tree.</p>
 
-    <h3>Polymorphism: one name, several meanings</h3>
-    <p><b>Overloading.</b> Several methods share a name but take different parameters. The compiler picks one from the arguments, before the program ever runs. Call one:</p>
+    <h3>Polymorphism: one name, many meanings</h3>
+    <p><b>Overloading.</b> Several methods have the same name but different parameters. The compiler chooses one by looking at the arguments. This happens before the program runs. Try a call:</p>
     <ul class="sigs" id="sigs"></ul>
     <div class="callbtns" id="calls"></div>
     <div class="out" id="ovout" aria-live="polite">Pick a call above.</div>
 
-    <p style="margin-top:22px"><b>Overriding.</b> A subclass replaces a method it inherited. Every variable below has the same declared type, <code>Animal</code>, yet each call runs a different version, chosen <i>at runtime</i> by the actual object. Untick a box to remove that override.</p>
+    <p style="margin-top:22px"><b>Overriding.</b> A subclass replaces a method that it got from its parent class. Below, every variable has the same declared type, <code>Animal</code>. But each call runs a different version. Java chooses the version <i>at runtime</i>, based on the real object. Uncheck a box to remove that override.</p>
     <div class="toggles" id="ovtoggles"></div>
     <pre class="code" id="ovcode"></pre>
     <button class="btn" id="ovrun">Run the loop</button>
     <div class="out" id="ovrout" aria-live="polite"></div>
 
-    <div class="heads"><h4>Heads-up on the slide's wording</h4><p>Slide 29 says overloading's meaning is "implied by the code itself" (read: by the different parameter lists you wrote) and overriding's is "implied by the values of the supplied variables" (read: by which object the variable actually points to at runtime, not the numbers inside it). Compile time vs runtime is the cleanest way to remember the difference.</p></div>
+    <div class="heads"><h4>A note about the words on the slide</h4><p>Slide 29 says the meaning of overloading is "implied by the code itself". This means: by the different parameter lists you wrote. It says the meaning of overriding is "implied by the values of the supplied variables". This means: by the object that the variable points to while the program runs, not by the numbers inside it. The easiest way to remember the difference: overloading is decided at compile time, and overriding is decided at runtime.</p></div>
 
-    <h3>Inheritance: build on what exists</h3>
-    <p>A new class takes the attributes and methods of an existing one and adds its own, with <code>extends</code> in Java. That's the Vehicle tree: <code>class Car extends WheeledVehicle</code>. You don't rewrite <code>move()</code> for every vehicle.</p>
-    <p>The quick test: inheritance fits when "X <b>is a</b> Y" sounds right. If it's "X <b>has a</b> Y", Y should be a field instead. Try it:</p>
+    <h3>Inheritance: build on a class that already exists</h3>
+    <p>A new class gets the attributes and methods of an existing class, and then adds its own. In Java, you do this with <code>extends</code>. The Vehicle tree works this way: <code>class Car extends WheeledVehicle</code>. You do not have to write <code>move()</code> again for every vehicle.</p>
+    <p>A quick test: use inheritance when "X <b>is a</b> Y" is true. If "X <b>has a</b> Y" is true, make Y a field instead. Try it:</p>
     <div class="isa" id="isa"></div>
     <div class="pager"></div>
   </section>
@@ -462,42 +462,42 @@ dialog.lb::backdrop{background:rgba(5,8,15,.82)}
   <!-- 7 -->
   <section hidden>
     <h2>Object-oriented languages</h2>
-    <p class="lede">The languages from the lecture, in order. The pill shows the date the slide gives where it differs from the commonly cited release.</p>
+    <p class="lede">These are the languages from the lecture, in order of date. When the slide gives a different date from the usual one, the small label shows the date on the slide.</p>
     <div class="refs" data-slides="30"></div>
     <ol class="tl" id="tl"></ol>
-    <p><b>Others mentioned:</b> Eiffel (the slide spells it "Effile"), Objective-C (Apple's main language before Swift), and Ada (object orientation added in Ada 95).</p>
-    <div class="heads"><h4>About those dates</h4><p>Languages have a "work started" date and a "first released" date, so sources disagree by a year or two. If an exam asks, use the slide's numbers; that's what your professor will mark against.</p></div>
+    <p><b>Other languages in the lecture:</b> Eiffel (the slide writes it as "Effile"), Objective-C (the main Apple language before Swift), and Ada (OOP was added in Ada 95).</p>
+    <div class="heads"><h4>About the dates</h4><p>Each language has a date when work started and a date when it was first released. That is why different sources give different years. In the exam, use the dates on the slide. Your professor will grade using those dates.</p></div>
 
     <h3>Is Python a pure OO language?</h3>
-    <p>"Pure" means everything is an object and all data is reached only through methods. Smalltalk is the classic pure one. Python is OO, and in Python even numbers and functions are objects, but it doesn't enforce privacy: a leading underscore is only a polite "please don't touch".</p>
+    <p>"Pure" means two things: everything is an object, and data can be used only through methods. Smalltalk is the best-known pure OO language. Python is OO, and in Python even numbers and functions are objects. But Python does not really protect private data. A name that starts with an underscore (<code>_</code>) only means "please don't touch". Nothing stops you.</p>
     <pre class="code" data-code="py"></pre>
-    <p>Java isn't pure either, for the opposite reason: <code>private</code> is enforced, but primitives like <code>int</code> and <code>double</code> are not objects.</p>
+    <p>Java is not pure either, but for a different reason. Java does protect <code>private</code> data, but simple types like <code>int</code> and <code>double</code> are not objects.</p>
     <div class="pager"></div>
   </section>
 
   <!-- 8 -->
   <section hidden>
     <h2>How the course works</h2>
-    <p class="lede">Grading, policy and the textbook, from the first slides.</p>
+    <p class="lede">Grades, rules and the textbook, from the first slides of the lecture.</p>
     <div class="refs" data-slides="2,3,4"></div>
     <div class="bar" id="gbar" role="img" aria-label="Grade breakdown"></div>
     <div class="legendg" id="glegend"></div>
-    <p style="margin-top:20px">Labs are 30% of your grade, so "the lab sessions are essential" is literal. The two lecture quizzes are pop-up, meaning unannounced: anything from this lecture can appear without warning.</p>
-    <h3>Policy</h3>
+    <p style="margin-top:20px">Labs are 30% of your grade. So when the slides say "the lab sessions are essential", they really mean it. The two lecture quizzes are pop-up quizzes. This means they come with no warning, and they can ask about anything from this lecture.</p>
+    <h3>Course rules</h3>
     <ul class="rules">
-      <li>Attend lectures; participation can earn bonus marks.</li>
-      <li>Assignments and a lab project run through the term.</li>
-      <li>Submitting code written by someone else is not accepted.</li>
+      <li>Come to the lectures. Taking part in class can give you bonus marks.</li>
+      <li>There are assignments and a lab project during the term.</li>
+      <li>You must not hand in code that someone else wrote.</li>
     </ul>
     <h3>Textbook</h3>
-    <p>Y. Daniel Liang, <i>Introduction to Java Programming</i>, 10th edition, Pearson, 2015. This lecture's ideas are covered in depth in the chapters on objects and classes, object-oriented thinking, and inheritance and polymorphism.</p>
+    <p>Y. Daniel Liang, <i>Introduction to Java Programming</i>, 10th edition, Pearson, 2015. The ideas in this lecture are explained in more detail in the chapters on objects and classes, object-oriented thinking, and inheritance and polymorphism.</p>
     <div class="pager"></div>
   </section>
 
   <!-- 9 -->
   <section hidden>
     <h2>Test yourself</h2>
-    <p class="lede">Ten questions in the style a pop-up quiz could use. Each answer comes with the reasoning.</p>
+    <p class="lede">Ten questions like the ones you may see in a pop-up quiz. Each answer comes with an explanation.</p>
     <div class="quiz" id="quiz"></div>
     <div class="pager"></div>
   </section>
@@ -543,7 +543,7 @@ py:`class Account:
         self._balance = 100
 
 a = Account()
-a._balance = -999   # Python lets you`
+a._balance = -999   # Python allows this`
 };
 $$('pre[data-code]').forEach(p=>p.innerHTML=hl(CODE[p.dataset.code]));
 
@@ -564,7 +564,7 @@ lb.addEventListener('click',e=>{if(e.target===lb)lb.close()});
 lb.addEventListener('keydown',e=>{if(e.key==='ArrowRight')$('#lbn').click();if(e.key==='ArrowLeft')$('#lbp').click()});
 
 /* ---------- navigation ---------- */
-const SECTIONS=['Class vs object','General to specific','How we got here','Abstract data types','Inside a class','The four pillars','OO languages','Course logistics','Test yourself'];
+const SECTIONS=['Class vs object','General to specific','How OOP began','Abstract data types','Inside a class','The four pillars','OO languages','About the course','Test yourself'];
 const secs=$$('main > section');
 $('#navlist').innerHTML=SECTIONS.map((s,i)=>`<button class="navi" data-i="${i}"><span class="n">${i+1}</span><span>${s}</span></button>`).join('');
 $('#navlist').addEventListener('click',e=>{const b=e.target.closest('.navi');if(b)show(+b.dataset.i)});
@@ -602,7 +602,7 @@ const CLASSES={
     samples:[['Nissan','grey'],['Smart','blue'],['Lincoln','black'],['Lotus','silver']]},
   HotelRoom:{v:'room',fields:[['int','number'],['String','view'],['boolean','occupied']],ctor:[0,1],
     init:a=>({number:parseInt(a[0])||0,view:a[1],occupied:false}),
-    methods:{checkIn:o=>{if(o.occupied)return `room ${o.number} is already occupied`;o.occupied=true;return `guest checked into room ${o.number}`},
+    methods:{checkIn:o=>{if(o.occupied)return `room ${o.number} already has a guest`;o.occupied=true;return `guest checked into room ${o.number}`},
              checkOut:o=>{if(!o.occupied)return `room ${o.number} is already empty`;o.occupied=false;return `room ${o.number} is free again`}},
     samples:[[101,'sea'],[214,'garden'],[305,'pool'],[412,'sea']]}
 };
@@ -620,7 +620,7 @@ function renderFactory(){
 }
 function renderObjs(flashId){
   const box=$('#objs');
-  if(!objs.length){box.innerHTML='<div class="empty">No objects yet. The class exists, but nothing has been built from it.</div>';return}
+  if(!objs.length){box.innerHTML='<div class="empty">No objects yet. The class exists, but no object has been made from it.</div>';return}
   box.innerHTML=objs.map(o=>{
     const C=CLASSES[o.cls];
     return `<div class="obj${o.id===flashId?' flash':''}"><div class="vn">${o.v} <small>: ${o.cls}</small></div><ul>`+
@@ -631,7 +631,7 @@ function renderObjs(flashId){
 function log(html){const l=$('#flog');l.insertAdjacentHTML('beforeend',`<div>${html}</div>`);l.scrollTop=l.scrollHeight}
 $('#ftabs').addEventListener('click',e=>{const b=e.target.closest('[data-c]');if(b){fcls=b.dataset.c;renderFactory()}});
 $('#fcreate').onclick=()=>{
-  if(objs.length>=8){log('<span class="e">// memory full for this demo. Clear some objects first.</span>');return}
+  if(objs.length>=8){log('<span class="e">// memory is full in this demo. Clear some objects first.</span>');return}
   const C=CLASSES[fcls];
   const args=C.ctor.map((_,j)=>$('#fi'+j).value.trim()||'?');
   counters[fcls]=(counters[fcls]||0)+1;
@@ -643,7 +643,7 @@ $('#fcreate').onclick=()=>{
   sampleIdx[fcls]++;
   renderFactory();renderObjs(o.id);
 };
-$('#fclear').onclick=()=>{objs=[];counters={};renderObjs();log('<span class="c">// all objects released</span>')};
+$('#fclear').onclick=()=>{objs=[];counters={};renderObjs();log('<span class="c">// all objects removed</span>')};
 $('#objs').addEventListener('click',e=>{
   const b=e.target.closest('[data-m]');if(!b)return;
   const o=objs.find(x=>x.id===+b.dataset.id);
@@ -656,16 +656,16 @@ log('<span class="c">// messages you send will show up here</span>');
 
 const CATS=[
   ['Things','Desk, chair, classroom, building, flower, tree, animal.','class Chair {\n  material, legs\n  move()\n}'],
-  ['People in a role','A student, a professor. The role decides what matters: the same person is a Student at university and a Client at the bank.','class Student {\n  studentId, gpa\n  enroll(course)\n}'],
+  ['People in a role','A student or a professor. The role decides which data matters. The same person is a Student at university and a Client at the bank.','class Student {\n  studentId, gpa\n  enroll(course)\n}'],
   ['Subjects','CS, IS, Math, History.','class Course {\n  code, credits\n  addLecture()\n}'],
   ['Organizations','A university, a bank, a city, a country.','class Bank {\n  name, branches\n  openAccount()\n}'],
-  ['Parts of a program','The interface (editor, menu, file) and the data manager (the database).','class Menu {\n  items\n  open()\n}']
+  ['Parts of a program','The user interface (editor, menu, file) and the part that manages the data (the database).','class Menu {\n  items\n  open()\n}']
 ];
 $('#cats').innerHTML=CATS.map(c=>`<div class="cat"><h4>${c[0]}</h4><p>${c[1]}</p><pre>${esc(c[2])}</pre></div>`).join('');
 
 /* ---------- 2. tree ---------- */
 const TREE={
-  Vehicle:{x:330,y:30,p:null,f:['maxSpeed','passengers'],m:['move()'],ex:[],note:'Too general to point at. Nobody owns "a vehicle" that isn\'t something more specific. Later you\'ll make classes like this abstract.'},
+  Vehicle:{x:330,y:30,p:null,f:['maxSpeed','passengers'],m:['move()'],ex:[],note:'Too general to point at. Nobody owns just "a vehicle". People own a car, a boat or a bike. Later you will learn to make classes like this abstract.'},
   WheeledVehicle:{x:200,y:115,p:'Vehicle',f:['wheelCount'],m:['steer()'],ex:[],label:'Wheeled vehicle'},
   Boat:{x:470,y:115,p:'Vehicle',f:['hullType'],m:['anchor()'],ex:['a felucca on the Nile','a fishing boat named "Amal"']},
   Car:{x:120,y:195,p:'WheeledVehicle',f:['engineSize','doors'],m:['refuel()'],ex:['your family car']},
@@ -687,7 +687,7 @@ function renderTree(){
   while(p){const pn=TREE[p];html+=`<dt>Inherited from ${pn.label||p}</dt><dd>${[...pn.f,...pn.m].join(', ')}</dd>`;p=pn.p}
   html+=`</dl>`;
   if(n.ex.length) html+=`<p style="margin:14px 0 0;font-size:15px"><b>Real objects:</b><br>${n.ex.map(e=>`<span class="chipobj">${esc(e)}</span>`).join('')}</p>`;
-  else html+=`<p style="margin:14px 0 0;font-size:15px;color:var(--muted)">${n.note||'Still general. Go one level down to find something you could actually point at.'}</p>`;
+  else html+=`<p style="margin:14px 0 0;font-size:15px;color:var(--muted)">${n.note||'Still general. Go one level down to find something real that you can point at.'}</p>`;
   $('#tpanel').innerHTML=html;
 }
 $('#tree').addEventListener('click',e=>{const g=e.target.closest('.tnode');if(g){tsel=g.dataset.k;renderTree();$(`.tnode[data-k="${tsel}"]`).focus()}});
@@ -699,19 +699,19 @@ const A='marker-end="url(#ah)" marker-start="url(#ah)"', E='marker-end="url(#ah)
 const STAGES=[
 {t:'Unstructured',sl:[12,13],h:'Unstructured programming',
  svg:`<svg viewBox="0 0 400 200" role="img" aria-label="One main program containing all the data"><rect class="d-box" x="60" y="12" width="280" height="176" rx="10"/><text class="d-t" x="200" y="42">Main program</text><rect class="d-data" x="120" y="66" width="160" height="62" rx="8"/><text class="d-t" x="200" y="102">Data (global)</text><text class="d-s" x="200" y="164">every line can read and change it</text></svg>`,
- txt:'<p>One long program, top to bottom. All data is global, so any line can change anything. When a task repeats, the code is copy-pasted, and the flow jumps around with <code>GOTO</code>.</p><p><b>Analogy:</b> one giant notebook page that everyone writes on, anywhere.</p>',
- prob:'Copy-paste means a bug lives in ten places, and jumps make the flow impossible to follow ("spaghetti code").',
+ txt:'<p>The whole program is one long list of lines that runs from top to bottom. All data is global, so any line can change any data. When a task repeats, the code is copied and pasted. The program jumps from line to line with <code>GOTO</code>.</p><p><b>Real-life example:</b> one big notebook page where everyone can write anywhere.</p>',
+ prob:'Because the code is copied, one bug can be in ten places. The jumps make the program very hard to follow. People call this "spaghetti code".',
  code:`10 BAL1 = 100
 20 BAL1 = BAL1 + 50
 30 BAL2 = 200
-40 BAL2 = BAL2 + 50      ' same logic, pasted again
+40 BAL2 = BAL2 + 50      ' same code, pasted again
 50 IF BAL1 < 30 THEN GOTO 70
 60 BAL1 = BAL1 - 30
 70 PRINT BAL1, BAL2`},
 {t:'Procedural',sl:[14,15],h:'Procedural programming',
  svg:`<svg viewBox="0 0 400 225" role="img" aria-label="Main program calling procedures"><rect class="d-box" x="8" y="22" width="172" height="112" rx="10"/><text class="d-t" x="94" y="50">Main program</text><rect class="d-data" x="40" y="66" width="108" height="46" rx="8"/><text class="d-t" x="94" y="94">Data</text><rect class="d-proc" x="240" y="12" width="152" height="44" rx="8"/><text class="d-t" x="316" y="39">Procedure 1</text><rect class="d-proc" x="240" y="90" width="152" height="44" rx="8"/><text class="d-t" x="316" y="117">Procedure 2</text><rect class="d-proc" x="240" y="168" width="152" height="44" rx="8"/><text class="d-t" x="316" y="195">Procedure 3</text><path class="d-line" d="M182 60 L236 38" ${A}/><path class="d-line" d="M182 92 L236 110" ${A}/><path class="d-line" d="M160 136 L236 186" ${A}/><text class="d-s" x="94" y="168">call, run, return</text></svg>`,
- txt:'<p>Repeated work moves into a <b>procedure</b> (a function). Main calls it, the procedure runs, and control returns to the next line in main. Written once, used many times.</p><p><b>Analogy:</b> a recipe that says "make the sauce (see page 12)" instead of repeating the sauce steps.</p>',
- prob:'The data still lives in main and gets passed around. Nothing protects it: any line can set a balance to -999.',
+ txt:'<p>Code that repeats goes into a <b>procedure</b> (a function). Main calls the procedure, the procedure runs, and then main continues from the next line. You write it once and use it many times.</p><p><b>Real-life example:</b> a recipe that says "make the sauce (see page 12)" instead of writing the sauce steps again.</p>',
+ prob:'The data is still in main, and it is passed from function to function. Nothing protects it. Any line can set a balance to -999.',
  code:`double deposit(double bal, double amt) {
     return bal + amt;
 }
@@ -724,8 +724,8 @@ int main() {
 }`},
 {t:'Modular',sl:[16],h:'Modular & structured programming',
  svg:`<svg viewBox="0 0 400 250" role="img" aria-label="Main program talking to two modules, each with its own data and procedures"><rect class="d-box" x="100" y="6" width="200" height="74" rx="10"/><text class="d-t" x="200" y="28">Main program (a module too)</text><rect class="d-data" x="150" y="40" width="100" height="30" rx="6"/><text class="d-t" x="200" y="60">Data</text><rect class="d-box" x="6" y="114" width="182" height="128" rx="10"/><text class="d-t" x="97" y="137">Module 1</text><rect class="d-data" x="24" y="148" width="146" height="32" rx="6"/><text class="d-t" x="97" y="169">Data + Data 1</text><rect class="d-proc" x="24" y="192" width="146" height="34" rx="6"/><text class="d-t" x="97" y="214">Procedure 1</text><rect class="d-box" x="212" y="114" width="182" height="128" rx="10"/><text class="d-t" x="303" y="137">Module 2</text><rect class="d-data" x="230" y="148" width="146" height="32" rx="6"/><text class="d-t" x="303" y="169">Data + Data 2</text><rect class="d-proc" x="222" y="192" width="78" height="34" rx="6"/><text class="d-t" x="261" y="214">Proc 2</text><rect class="d-proc" x="306" y="192" width="78" height="34" rx="6"/><text class="d-t" x="345" y="214">Proc 3</text><path class="d-line" d="M150 84 L112 110" ${A}/><path class="d-line" d="M250 84 L288 110" ${A}/></svg>`,
- txt:'<p>Related procedures <i>and the data they use</i> are grouped into <b>modules</b> (separate files). Each module keeps its own data; main talks to a module only through its procedures. "Structured" means no more <code>GOTO</code>: only sequence, if/else and loops.</p><p><b>Analogy:</b> departments in a company. Accounting keeps its own ledger; you ask accounting, you don\'t edit the ledger.</p>',
- prob:'A module usually holds <i>one</i> copy of its data. One balance, one account. Need two accounts? The module wasn\'t built for "many".',
+ txt:'<p>Procedures that belong together, <i>and the data they use</i>, are put into <b>modules</b> (separate files). Each module keeps its own data. Main can use a module only by calling its procedures. "Structured" means no more <code>GOTO</code>. You only use steps in order, if/else, and loops.</p><p><b>Real-life example:</b> departments in a company. The accounting department keeps its own money records. You ask accounting for what you need. You do not change their records yourself.</p>',
+ prob:'A module usually has only <i>one</i> copy of its data: one balance, one account. What if you need two accounts? The module was not made for more than one.',
  code:`/* account.c */
 static double balance = 0;   /* private to this file */
 void deposit(double amt) { balance += amt; }
@@ -735,8 +735,8 @@ double getBalance(void)  { return balance; }
 deposit(50);   /* whose account? there is only one */`},
 {t:'ADT',sl:[17],h:'Abstract data types',
  svg:`<svg viewBox="0 0 400 230" role="img" aria-label="Program holding handles that it passes to the operations of an Account type with hidden data"><rect class="d-box" x="6" y="30" width="134" height="170" rx="10"/><text class="d-t" x="73" y="56">Program</text><rect class="d-data" x="26" y="76" width="94" height="34" rx="6"/><text class="d-t" x="73" y="98">handle a</text><rect class="d-data" x="26" y="130" width="94" height="34" rx="6"/><text class="d-t" x="73" y="152">handle b</text><rect class="d-adt" x="196" y="8" width="198" height="214" rx="12"/><text class="d-t" x="295" y="32">Account type</text><rect class="d-proc" x="212" y="46" width="166" height="30" rx="6"/><text class="d-t" x="295" y="66">create()</text><rect class="d-proc" x="212" y="84" width="166" height="30" rx="6"/><text class="d-t" x="295" y="104">deposit(h, x)</text><rect class="d-proc" x="212" y="122" width="166" height="30" rx="6"/><text class="d-t" x="295" y="142">withdraw(h, x)</text><rect class="d-hid" x="212" y="166" width="166" height="40" rx="6"/><text class="d-t" x="295" y="191">hidden data</text><path class="d-line" d="M122 93 L207 99" ${E}/><path class="d-line" d="M122 147 L207 139" ${E}/></svg>`,
- txt:'<p>Define a <b>new type</b>: its data plus the operations allowed on it, specified independently of how they\'re implemented. Now you can create as many accounts as you like, and you touch each one only through the operations.</p><p><b>Analogy:</b> a coat check. You hand in a ticket (the handle), staff do the work, you never walk into the cloakroom.</p>',
- prob:'Data and operations are still separate in the code. Every call needs the right handle: <code>deposit(a, 50)</code>. Pass <code>b</code> by mistake and the wrong account changes.',
+ txt:'<p>You make a <b>new type</b>. It has data and a list of operations that you are allowed to use on it. The type says <i>what</i> the operations do, not <i>how</i> they are written. Now you can create as many accounts as you want, and you can change each one only through its operations.</p><p><b>Real-life example:</b> leaving your coat at a theater. You get a ticket with a number (the handle). You give the ticket, and the staff bring your coat. You never go into the coat room yourself.</p>',
+ prob:'Data and operations are still separate in the code. Every call needs the right handle, like <code>deposit(a, 50)</code>. If you pass <code>b</code> by mistake, the wrong account changes.',
  code:`typedef struct Account Account;   /* contents hidden */
 Account* createAccount(double initial);
 void     deposit(Account* acc, double amt);
@@ -746,8 +746,8 @@ Account* b = createAccount(200);
 deposit(a, 50);   /* you must pass the right handle */`},
 {t:'OOP',sl:[22,23],h:'Object-oriented programming',
  svg:`<svg viewBox="0 0 400 240" role="img" aria-label="Four objects, each with data and methods, sending messages to each other"><path class="d-line" d="M168 72 L112 94" ${A}/><path class="d-line" d="M232 72 L288 94" ${A}/><path class="d-line" d="M200 72 L200 166" ${A}/><path class="d-line" d="M112 158 L164 172" ${A}/><path class="d-line" d="M288 158 L236 172" ${A}/><rect class="d-obj" x="140" y="10" width="120" height="60" rx="10"/><text class="d-t oi" x="200" y="37">Object 1</text><text class="d-s oi" x="200" y="56">data + methods</text><rect class="d-obj" x="10" y="96" width="130" height="60" rx="10"/><text class="d-t oi" x="75" y="123">Object 2</text><text class="d-s oi" x="75" y="142">data + methods</text><rect class="d-obj" x="260" y="96" width="130" height="60" rx="10"/><text class="d-t oi" x="325" y="123">Object 3</text><text class="d-s oi" x="325" y="142">data + methods</text><rect class="d-obj" x="135" y="170" width="130" height="60" rx="10"/><text class="d-t oi" x="200" y="197">Object 4</text><text class="d-s oi" x="200" y="216">data + methods</text></svg>`,
- txt:'<p>The object idea comes straight from the ADT, with one change: data and operations now live <i>together</i> inside the object. Instead of calling a function and handing it a handle, you send a message to the object itself: <code>a.deposit(50)</code>. The program becomes a web of objects messaging each other.</p><p><b>Analogy:</b> instead of a coat check, every coat has its own pockets. You just reach into the right coat.</p>',
- fix:'The handle problem disappears: <code>a.deposit(50)</code> can only ever change <code>a</code>. And <code>private</code> keeps the data safe from outside code.',
+ txt:'<p>Objects come directly from ADTs, with one change: the data and the operations are now <i>together</i> inside the object. You do not call a function and give it a handle. Instead, you send a message to the object itself: <code>a.deposit(50)</code>. The program becomes a group of objects that send messages to each other.</p><p><b>Real-life example:</b> no more coat room and tickets. Each coat has its own pockets, so you just use the pockets of the coat you want.</p>',
+ fix:'The handle problem is gone. <code>a.deposit(50)</code> can only change <code>a</code>. Also, <code>private</code> keeps the data safe from code outside the class.',
  code:`class Account {
     private double balance;
     Account(double initial) { balance = initial; }
@@ -762,7 +762,7 @@ let stg=0;
 function renderStage(){
   $('#steps').innerHTML=STAGES.map((s,i)=>`<button class="stepb" role="tab" aria-selected="${i===stg}" data-s="${i}"><span class="sn">${i+1}</span>${s.t}</button>`).join('');
   const s=STAGES[stg];
-  $('#stage').innerHTML=`<div class="stage"><div class="diag">${s.svg}</div><div><h3 style="margin-top:0">${stg+1}. ${s.h}</h3>${refsHTML(s.sl)}${s.txt}${s.prob?`<p class="prob"><b>Where it breaks:</b> ${s.prob}</p>`:''}${s.fix?`<p class="fix"><b>What it fixes:</b> ${s.fix}</p>`:''}</div></div><pre class="code">${hl(s.code)}</pre>`+
+  $('#stage').innerHTML=`<div class="stage"><div class="diag">${s.svg}</div><div><h3 style="margin-top:0">${stg+1}. ${s.h}</h3>${refsHTML(s.sl)}${s.txt}${s.prob?`<p class="prob"><b>The problem:</b> ${s.prob}</p>`:''}${s.fix?`<p class="fix"><b>What it fixes:</b> ${s.fix}</p>`:''}</div></div><pre class="code">${hl(s.code)}</pre>`+
     (stg<STAGES.length-1?`<button class="btn ghost" id="nextstage">See how stage ${stg+2} fixes this</button>`:'');
   const n=$('#nextstage'); if(n) n.onclick=()=>{stg++;renderStage()};
 }
@@ -771,17 +771,17 @@ renderStage();
 
 /* ---------- 4. ADT game ---------- */
 const TRAITS=[
- {k:'name',id:'name',l:'Full name',bank:1,hotel:1,w:{bank:'identifies the client on every statement',hotel:'goes on the registration card'}},
+ {k:'name',id:'name',l:'Full name',bank:1,hotel:1,w:{bank:'it shows who the client is on every bank statement',hotel:'the hotel writes it down at check-in'}},
  {k:'dob',id:'dateOfBirth',l:'Date of birth',bank:1,hotel:.5,w:{bank:'banks check age before opening an account',hotel:'optional here, either choice is fine'}},
- {k:'nid',id:'nationalId',l:'National ID number',bank:1,hotel:1,w:{bank:'legally required to open an account',hotel:'checked at check-in'}},
- {k:'acct',id:'accountNumber',l:'Account number',bank:1,hotel:0,w:{bank:'every operation works on it',hotel:'the hotel doesn\'t manage the guest\'s bank account'}},
- {k:'bal',id:'balance',l:'Balance',bank:1,hotel:0,w:{bank:'deposit and withdraw change it',hotel:'the guest\'s bank balance is none of the hotel\'s business'}},
- {k:'phone',id:'phone',l:'Phone number',bank:1,hotel:1,w:{bank:'used for alerts and verification',hotel:'needed to reach the guest'}},
+ {k:'nid',id:'nationalId',l:'National ID number',bank:1,hotel:1,w:{bank:'the law requires it to open an account',hotel:'checked at check-in'}},
+ {k:'acct',id:'accountNumber',l:'Account number',bank:1,hotel:0,w:{bank:'every operation uses it',hotel:'the hotel does not manage guest bank accounts'}},
+ {k:'bal',id:'balance',l:'Balance',bank:1,hotel:0,w:{bank:'deposit and withdraw change it',hotel:'the hotel does not need to know how much money the guest has'}},
+ {k:'phone',id:'phone',l:'Phone number',bank:1,hotel:1,w:{bank:'used for messages and security checks',hotel:'needed to contact the guest'}},
  {k:'hair',id:'hairColor',l:'Hair color',bank:0,hotel:0,w:{bank:'no banking operation uses it',hotel:'no hotel operation uses it'}},
- {k:'club',id:'favoriteClub',l:'Favorite football club',bank:0,hotel:0,w:{bank:'irrelevant to money',hotel:'irrelevant to a stay'}},
- {k:'height',id:'height',l:'Height',bank:0,hotel:0,w:{bank:'irrelevant to money',hotel:'irrelevant to a stay'}},
- {k:'view',id:'preferredView',l:'Preferred room view',bank:0,hotel:1,w:{bank:'belongs to a hotel system, not a bank',hotel:'used when assigning a room'}},
- {k:'nights',id:'nights',l:'Number of nights',bank:0,hotel:1,w:{bank:'belongs to a hotel system, not a bank',hotel:'needed for the bill and check-out date'}}
+ {k:'club',id:'favoriteClub',l:'Favorite football club',bank:0,hotel:0,w:{bank:'it has nothing to do with money',hotel:'it has nothing to do with a hotel stay'}},
+ {k:'height',id:'height',l:'Height',bank:0,hotel:0,w:{bank:'it has nothing to do with money',hotel:'it has nothing to do with a hotel stay'}},
+ {k:'view',id:'preferredView',l:'Preferred room view',bank:0,hotel:1,w:{bank:'belongs to a hotel system, not a bank',hotel:'used when choosing a room for the guest'}},
+ {k:'nights',id:'nights',l:'Number of nights',bank:0,hotel:1,w:{bank:'belongs to a hotel system, not a bank',hotel:'needed for the bill and the check-out date'}}
 ];
 const CTX={bank:{label:'Banking system',cls:'BankClient',ops:['createAccount()','deposit(amount)','withdraw(amount)']},
            hotel:{label:'Hotel front desk',cls:'HotelGuest',ops:['checkIn()','checkOut()','orderRoomService()']}};
@@ -805,7 +805,7 @@ $('#check').onclick=()=>{
     if(ok)right++;else wrong.push(`<li><b>${t.l}</b> should be ${rel===1?'kept':'dropped'}: ${t.w[ctx]}.</li>`);
   });
   $('#result').innerHTML=wrong.length?`<b>${right} of ${TRAITS.length} right.</b><ul>${wrong.join('')}</ul>`:
-    `<b>All ${TRAITS.length} right.</b> That's abstraction: same person, only what this purpose needs. Now switch to ${ctx==='bank'?'"Hotel front desk"':'"Banking system"'} and see the model change.`;
+    `<b>All ${TRAITS.length} right.</b> That is abstraction: the same person, but only the details this purpose needs. Now switch to ${ctx==='bank'?'"Hotel front desk"':'"Banking system"'} and watch the model change.`;
 };
 resetGame();
 
@@ -816,19 +816,19 @@ function msg(el,cls,t){el.className='msg '+cls;el.textContent=t}
 $('#e1go').onclick=()=>{
   const v=parseFloat($('#e1v').value);if(isNaN(v))return msg($('#e1msg'),'err','Type a number first.');
   b1=v;$('#e1bal').textContent=fmt(b1);
-  if(v<0)msg($('#e1msg'),'err',`Balance is now ${fmt(v)}. The object is in an impossible state, and nothing objected.`);
-  else msg($('#e1msg'),'ok',`Balance set to ${fmt(v)}. It worked, but only because you typed something sensible. Nothing would have stopped a mistake.`);
+  if(v<0)msg($('#e1msg'),'err',`Balance is now ${fmt(v)}. A balance cannot be negative, but nothing stopped you.`);
+  else msg($('#e1msg'),'ok',`Balance set to ${fmt(v)}. It worked this time because the number was OK. But nothing would stop a wrong number.`);
 };
-$('#e2go').onclick=()=>msg($('#e2msg'),'err','Compile error: balance has private access in Account. Outside code can\'t touch it at all.');
+$('#e2go').onclick=()=>msg($('#e2msg'),'err','Compile error: balance has private access in Account. Code outside the class cannot change it.');
 $('#e2wgo').onclick=()=>{
   const x=parseFloat($('#e2w').value);
-  if(isNaN(x)||x<=0)return msg($('#e2msg'),'err','withdraw() refused: the amount must be positive.');
-  if(x>b2)return msg($('#e2msg'),'err',`withdraw() refused: only ${fmt(b2)} available.`);
+  if(isNaN(x)||x<=0)return msg($('#e2msg'),'err','withdraw() refused: the amount must be more than 0.');
+  if(x>b2)return msg($('#e2msg'),'err',`withdraw() refused: there is only ${fmt(b2)} in the account.`);
   b2-=x;$('#e2bal').textContent=fmt(b2);msg($('#e2msg'),'ok',`withdraw(${fmt(x)}) accepted. The method checked the rules first.`);
 };
 $('#e2dgo').onclick=()=>{
   const x=parseFloat($('#e2d').value);
-  if(isNaN(x)||x<=0)return msg($('#e2msg'),'err','deposit() refused: the amount must be positive.');
+  if(isNaN(x)||x<=0)return msg($('#e2msg'),'err','deposit() refused: the amount must be more than 0.');
   b2+=x;$('#e2bal').textContent=fmt(b2);msg($('#e2msg'),'ok',`deposit(${fmt(x)}) accepted.`);
 };
 
@@ -843,11 +843,11 @@ const SEG=[
 ];
 $('#anacode').innerHTML=SEG.map(([t,p])=>p?`<span class="part" data-part="${p}">${hl(t)}</span>`:hl(t)).join('');
 const PARTS={
- field:['Data members','Also called fields or attributes. The object\'s own memory: every Account object gets its own owner and its own balance. Create 350 accounts, get 350 separate balances.'],
- method:['Methods (functions)','The operations. Calling acc.deposit(50) is what the lecture calls sending the message "deposit" to the object acc. The method decides how the data may change: here, negative deposits are ignored.'],
- access:['Access modifiers','They decide who may touch what. private: only code inside this class. public: anyone. This is how encapsulation is enforced, and why acc.balance = -5000 fails to compile.'],
- ctor:['Constructor','Runs exactly once, when you write new Account("Sherif", 100). Same name as the class, no return type. It\'s the object taking charge of its own creation, making sure it starts in a valid state.'],
- dtor:['Destructor','Code that runs when an object is destroyed, to clean up. C++ has them, written ~Account(). Java does not: the garbage collector frees any object nothing points to anymore. Nothing is highlighted because this class has none, and in Java it never would.']
+ field:['Data members','Also called fields or attributes. This is the object\'s own memory. Every Account object has its own owner and its own balance. If you create 350 accounts, you get 350 different balances.'],
+ method:['Methods (functions)','These are the operations. When you call acc.deposit(50), the lecture says you are sending the message "deposit" to the object acc. The method decides how the data can change. Here, a deposit of 0 or less is ignored.'],
+ access:['Access modifiers','They decide who can use what. private means only code inside this class. public means any code. This is how Java makes encapsulation work. It is also why acc.balance = -5000 gives a compile error.'],
+ ctor:['Constructor','It runs once, when you write new Account("Sherif", 100). It has the same name as the class and no return type. The object sets itself up, so it always starts with correct values.'],
+ dtor:['Destructor','Code that runs when an object is deleted, to clean up. C++ has destructors, written like ~Account(). Java does not. In Java, the garbage collector removes any object that nothing points to anymore. Nothing is highlighted here because this class has no destructor. Java classes never have one.']
 };
 let apart='field';
 function renderAna(){
@@ -864,13 +864,13 @@ const CALLS=[
  {c:'add(2, 3)',s:0,r:'5',w:'Two ints: exact match with add(int, int).'},
  {c:'add(2.5, 1.5)',s:1,r:'4.0',w:'Two doubles: exact match with add(double, double).'},
  {c:'add("Hot", "el")',s:2,r:'"Hotel"',w:'Two Strings: add(String, String), where + joins text.'},
- {c:'add(2, 1.5)',s:1,r:'3.5',w:'There\'s no add(int, double). Java widens the int 2 to 2.0, so add(double, double) is chosen.'}
+ {c:'add(2, 1.5)',s:1,r:'3.5',w:'There is no add(int, double). Java changes the int 2 into the double 2.0, so add(double, double) is chosen.'}
 ];
 function renderSigs(hit){$('#sigs').innerHTML=SIGS.map((s,i)=>`<li class="${i===hit?'hit':''}">${esc(s)}</li>`).join('')}
 renderSigs(-1);
 $('#calls').innerHTML=CALLS.map((c,i)=>`<button class="btn ghost small" data-k="${i}">${esc(c.c)}</button>`).join('');
 $('#calls').addEventListener('click',e=>{const b=e.target.closest('[data-k]');if(!b)return;const c=CALLS[+b.dataset.k];renderSigs(c.s);
-  $('#ovout').innerHTML=`${esc(c.c)}  →  ${esc(c.r)}<br><span style="color:var(--com)">// ${esc(c.w)} Decided at compile time.</span>`});
+  $('#ovout').innerHTML=`${esc(c.c)}  →  ${esc(c.r)}<br><span style="color:var(--com)">// ${esc(c.w)} Chosen at compile time.</span>`});
 
 const ANIMALS=[['Dog','Woof',true],['Cat','Meow',true],['Cow','Moo',false]];
 function renderOv(){
@@ -883,23 +883,24 @@ function renderOv(){
 }
 $('#ovtoggles').addEventListener('change',e=>{const i=e.target.dataset.a;if(i!==undefined){ANIMALS[+i][2]=e.target.checked;renderOv()}});
 $('#ovrun').onclick=()=>{
-  $('#ovrout').innerHTML=ANIMALS.map(a=>a[2]?`${a[1]}  <span style="color:var(--com)">// ${a[0]}'s own version</span>`:`...  <span style="color:var(--com)">// ${a[0]} has no override, falls back to Animal's</span>`).join('<br>');
+  $('#ovrout').innerHTML=ANIMALS.map(a=>a[2]?`${a[1]}  <span style="color:var(--com)">// ${a[0]}'s own version</span>`:`...  <span style="color:var(--com)">// ${a[0]} has no override, so it uses Animal's version</span>`).join('<br>');
 };
 renderOv();
 
+const an=w=>/^[AEIOU]/.test(w)?'an':'a';
 const ISA=[['Sedan','Car','is'],['Car','Engine','has'],['Dog','Animal','is'],['Hotel','Room','has'],['Student','Person','is'],['Account','Balance','has']];
 $('#isa').innerHTML=ISA.map((p,i)=>`<div class="r"><span class="pair">${p[0]} … ${p[1]}</span><button class="btn ghost small" data-i="${i}" data-a="is">is a</button><button class="btn ghost small" data-i="${i}" data-a="has">has a</button><span class="fb" id="fb${i}"></span></div>`).join('');
 $('#isa').addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b)return;const p=ISA[+b.dataset.i],ok=b.dataset.a===p[2],fb=$('#fb'+b.dataset.i);
   fb.className='fb '+(ok?'ok':'bad');
-  fb.textContent=p[2]==='is'?`${ok?'Right':'No'}: a ${p[0]} is a ${p[1]}, so class ${p[0]} extends ${p[1]}.`:`${ok?'Right':'No'}: a ${p[0]} has a ${p[1]}, so ${p[1]} becomes a field inside ${p[0]}.`});
+  fb.textContent=p[2]==='is'?`${ok?'Right':'No'}: ${an(p[0])} ${p[0]} is ${an(p[1])} ${p[1]}, so class ${p[0]} extends ${p[1]}.`:`${ok?'Right':'No'}: ${an(p[0])} ${p[0]} has ${an(p[1])} ${p[1]}, so ${p[1]} becomes a field inside ${p[0]}.`});
 
 /* ---------- 7. languages ---------- */
 const LANGS=[
- ['1972','Smalltalk','Alan Kay and team, Xerox PARC','1972–1980','Developed through the 1970s; Smalltalk-80 is the version that spread. The purest OO language here: even numbers and true/false are objects, and everything happens by sending messages.'],
- ['1985','C++','Bjarne Stroustrup, Bell Labs','1986','Began in 1979 as "C with Classes"; first commercial release in 1985. Adds classes to C, so it supports OOP without forcing it.'],
- ['1991','Python','Guido van Rossum','late 1980s','Designed from the late 1980s, first released in 1991. Everything is an object, but privacy is only a convention.'],
- ['1995','Java','James Gosling, Sun Microsystems','1992','Work began in 1991 under the name Oak; public release in 1995. The language of this course and of the Liang textbook.'],
- ['2002','C#','Anders Hejlsberg, Microsoft','2001','Announced in 2000; version 1.0 shipped with .NET in 2002. Very close to Java in style.']
+ ['1972','Smalltalk','Alan Kay and team, Xerox PARC','1972–1980','Built during the 1970s. Smalltalk-80 is the version that became popular. It is the most pure OO language here. Even numbers and true/false are objects, and everything happens by sending messages.'],
+ ['1985','C++','Bjarne Stroustrup, Bell Labs','1986','Started in 1979 as "C with Classes". First sold in 1985. It adds classes to C. You can use OOP in C++, but you do not have to.'],
+ ['1991','Python','Guido van Rossum','late 1980s','Work started in the late 1980s. First released in 1991. Everything is an object, but private data is not really protected.'],
+ ['1995','Java','James Gosling, Sun Microsystems','1992','Work started in 1991 with the name Oak. Released to the public in 1995. This course and the Liang textbook use Java.'],
+ ['2002','C#','Anders Hejlsberg, Microsoft','2001','Announced in 2000. Version 1.0 came out with .NET in 2002. It looks very similar to Java.']
 ];
 $('#tl').innerHTML=LANGS.map(l=>`<li><span class="y">${l[0]}</span><span class="nm">${l[1]}</span>${l[3]?`<span class="sl">slide: ${l[3]}</span>`:''}<div class="who">${l[2]}</div><p>${l[4]}</p></li>`).join('');
 
@@ -910,21 +911,21 @@ $('#glegend').innerHTML=GR.map(g=>`<div><span style="background:${g[2]};border:1
 
 /* ---------- 9. quiz ---------- */
 const Q=[
- {q:'In class Dog { ... }, what is Dog?',o:['An object','A class: an abstract type','A method','A module'],a:1,e:'Dog is the definition, the mold. An object would be a specific dog created from it with new Dog(...).'},
- {q:'Which line actually creates an object?',o:['class Car { }','Car c;','Car c = new Car();','c.drive();'],a:2,e:'new builds the object in memory. Car c; only declares a variable that could point to a Car; c.drive() sends a message to an existing one.'},
- {q:'Abstraction hides details at the ___ level; encapsulation at the ___ level.',o:['design, implementation','implementation, design','design, design','runtime, compile time'],a:0,e:'Straight from the lecture: abstraction decides what matters (design); encapsulation hides and protects how it\'s done (implementation).'},
- {q:'In the ADT stage, which inconvenience did OOP remove?',o:['GOTO jumps','Having to pass the right handle to every operation','Not having procedures','Data couldn\'t be stored'],a:1,e:'With ADTs you call deposit(a, 50) and must supply the right handle. With objects you send the message to the object itself: a.deposit(50).'},
- {q:'With overloading, how does Java choose which add() to run?',o:['From the actual object type at runtime','From the number and types of the arguments, at compile time','From the return type alone','From the access modifier'],a:1,e:'Overloaded methods differ in their parameter lists. The compiler matches the arguments; the return type alone can\'t distinguish them.'},
- {q:'Animal a = new Cat(); a.speak(); where Cat overrides speak(). Which version runs?',o:['Animal\'s','Cat\'s','Both','It doesn\'t compile'],a:1,e:'Overriding is decided at runtime by the real object, which is a Cat, even though the variable\'s declared type is Animal.'},
- {q:'Which is NOT one of the three ADT properties from the lecture?',o:['It\'s a well-defined entity','It defines the data structure of its items','Its data is accessed only through defined operations','It must be written in Java'],a:3,e:'ADTs are language-independent; the lecture\'s C-era definition says "independent of any particular implementation".'},
- {q:'Which best describes encapsulation?',o:['Creating new classes from existing ones','Bundling data with its operations and hiding the details from users','Using one method name for different meanings','Finding a class from real objects'],a:1,e:'The other options are inheritance, polymorphism and abstraction, in that order.'},
- {q:'What was the core problem of unstructured programming?',o:['Too many classes','One main program with global data, copy-pasted code and GOTO jumps','Data hidden too well','Procedures that couldn\'t return'],a:1,e:'Everything lived in one block, any line could change any data, and repeated logic was pasted around.'},
- {q:'How does Java handle "each object is responsible for its own destruction"?',o:['With ~ClassName() destructors','Objects are never destroyed','The garbage collector frees objects that are no longer referenced','You must call delete'],a:2,e:'Destructors (~Account()) and delete belong to C++. Java has constructors but no destructors; the garbage collector does the cleanup.'}
+ {q:'In class Dog { ... }, what is Dog?',o:['An object','A class: an abstract type','A method','A module'],a:1,e:'Dog is the definition, the plan. An object is one real dog made from it with new Dog(...).'},
+ {q:'Which line actually creates an object?',o:['class Car { }','Car c;','Car c = new Car();','c.drive();'],a:2,e:'new creates the object in memory. Car c; only makes a variable that can point to a Car. c.drive() sends a message to an object that already exists.'},
+ {q:'Abstraction hides details at the ___ level. Encapsulation hides details at the ___ level.',o:['design, implementation','implementation, design','design, design','runtime, compile time'],a:0,e:'This comes from the lecture. Abstraction decides what matters (design). Encapsulation hides and protects how things are done (implementation).'},
+ {q:'Which problem from the ADT stage did OOP remove?',o:['GOTO jumps','Having to pass the right handle to every operation','Not having procedures','Data could not be stored'],a:1,e:'With ADTs you call deposit(a, 50), and you must give the right handle. With objects you send the message to the object itself: a.deposit(50).'},
+ {q:'With overloading, how does Java choose which add() to run?',o:['From the real object type at runtime','From the number and types of the arguments, at compile time','From the return type only','From the access modifier'],a:1,e:'Overloaded methods have different parameter lists. The compiler matches the arguments to them. The return type alone cannot tell them apart.'},
+ {q:'Cat overrides speak(). Which version runs here? Animal a = new Cat(); a.speak();',o:['Animal\'s','Cat\'s','Both','It does not compile'],a:1,e:'Overriding is decided at runtime by the real object. The object is a Cat, even though the variable type is Animal.'},
+ {q:'Which is NOT one of the three ADT properties from the lecture?',o:['It is a well-defined entity','It defines the data structure of its items','Its data can be used only through defined operations','It must be written in Java'],a:3,e:'ADTs do not depend on any programming language. The lecture defines them as "independent of any particular implementation".'},
+ {q:'Which best describes encapsulation?',o:['Creating new classes from existing ones','Putting data and its operations together and hiding the details from users','Using one method name for different meanings','Finding a class from real objects'],a:1,e:'The other options describe inheritance, polymorphism and abstraction, in that order.'},
+ {q:'What was the main problem of unstructured programming?',o:['Too many classes','One main program with global data, copy-pasted code and GOTO jumps','Data hidden too well','Procedures that could not return'],a:1,e:'Everything was in one block. Any line could change any data, and repeated code was copied and pasted.'},
+ {q:'The lecture says "each object is responsible for its own destruction". How does Java do this?',o:['With ~ClassName() destructors','Objects are never destroyed','The garbage collector removes objects that nothing points to anymore','You must call delete'],a:2,e:'Destructors (~Account()) and delete are C++ features. Java has constructors but no destructors. The garbage collector does the cleanup.'}
 ];
 let qi=0,score=0,answered=false;
 function renderQ(){
   const box=$('#quiz');
-  if(qi>=Q.length){box.innerHTML=`<div class="score">${score}/${Q.length}</div><p style="margin-top:10px">${score>=9?'Ready for a pop-up quiz.':score>=6?'Solid. Revisit the sections behind the ones you missed.':'Go back through sections 3 to 6, then try again.'}</p><button class="btn" id="qre">Try again</button>`;
+  if(qi>=Q.length){box.innerHTML=`<div class="score">${score}/${Q.length}</div><p style="margin-top:10px">${score>=9?'You are ready for a pop-up quiz.':score>=6?'Good work. Go back to the sections for the questions you missed.':'Read sections 3 to 6 again, then try the quiz again.'}</p><button class="btn" id="qre">Try again</button>`;
     $('#qre').onclick=()=>{qi=0;score=0;renderQ()};return}
   const q=Q[qi];answered=false;
   box.innerHTML=`<div class="qmeta">Question ${qi+1} of ${Q.length}, score ${score}</div><div class="qtext">${esc(q.q)}</div><div class="opts">${q.o.map((o,i)=>`<button class="opt" data-o="${i}">${esc(o)}</button>`).join('')}</div><div class="qexp" id="qexp" aria-live="polite"></div><div class="qnav" id="qnav"></div>`;
@@ -935,7 +936,7 @@ $('#quiz').addEventListener('click',e=>{
     answered=true;const q=Q[qi],pick=+b.dataset.o;
     $$('.opt').forEach((o,i)=>{o.disabled=true;if(i===q.a)o.classList.add('right');else if(i===pick)o.classList.add('wrong')});
     if(pick===q.a)score++;
-    $('#qexp').innerHTML=`<b>${pick===q.a?'Correct.':'Not quite.'}</b> ${esc(q.e)}`;
+    $('#qexp').innerHTML=`<b>${pick===q.a?'Correct.':'Not correct.'}</b> ${esc(q.e)}`;
     $('#qnav').innerHTML=`<button class="btn" id="qnext">${qi===Q.length-1?'See score':'Next question'}</button>`;
     $('#qnext').onclick=()=>{qi++;renderQ()};
   }
