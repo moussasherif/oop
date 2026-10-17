@@ -6,16 +6,18 @@
 <title>OOP Lecture 1: Introduction to OOP</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
 <style>
 :root{
-  --paper:#F3F5FA;--surface:#FFFFFF;--ink:#152038;--muted:#596379;--line:#D5DBE7;
-  --blue:#2347C5;--on-blue:#FFFFFF;--blue-soft:#E5EBFF;
-  --obj:#FFD54A;--obj-ink:#2A2000;--obj-soft:#FFF5D1;
+  --paper:#F3F2EE;--grid:#E5E3DC;--surface:#FFFFFF;--ink:#1B1E25;--text:#3A3F4B;--muted:#646A78;--line:#E0DED6;
+  --blue:#3B3FD8;--on-blue:#FFFFFF;--blue-soft:#E8E9FB;
+  --obj:#F0A05A;--obj-ink:#2A1300;--obj-soft:#FDEEE1;
   --red:#C2352B;--red-soft:#FCE8E6;--green:#1C8556;--green-soft:#E2F4EB;
-  --code-bg:#101A33;--code-ink:#DCE4F7;--kw:#93B2FF;--str:#FFD54A;--com:#8390AB;--num:#7FE0B5;
-  --display:'Bricolage Grotesque','Segoe UI',system-ui,sans-serif;
-  --body:'Atkinson Hyperlegible','Segoe UI',system-ui,sans-serif;
+  --code-bg:#1B2130;--code-ink:#DDE2EC;--kw:#A9ACFF;--str:#F7B577;--com:#8A93A6;--num:#7FE0B5;
+  --side-bg:#1E2533;--side-ink:#FFFFFF;--side-text:#B4BCC8;--side-muted:#7F889A;--side-active:#2B3446;--side-line:#344055;--side-num:#F59E4B;
+  --shadow:0 1px 2px rgba(20,22,30,.04),0 10px 28px -16px rgba(20,22,30,.16);
+  --display:'JetBrains Mono',ui-monospace,Consolas,monospace;
+  --body:'Source Sans 3','Segoe UI',system-ui,sans-serif;
   --mono:'JetBrains Mono',ui-monospace,Consolas,monospace;
   box-sizing:border-box;
   padding-top:env(safe-area-inset-top,0px);
@@ -23,125 +25,148 @@
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --paper:#0E1320;--surface:#171E2E;--ink:#E7ECF5;--muted:#9AA5BB;--line:#2B3448;
-    --blue:#89A5FF;--on-blue:#0E1320;--blue-soft:#1D2849;
-    --obj:#F0C93E;--obj-ink:#231A00;--obj-soft:#2C2610;
+    --paper:#13161D;--grid:#1B1F28;--surface:#1A1E27;--ink:#ECEEF3;--text:#C7CCD6;--muted:#959CAB;--line:#2B303B;
+    --blue:#8E92FF;--on-blue:#11131A;--blue-soft:#24274A;
+    --obj-soft:#33251A;
     --red:#FF8277;--red-soft:#3A1F1F;--green:#57CB96;--green-soft:#15302A;
-    --code-bg:#090E1A;
+    --code-bg:#0E1117;
+    --side-bg:#0E1117;--side-active:#1E2430;--side-line:#262D3A;
+    --shadow:none;
   }
 }
 :root[data-theme="dark"]{
-  --paper:#0E1320;--surface:#171E2E;--ink:#E7ECF5;--muted:#9AA5BB;--line:#2B3448;
-  --blue:#89A5FF;--on-blue:#0E1320;--blue-soft:#1D2849;
-  --obj:#F0C93E;--obj-ink:#231A00;--obj-soft:#2C2610;
+  --paper:#13161D;--grid:#1B1F28;--surface:#1A1E27;--ink:#ECEEF3;--text:#C7CCD6;--muted:#959CAB;--line:#2B303B;
+  --blue:#8E92FF;--on-blue:#11131A;--blue-soft:#24274A;
+  --obj-soft:#33251A;
   --red:#FF8277;--red-soft:#3A1F1F;--green:#57CB96;--green-soft:#15302A;
-  --code-bg:#090E1A;
+  --code-bg:#0E1117;
+  --side-bg:#0E1117;--side-active:#1E2430;--side-line:#262D3A;
+  --shadow:none;
 }
-html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%}
+html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%;accent-color:var(--blue)}
 *,*::before,*::after{box-sizing:inherit}
-body{margin:0;min-height:100%;background:var(--paper);color:var(--ink);font:17px/1.6 var(--body);-webkit-font-smoothing:antialiased}
-h1,h2,h3,h4{font-family:var(--display);line-height:1.15;margin:0 0 .5em;letter-spacing:-.01em}
-h1{font-size:clamp(2rem,5.2vw,3.2rem);font-weight:800;max-width:18ch}
-h2{font-size:clamp(1.6rem,3.6vw,2.2rem);font-weight:800;max-width:24ch}
-h3{font-size:1.25rem;font-weight:600;margin-top:2em}
-h4{font-size:1.05rem;font-weight:600}
-p,li{max-width:68ch}
+/* show code exactly as typed: no <= to ≤ ligatures */
+*{font-variant-ligatures:none!important}
+body{margin:0;min-height:100%;background-color:var(--paper);background-image:linear-gradient(to right,var(--grid) 1px,transparent 1px),linear-gradient(to bottom,var(--grid) 1px,transparent 1px);background-size:34px 34px;color:var(--text);font:18px/1.7 var(--body);-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{font-family:var(--display);color:var(--ink);line-height:1.15;margin:0 0 .5em;letter-spacing:-.02em}
+h1{font-size:clamp(2.1rem,4.6vw,3.5rem);font-weight:800;max-width:22ch;line-height:1.12}
+h2{font-size:clamp(1.7rem,3.4vw,2.45rem);font-weight:800;max-width:26ch}
+h3{font-size:1.28rem;font-weight:700;margin-top:2.2em;scroll-margin-top:28px}
+h4{font-size:1.02rem;font-weight:700;letter-spacing:-.01em}
+.hl{color:var(--blue)}
+.kicker{font:700 12.5px/1.4 var(--mono);letter-spacing:.28em;text-transform:uppercase;color:var(--blue);margin:0 0 18px}
+p,li{max-width:70ch}
 p{margin:0 0 1em}
-code{font-family:var(--mono);font-size:.88em;background:var(--blue-soft);padding:.1em .35em;border-radius:5px}
-b{font-weight:700}
+code{font-family:var(--mono);font-size:.84em;background:var(--blue-soft);color:var(--ink);padding:.12em .38em;border-radius:5px}
+b{font-weight:700;color:var(--ink)}
 button{font:inherit;color:inherit}
 button:focus-visible,input:focus-visible,select:focus-visible,[tabindex]:focus-visible{outline:3px solid var(--obj);outline-offset:2px}
 
-.app{display:grid;grid-template-columns:250px minmax(0,1fr);min-height:100%}
-.side{position:sticky;top:0;align-self:start;max-height:100vh;overflow:auto;padding:28px 16px;border-right:1px solid var(--line);display:flex;flex-direction:column;gap:4px}
-.brand{padding:0 10px 18px}
-.brand strong{display:block;font-family:var(--display);font-size:1.3rem;font-weight:800;line-height:1.1}
-.brand span{font-size:14px;color:var(--muted)}
-.navi{display:flex;gap:10px;align-items:baseline;text-align:left;border:0;background:none;padding:8px 10px;border-radius:8px;color:var(--muted);font-size:15px;cursor:pointer;line-height:1.3}
-.navi .n{font-family:var(--display);font-weight:800;color:var(--blue);min-width:1.2em}
-.navi:hover{color:var(--ink)}
-.navi[aria-current="true"]{background:var(--blue-soft);color:var(--ink)}
-.theme-btn{margin-top:auto;border:1.5px solid var(--line);background:var(--surface);border-radius:999px;padding:7px 14px;font-size:14px;cursor:pointer;align-self:flex-start}
-#navlist{display:contents}
+/* sidebar */
+.app{display:grid;grid-template-columns:292px minmax(0,1fr);min-height:100%}
+.side{position:sticky;top:0;align-self:start;height:100vh;height:100dvh;overflow:auto;padding:28px 14px 22px;background:var(--side-bg);color:var(--side-text);display:flex;flex-direction:column;gap:2px;scrollbar-width:thin;scrollbar-color:var(--side-line) transparent}
+.brand{padding:0 10px 24px}
+.brand strong{display:block;font:800 1.45rem/1.1 var(--mono);color:var(--side-ink);letter-spacing:-.02em}
+.brand strong i{font-style:normal;color:var(--side-num)}
+.brand span{display:block;margin-top:9px;font:600 10.5px/1.4 var(--mono);letter-spacing:.3em;text-transform:uppercase;color:var(--side-muted)}
+#navlist{display:flex;flex-direction:column}
+.grp{display:flex;flex-direction:column;gap:1px;margin-bottom:12px}
+.navi{display:flex;gap:12px;align-items:baseline;text-align:left;border:0;border-left:2px solid transparent;background:none;padding:7px 10px;border-radius:6px;color:var(--side-ink);font:700 13.5px/1.35 var(--mono);cursor:pointer}
+.navi .n{color:var(--side-num);font-size:12px;min-width:1.4em}
+.gs{display:block;text-align:left;border:0;border-left:2px solid transparent;background:none;margin-left:28px;padding:6px 12px;border-radius:6px;color:var(--side-text);font:400 14.5px/1.35 var(--body);cursor:pointer}
+.navi:hover,.gs:hover{background:rgba(255,255,255,.04);color:var(--side-ink)}
+.navi.on,.gs.on{background:var(--side-active);border-left-color:var(--side-ink);color:var(--side-ink)}
+.gs.on{font-weight:600}
+.theme-btn{margin:auto 10px 0;border:1px solid var(--side-line);background:transparent;color:var(--side-text);border-radius:8px;padding:8px 12px;font:600 11.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;cursor:pointer;align-self:flex-start}
+.theme-btn:hover{color:var(--side-ink);border-color:var(--side-muted)}
 
-main{padding:44px clamp(18px,4.5vw,60px) 80px;max-width:960px;min-width:0}
+main{padding:56px clamp(18px,5vw,76px) 96px;max-width:1040px;min-width:0}
 section[hidden]{display:none}
-.lede{font-size:1.15rem;color:var(--muted)}
-.hint{font-size:14px;color:var(--muted);margin-top:10px}
+.lede{font-size:1.14rem;color:var(--text)}
+.hint{font-size:14.5px;color:var(--muted);margin-top:10px}
 
-.btn{font-weight:700;font-size:15px;border-radius:999px;padding:9px 18px;border:2px solid var(--blue);background:var(--blue);color:var(--on-blue);cursor:pointer;white-space:nowrap}
-.btn.ghost{background:transparent;color:var(--blue)}
-.btn.small{padding:5px 12px;font-size:14px}
+.btn{font:600 14px/1.2 var(--mono);border-radius:8px;padding:10px 16px;border:1.5px solid var(--blue);background:var(--blue);color:var(--on-blue);cursor:pointer;white-space:nowrap}
+.btn.ghost{background:var(--surface);color:var(--blue)}
+.btn.small{padding:6px 11px;font-size:13px}
+.btn:hover:not(:disabled){filter:brightness(1.08)}
 .btn:disabled{opacity:.45;cursor:not-allowed}
 .tabs{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0 16px}
-.tab{border:2px solid var(--blue);background:transparent;color:var(--blue);border-radius:999px;padding:6px 14px;font-weight:700;font-size:15px;cursor:pointer}
-.tab[aria-selected="true"]{background:var(--blue);color:var(--on-blue)}
+.tab{border:1.5px solid var(--line);background:var(--surface);color:var(--text);border-radius:8px;padding:7px 13px;font:600 13.5px var(--mono);cursor:pointer}
+.tab:hover{border-color:var(--blue);color:var(--blue)}
+.tab[aria-selected="true"]{background:var(--blue);border-color:var(--blue);color:var(--on-blue)}
 
-.callout{border-left:4px solid var(--blue);background:var(--blue-soft);padding:14px 18px;border-radius:0 12px 12px 0;margin:1.4em 0}
+/* live cards */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px 22px 22px;margin:24px 0;box-shadow:var(--shadow)}
+.card-h{display:flex;justify-content:space-between;align-items:baseline;gap:6px 16px;flex-wrap:wrap;font:700 14px/1.4 var(--mono);color:var(--ink);margin-bottom:16px}
+.card-h span{font-weight:400;font-size:13px;color:var(--muted)}
+.card-h + *{margin-top:0}
+.card .tpanel,.card .pane,.card .anainfo,.card .diag{background:var(--paper)}
+
+.callout{border-left:3px solid var(--blue);background:var(--blue-soft);padding:14px 18px;border-radius:0 10px 10px 0;margin:1.4em 0}
 .callout p:last-child,.heads p:last-child{margin:0}
-.heads{border:2px solid var(--obj);background:var(--obj-soft);padding:14px 18px;border-radius:12px;margin:1.4em 0}
+.heads{border:1.5px solid var(--obj);background:var(--obj-soft);padding:14px 18px;border-radius:10px;margin:1.4em 0}
 .heads h4{margin-bottom:.3em}
 
-pre.code{background:var(--code-bg);color:var(--code-ink);font:13.5px/1.6 var(--mono);padding:16px 18px;border-radius:12px;overflow-x:auto;margin:1em 0;max-width:100%}
+pre.code{background:var(--code-bg);color:var(--code-ink);font:13.5px/1.65 var(--mono);padding:16px 18px;border-radius:10px;overflow-x:auto;margin:1em 0;max-width:100%}
 .tk{color:var(--kw)}.ts{color:var(--str)}.tc{color:var(--com);font-style:italic}.tn{color:var(--num)}
 
 input,select{font:inherit;font-size:15px;padding:7px 10px;border:1.5px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);width:100%;min-width:0}
-label.f{display:block;font-size:14px;color:var(--muted);margin:10px 0 3px;font-family:var(--mono)}
+label.f{display:block;font-size:13.5px;color:var(--muted);margin:10px 0 3px;font-family:var(--mono)}
 
 /* class vs object */
 .factory{display:grid;grid-template-columns:minmax(0,310px) minmax(0,1fr);gap:22px;align-items:start}
-.klass{border:2px dashed var(--blue);border-radius:14px;padding:16px 18px;margin-bottom:6px}
+.klass{border:2px dashed var(--blue);border-radius:10px;padding:16px 18px;margin-bottom:6px}
 .klass pre{margin:0;font:13.5px/1.6 var(--mono);white-space:pre-wrap;color:var(--ink)}
 .klass .tk{color:var(--blue);font-weight:600}.klass .ts{color:var(--green)}.klass .tn{color:var(--green)}
 .objs{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px}
-.obj{background:var(--obj);color:var(--obj-ink);border-radius:14px;padding:14px 16px}
-.obj .vn{font-family:var(--mono);font-weight:600;font-size:15px}
+.obj{background:var(--obj);color:var(--obj-ink);border-radius:10px;padding:14px 16px}
+.obj .vn{font-family:var(--mono);font-weight:700;font-size:15px}
 .obj .vn small{font-weight:400;opacity:.7}
 .obj ul{list-style:none;padding:0;margin:8px 0 10px;font:13px/1.6 var(--mono)}
 .obj .mb{display:flex;flex-wrap:wrap;gap:6px}
-.obj .mb button{border:1.5px solid var(--obj-ink);background:transparent;color:var(--obj-ink);border-radius:999px;padding:3px 10px;font:600 13px var(--mono);cursor:pointer}
+.obj .mb button{border:1.5px solid var(--obj-ink);background:transparent;color:var(--obj-ink);border-radius:6px;padding:3px 9px;font:600 12.5px var(--mono);cursor:pointer}
 .obj .mb button:hover{background:rgba(0,0,0,.08)}
 .obj.flash{animation:fl .6s ease}
 @keyframes fl{0%{transform:scale(1)}40%{transform:scale(1.04)}100%{transform:scale(1)}}
-.empty{border:2px dashed var(--line);border-radius:14px;padding:26px 20px;color:var(--muted);text-align:center;grid-column:1/-1}
-.log{background:var(--code-bg);color:var(--code-ink);font:13px/1.65 var(--mono);border-radius:12px;padding:12px 14px;height:160px;overflow:auto;margin-top:14px}
+.empty{border:2px dashed var(--line);border-radius:10px;padding:26px 20px;color:var(--muted);text-align:center;grid-column:1/-1}
+.log{background:var(--code-bg);color:var(--code-ink);font:13px/1.65 var(--mono);border-radius:10px;padding:12px 14px;height:160px;overflow:auto;margin-top:14px}
 .log .c{color:var(--com)}
 .log .e{color:#FF9A90}
 .rules{padding-left:1.2em}
 .rules li{margin-bottom:.55em}
 .cats{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px;margin-top:10px}
-.cat{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.cat{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px;box-shadow:var(--shadow)}
 .cat h4{margin-bottom:.2em}
-.cat p{font-size:15px;color:var(--muted);margin:0 0 8px}
+.cat p{font-size:15.5px;color:var(--muted);margin:0 0 8px}
 .cat pre{margin:0;font:12.5px/1.5 var(--mono);color:var(--blue);white-space:pre-wrap}
 
 /* tree */
-.treewrap{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:22px;align-items:start;margin-top:10px}
+.treewrap{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:22px;align-items:start}
 .tree svg{width:100%;height:auto;display:block}
 .tnode{cursor:pointer}
 .tnode rect{fill:var(--surface);stroke:var(--blue);stroke-width:2;stroke-dasharray:6 4}
-.tnode text{fill:var(--ink);font:600 14px var(--display);text-anchor:middle;pointer-events:none}
+.tnode text{fill:var(--ink);font:600 14px var(--body);text-anchor:middle;pointer-events:none}
 .tnode.sel rect{fill:var(--blue);stroke-dasharray:none}
 .tnode.sel text{fill:var(--on-blue)}
 .tnode:focus{outline:none}
 .tnode:focus-visible rect{stroke:var(--obj);stroke-width:4}
 .tlink{stroke:var(--muted);stroke-width:1.6;fill:none}
-.tpanel{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px}
-.tpanel h4{font-size:1.3rem;margin-bottom:.2em}
+.tpanel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px}
+.tpanel h4{font-size:1.25rem;margin-bottom:.2em}
 .tpanel .sig{font:13px var(--mono);color:var(--blue);margin-bottom:12px}
-.tpanel dl{margin:0;font-size:15px}
-.tpanel dt{font-weight:700;margin-top:10px}
+.tpanel dl{margin:0;font-size:15.5px}
+.tpanel dt{font-weight:700;margin-top:10px;color:var(--ink)}
 .tpanel dd{margin:2px 0 0;font:13.5px/1.6 var(--mono)}
-.chipobj{display:inline-block;background:var(--obj);color:var(--obj-ink);border-radius:999px;padding:3px 12px;font-size:14px;margin:4px 6px 0 0}
+.chipobj{display:inline-block;background:var(--obj);color:var(--obj-ink);border-radius:6px;padding:3px 10px;font-size:14px;margin:4px 6px 0 0}
 
 /* evolution */
 .steps{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0}
-.stepb{display:flex;align-items:center;gap:8px;border:2px solid var(--line);background:var(--surface);border-radius:999px;padding:5px 14px 5px 5px;cursor:pointer;font-size:15px;font-weight:700}
-.stepb .sn{width:26px;height:26px;border-radius:50%;background:var(--blue-soft);color:var(--blue);display:grid;place-items:center;font-family:var(--display)}
+.stepb{display:flex;align-items:center;gap:8px;border:1.5px solid var(--line);background:var(--surface);border-radius:8px;padding:5px 12px 5px 5px;cursor:pointer;font:600 13.5px var(--mono)}
+.stepb .sn{width:24px;height:24px;border-radius:6px;background:var(--blue-soft);color:var(--blue);display:grid;place-items:center;font:700 12.5px var(--mono)}
 .stepb[aria-selected="true"]{border-color:var(--blue)}
 .stepb[aria-selected="true"] .sn{background:var(--blue);color:var(--on-blue)}
 .stage{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:24px;align-items:start}
-.diag{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px}
+.diag{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px}
 .diag svg{width:100%;height:auto;display:block}
 .d-box{fill:var(--surface);stroke:var(--ink);stroke-width:2}
 .d-data{fill:var(--green-soft);stroke:var(--green);stroke-width:2}
@@ -154,114 +179,121 @@ label.f{display:block;font-size:14px;color:var(--muted);margin:10px 0 3px;font-f
 .d-t.oi,.d-s.oi{fill:var(--obj-ink)}
 .d-line{stroke:var(--ink);stroke-width:2;fill:none}
 #ahp{fill:var(--ink)}
-.prob{background:var(--red-soft);border-radius:10px;padding:12px 14px;font-size:15.5px}
-.fix{background:var(--green-soft);border-radius:10px;padding:12px 14px;font-size:15.5px}
+.prob{background:var(--red-soft);border-radius:8px;padding:12px 14px;font-size:16px}
+.fix{background:var(--green-soft);border-radius:8px;padding:12px 14px;font-size:16px}
 
 /* ADT */
 .chips{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
-.chip{border:2px solid var(--blue);background:var(--blue-soft);border-radius:999px;padding:6px 14px;font-size:15px;cursor:pointer}
+.chip{border:1.5px solid var(--blue);background:var(--blue-soft);color:var(--ink);border-radius:8px;padding:6px 12px;font-size:15.5px;cursor:pointer}
 .chip[aria-pressed="false"]{border-color:var(--line);background:transparent;color:var(--muted);text-decoration:line-through}
 .chip.ok{box-shadow:0 0 0 3px var(--green)}
 .chip.bad{box-shadow:0 0 0 3px var(--red)}
 .gamegrid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:22px;align-items:start}
-.result{font-size:15.5px;margin-top:12px}
+.result{font-size:16px;margin-top:12px}
 .result ul{padding-left:1.1em;margin:.4em 0 0}
 .props{counter-reset:p;list-style:none;padding:0}
-.props li{counter-increment:p;position:relative;padding-left:44px;margin-bottom:14px}
-.props li::before{content:counter(p);position:absolute;left:0;top:-2px;width:30px;height:30px;border-radius:50%;background:var(--blue);color:var(--on-blue);font:800 15px/30px var(--display);text-align:center}
-.duo{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:12px}
-.pane{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;min-width:0}
+.props li{counter-increment:p;position:relative;padding-left:46px;margin-bottom:14px}
+.props li::before{content:counter(p);position:absolute;left:0;top:-1px;width:30px;height:30px;border-radius:8px;background:var(--blue);color:var(--on-blue);font:800 14px/30px var(--mono);text-align:center}
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.pane{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;min-width:0}
 .pane pre.code{font-size:12.5px;margin:.4em 0 .8em}
 .row{display:flex;align-items:center;gap:8px;margin:8px 0;flex-wrap:wrap}
 .row code{background:none;padding:0;white-space:nowrap}
 .row input{width:110px;flex:0 0 auto}
-.bal{font:600 15px var(--mono);margin-top:8px}
-.msg{font-size:14.5px;border-radius:8px;padding:0;margin-top:8px;min-height:1em}
+.bal{font:700 15px var(--mono);margin-top:8px;color:var(--ink)}
+.msg{font-size:15px;border-radius:8px;padding:0;margin-top:8px;min-height:1em}
 .msg.err{background:var(--red-soft);color:var(--red);padding:9px 12px}
 .msg.ok{background:var(--green-soft);color:var(--green);padding:9px 12px}
 .uses{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-top:10px}
-.uses div{border-top:3px solid var(--blue);padding-top:8px;font-size:15px}
-.uses b{display:block;font-family:var(--display);font-size:1.05rem}
+.uses div{border-top:3px solid var(--blue);padding-top:8px;font-size:15.5px}
+.uses b{display:block;font:700 .95rem/1.4 var(--mono);margin-bottom:2px}
 
 /* anatomy */
 .legend{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
 .part{border-radius:4px;transition:background .2s,box-shadow .2s}
-.part.on{background:rgba(255,213,74,.28);box-shadow:0 0 0 2px var(--obj)}
+.part.on{background:rgba(240,160,90,.26);box-shadow:0 0 0 2px var(--obj)}
 .ana{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:22px;align-items:start}
-.anainfo{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;min-height:160px}
+.ana pre.code{margin:0}
+.anainfo{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px;min-height:160px}
 
 /* pillars */
-.tablewrap{overflow-x:auto;margin:12px 0}
-table.cmp{border-collapse:collapse;width:100%;min-width:520px;font-size:15.5px}
-table.cmp th,table.cmp td{text-align:left;vertical-align:top;padding:10px 12px;border-bottom:1px solid var(--line)}
-table.cmp thead th{font-family:var(--display);font-size:1.05rem}
+.tablewrap{overflow-x:auto;margin:14px 0;background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow)}
+table.cmp{border-collapse:collapse;width:100%;min-width:520px;font-size:16px}
+table.cmp th,table.cmp td{text-align:left;vertical-align:top;padding:12px 16px;border-bottom:1px solid var(--line)}
+table.cmp tbody tr:last-child th,table.cmp tbody tr:last-child td{border-bottom:0}
+table.cmp thead th{font:700 12.5px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink)}
 table.cmp tbody th{color:var(--muted);font-weight:700;width:22%}
 .sigs{list-style:none;padding:0;margin:10px 0;font:14px/1.5 var(--mono)}
-.sigs li{padding:8px 12px;border-radius:8px;border:1.5px solid var(--line);margin-bottom:6px;background:var(--surface);transition:background .2s}
+.sigs li{padding:8px 12px;border-radius:8px;border:1.5px solid var(--line);margin-bottom:6px;background:var(--surface);transition:background .2s;max-width:none}
 .sigs li.hit{background:var(--obj);color:var(--obj-ink);border-color:var(--obj)}
 .callbtns{display:flex;flex-wrap:wrap;gap:8px}
-.callbtns button{font-family:var(--mono);font-size:13.5px}
-.out{background:var(--code-bg);color:var(--code-ink);font:13.5px/1.7 var(--mono);border-radius:12px;padding:12px 14px;min-height:56px;margin-top:10px}
-.toggles{display:flex;flex-wrap:wrap;gap:14px;margin:10px 0;font-size:15px}
+.callbtns button{font-family:var(--mono);font-size:13px}
+.out{background:var(--code-bg);color:var(--code-ink);font:13.5px/1.7 var(--mono);border-radius:10px;padding:12px 14px;min-height:56px;margin-top:10px}
+.toggles{display:flex;flex-wrap:wrap;gap:14px;margin:10px 0;font-size:15.5px}
 .toggles label{display:flex;align-items:center;gap:6px;cursor:pointer}
 .toggles input{width:auto}
 .isa{display:grid;gap:8px;margin-top:10px}
-.isa .r{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 12px}
-.isa .pair{font-weight:700;min-width:170px}
-.isa .fb{font-size:14.5px}
+.isa .r{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:8px 12px}
+.isa .pair{font:700 14.5px var(--mono);color:var(--ink);min-width:170px}
+.isa .fb{font-size:15px}
 .isa .fb.ok{color:var(--green)}.isa .fb.bad{color:var(--red)}
 
 /* languages */
-.tl{list-style:none;padding:0;margin:16px 0;border-left:3px solid var(--blue)}
-.tl li{position:relative;padding:0 0 22px 22px;max-width:none}
-.tl li::before{content:"";position:absolute;left:-9px;top:6px;width:15px;height:15px;border-radius:50%;background:var(--paper);border:3px solid var(--blue)}
-.tl .y{font:800 1.4rem/1 var(--display);color:var(--blue)}
-.tl .nm{font:800 1.2rem var(--display);margin-left:8px}
-.tl .who{font-size:15px;color:var(--muted)}
-.tl .sl{display:inline-block;font-size:13px;border:1.5px solid var(--line);border-radius:999px;padding:1px 9px;margin-left:6px;color:var(--muted)}
-.tl p{margin:.3em 0 0;font-size:15.5px}
+.tl{list-style:none;padding:0;margin:16px 0;border-left:2px solid var(--blue)}
+.tl li{position:relative;padding:0 0 24px 24px;max-width:none}
+.tl li::before{content:"";position:absolute;left:-8px;top:5px;width:14px;height:14px;border-radius:50%;background:var(--paper);border:3px solid var(--blue)}
+.tl .y{font:800 1.3rem/1 var(--mono);color:var(--blue)}
+.tl .nm{font:800 1.15rem var(--mono);color:var(--ink);margin-left:8px}
+.tl .who{font-size:15.5px;color:var(--muted)}
+.tl .sl{display:inline-block;font:12px var(--mono);border:1.5px solid var(--line);border-radius:6px;padding:1px 8px;margin-left:6px;color:var(--muted)}
+.tl p{margin:.3em 0 0;font-size:16px}
 
 /* logistics */
-.bar{display:flex;height:52px;border-radius:12px;overflow:hidden;margin:14px 0 8px}
-.bar div{display:flex;align-items:center;justify-content:center;font:800 15px var(--display);min-width:0}
-.legendg{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px;font-size:15px}
+.bar{display:flex;height:52px;border-radius:8px;overflow:hidden;margin:0 0 10px}
+.bar div{display:flex;align-items:center;justify-content:center;font:700 14px var(--mono);min-width:0}
+.legendg{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px;font-size:15.5px}
 .legendg span{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:8px;vertical-align:-1px}
 
 /* quiz */
-.quiz{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:22px;margin-top:14px}
-.qmeta{font-size:14px;color:var(--muted);margin-bottom:6px}
-.qtext{font:600 1.2rem/1.35 var(--display);margin-bottom:14px}
+.quiz{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:24px;margin-top:14px;box-shadow:var(--shadow)}
+.qmeta{font:600 12.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.qtext{font:600 1.3rem/1.4 var(--body);color:var(--ink);margin-bottom:14px}
 .opts{display:grid;gap:8px}
-.opt{text-align:left;border:2px solid var(--line);background:var(--paper);border-radius:10px;padding:10px 14px;cursor:pointer;font-size:15.5px}
+.opt{text-align:left;border:1.5px solid var(--line);background:var(--paper);border-radius:8px;padding:10px 14px;cursor:pointer;font-size:16px}
 .opt:hover:not(:disabled){border-color:var(--blue)}
 .opt.right{border-color:var(--green);background:var(--green-soft)}
 .opt.wrong{border-color:var(--red);background:var(--red-soft)}
 .opt:disabled{cursor:default}
-.qexp{margin-top:14px;font-size:15.5px}
+.qexp{margin-top:14px;font-size:16px}
 .qnav{display:flex;justify-content:flex-end;margin-top:14px}
-.score{font:800 3rem/1 var(--display);color:var(--blue)}
+.score{font:800 3rem/1 var(--mono);color:var(--blue)}
 
 .refs{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:14px 0 22px}
-.refs .rl{font-size:14px;color:var(--muted);margin-right:2px}
-.thumb{position:relative;padding:0;border:1.5px solid var(--line);border-radius:8px;overflow:hidden;background:var(--surface);cursor:zoom-in;width:116px;line-height:0}
+.refs .rl{font:600 11.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-right:2px}
+.thumb{position:relative;padding:0;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--surface);cursor:zoom-in;width:116px;line-height:0}
 .thumb img{width:100%;height:auto;display:block}
-.thumb span{position:absolute;left:5px;bottom:5px;line-height:1.2;font:700 11px var(--body);background:var(--ink);color:var(--paper);border-radius:4px;padding:2px 6px}
+.thumb span{position:absolute;left:5px;bottom:5px;line-height:1.2;font:700 11px var(--mono);background:var(--ink);color:var(--paper);border-radius:4px;padding:2px 6px}
 .thumb:hover{border-color:var(--blue)}
 dialog.lb{border:0;padding:0;background:transparent;max-width:min(1100px,96vw);width:100%;color:var(--ink)}
 dialog.lb::backdrop{background:rgba(5,8,15,.82)}
-.lbin{background:var(--surface);border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:10px}
+.lbin{background:var(--surface);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:10px}
 .lbin img{width:100%;height:auto;max-height:calc(100dvh - 140px);object-fit:contain;border-radius:8px;background:#fff}
 .lbbar{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
-.lbbar b{font-family:var(--display)}
+.lbbar b{font-family:var(--mono)}
 .pager{display:flex;justify-content:space-between;gap:10px;margin-top:48px;padding-top:20px;border-top:1px solid var(--line);flex-wrap:wrap}
 
 @media (max-width:860px){
   .app{grid-template-columns:1fr}
-  .side{position:sticky;top:env(safe-area-inset-top,0px);max-height:none;flex-direction:row;align-items:center;overflow-x:auto;border-right:0;border-bottom:1px solid var(--line);background:var(--paper);z-index:5;padding:8px 12px;gap:2px}
-  .brand{display:none}
-  .navi{white-space:nowrap;padding:7px 10px}
+  .side{position:sticky;top:env(safe-area-inset-top,0px);height:auto;max-height:none;flex-direction:row;align-items:center;overflow-x:auto;z-index:5;padding:8px 10px;gap:2px}
+  .brand,.gs{display:none}
+  #navlist,.grp{display:contents}
+  .navi{white-space:nowrap;padding:7px 10px;flex:0 0 auto}
+  .navi.on{background:none;border-left-color:transparent}
+  .navi[aria-current="true"]{background:var(--side-active);border-left-color:var(--side-ink)}
   .theme-btn{margin:0 0 0 6px;flex:0 0 auto}
-  main{padding-top:28px}
+  main{padding-top:30px}
+  h3{scroll-margin-top:72px}
+  .card{padding:16px}
   .factory,.treewrap,.stage,.gamegrid,.duo,.ana{grid-template-columns:1fr}
 }
 @media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
@@ -274,7 +306,7 @@ dialog.lb::backdrop{background:rgba(5,8,15,.82)}
 
 <div class="app">
   <nav class="side" aria-label="Lecture sections">
-    <div class="brand"><strong>OOP, Lecture 1</strong><span>Introduction to object-oriented programming</span></div>
+    <div class="brand"><strong>OOP<i>/</i>Lecture 1</strong><span>An interactive lecture</span></div>
     <div id="navlist"></div>
     <button class="theme-btn" id="theme">Dark mode</button>
   </nav>
@@ -282,28 +314,31 @@ dialog.lb::backdrop{background:rgba(5,8,15,.82)}
   <main>
   <!-- 1 -->
   <section>
-    <h1>A class is the plan. An object is the real thing made from it.</h1>
+    <h1>A class is the <span class="hl">plan</span>. An object is the <span class="hl">real thing</span> made from it.</h1>
     <p class="lede">When you hear the word "dog", you think of an animal with four legs that barks. That general idea is a <b>class</b>. It is not a real dog, so you cannot touch it. Rex, the Dalmatian sleeping on your sofa, is an <b>object</b>. He is a real dog, with his own name and age. Try making a few objects below.</p>
     <div class="refs" data-slides="5,6,7,9,10,11"></div>
 
+    <div class="card">
+    <div class="card-h"><b>Live: make objects from a class</b><span id="fmeta"></span></div>
     <div class="tabs" role="tablist" id="ftabs"></div>
     <div class="factory">
       <div>
         <div class="klass"><pre id="kcode"></pre></div>
         <div id="finputs"></div>
         <div class="row" style="margin-top:14px"><button class="btn" id="fcreate">Create object</button><button class="btn ghost" id="fclear">Clear all</button></div>
-        <p class="hint">A dashed border means a class (a plan). A solid yellow box means an object (a real thing in memory).</p>
+        <p class="hint">A dashed border means a class (a plan). A solid orange box means an object (a real thing in memory).</p>
       </div>
       <div>
         <div id="objs" class="objs"></div>
         <div class="log" id="flog" aria-live="polite"></div>
       </div>
     </div>
+    </div>
 
-    <h3>Two terms that mean different things</h3>
+    <h3 data-nav="Two terms">Two terms that mean different things</h3>
     <p><b>Object orientation</b> is a way of thinking. You look at a problem and find the "things" in it. <b>Object-oriented programming</b> is a way of writing code based on that idea. The program is made of objects. Each object has data (called fields or attributes) and code (called methods). Not every language can do this. For example, C has no classes.</p>
 
-    <h3>What you just did, in the words of the lecture</h3>
+    <h3 data-nav="What you just did">What you just did, in the words of the lecture</h3>
     <ul class="rules">
       <li><b>Everything is an object.</b> Dogs, cars, hotel rooms and bank accounts are all objects.</li>
       <li><b>Every object has a type, and that type is its class.</b> The type of <code>dog1</code> is <code>Dog</code>.</li>
@@ -321,12 +356,15 @@ dialog.lb::backdrop{background:rgba(5,8,15,.82)}
 
   <!-- 2 -->
   <section hidden>
-    <h2>Classes go from general to specific</h2>
+    <h2>Classes go from <span class="hl">general</span> to <span class="hl">specific</span></h2>
     <p class="lede">This is the Vehicle diagram from the lecture. Each level down adds more detail. A child class gets everything its parent has, automatically. Tap a class to see it.</p>
     <div class="refs" data-slides="6,8"></div>
+    <div class="card">
+    <div class="card-h"><b>Live: the Vehicle class tree</b><span id="tmeta"></span></div>
     <div class="treewrap">
       <div class="tree"><svg id="tree" viewBox="0 0 600 300" role="group" aria-label="Vehicle class hierarchy"></svg></div>
       <div class="tpanel" id="tpanel" aria-live="polite"></div>
+    </div>
     </div>
     <p style="margin-top:18px">Going up the tree is called <b>generalization</b>. Sedan and Hatchback have a lot in common, so you make a new class, "Car", for the shared parts. Going down the tree is called <b>specialization</b>. You start general and add details. The slide says "from generalization to specification", but it means specialization.</p>
     <div class="callout"><p><b>Real-life example:</b> job titles. "Employee" is general. An "Engineer" is an Employee with technical skills. An "AI Engineer" is an Engineer who also knows machine learning. Each title includes everything above it. But you never meet just "an Employee". You meet Sara, and Sara is an employee. Sara is the object.</p></div>
@@ -335,22 +373,27 @@ dialog.lb::backdrop{background:rgba(5,8,15,.82)}
 
   <!-- 3 -->
   <section hidden>
-    <h2>How programming led to objects</h2>
+    <h2>How programming led to <span class="hl">objects</span></h2>
     <p class="lede">There are five stages. Each stage fixes the biggest problem of the stage before it. To make the differences easy to see, every stage does the same job: it keeps track of two bank accounts.</p>
+    <div class="card">
+    <div class="card-h"><b>Live: five stages, one bank job</b><span id="smeta"></span></div>
     <div class="steps" role="tablist" id="steps"></div>
     <div id="stage"></div>
+    </div>
     <div class="pager"></div>
   </section>
 
   <!-- 4 -->
   <section hidden>
-    <h2>Abstract data types: where classes came from</h2>
+    <h2><span class="hl">Abstract data types</span>: where classes came from</h2>
     <p class="lede">An ADT (abstract data type) is a new type that you design yourself. It has a set of values and the operations you are allowed to use on them. It is described by <i>what it does</i>, not by how it is coded.</p>
     <div class="refs" data-slides="17,18,19,20,21"></div>
     <div class="callout"><p><b>Real-life example:</b> a vending machine (a snack machine). You know what it can do: take a coin, let you choose an item, and give you change. You do not know how it works inside, and you do not need to. Any machine that does these same things is "the same type" for you, even if the inside is different.</p></div>
 
-    <h3>1. Abstraction: keep only what you need</h3>
+    <h3 data-nav="Abstraction">1. Abstraction: keep only what you need</h3>
     <p>Abstraction means keeping only the information you need for <i>one purpose</i>. A real person has thousands of details. Which ones does your system need? Tap the details that do not matter to remove them, then press "Check my model". Then change the purpose and try again. The same person gives a different model.</p>
+    <div class="card">
+    <div class="card-h"><b>Live: build a model</b><span id="gmeta"></span></div>
     <div class="tabs" id="ctx"></div>
     <div class="gamegrid">
       <div>
@@ -364,8 +407,9 @@ dialog.lb::backdrop{background:rgba(5,8,15,.82)}
         <p class="hint">A model is a simple view of the problem: the data that matters and the operations on it. An ADT is one kind of model.</p>
       </div>
     </div>
+    </div>
 
-    <h3>3. The three properties of an ADT</h3>
+    <h3 data-nav="Three properties">3. The three properties of an ADT</h3>
     <ol class="props">
       <li><b>It is a well-defined entity.</b> This means it is one clear thing that you can use as a single unit, like "a BankClient", not many loose variables.</li>
       <li><b>It defines the data structure of its items.</b> This means it lists the data that each item has: name, date of birth, ID, account number.</li>
@@ -373,8 +417,10 @@ dialog.lb::backdrop{background:rgba(5,8,15,.82)}
     </ol>
     <p>If something has all three, it is an abstract data type.</p>
 
-    <h3>4. Encapsulation: data and operations together in one capsule</h3>
+    <h3 data-nav="Encapsulation">4. Encapsulation: data and operations together in one capsule</h3>
     <p>Encapsulation puts the data and its operations together in one unit. It also hides the details from the people who use the ADT. Try to break each account below.</p>
+    <div class="card">
+    <div class="card-h"><b>Live: try to break each account</b><span>open box vs capsule</span></div>
     <div class="duo">
       <div class="pane">
         <h4>Open box</h4>
@@ -393,6 +439,7 @@ dialog.lb::backdrop{background:rgba(5,8,15,.82)}
         <div class="msg" id="e2msg"></div>
       </div>
     </div>
+    </div>
     <div class="callout"><p><b>Real-life example:</b> an ATM (cash machine). You never open the safe where the money is kept. You ask the machine for money, and it checks the rules first. The safe is the private data. The ATM buttons are the public methods.</p></div>
     <h4 style="margin-top:1.6em">Why this is useful</h4>
     <div class="uses">
@@ -406,13 +453,16 @@ dialog.lb::backdrop{background:rgba(5,8,15,.82)}
 
   <!-- 5 -->
   <section hidden>
-    <h2>Inside a class: the five parts</h2>
+    <h2>Inside a class: the <span class="hl">five parts</span></h2>
     <p class="lede">One slide in the lecture shows the parts of an object: data members, functions, access modifiers, constructor and destructor. Pick one to see where it is in real Java code.</p>
     <div class="refs" data-slides="24,25"></div>
+    <div class="card">
+    <div class="card-h"><b>Live: the parts of a class</b><span>Account.java</span></div>
     <div class="legend" id="legend"></div>
     <div class="ana">
       <pre class="code" id="anacode"></pre>
       <div class="anainfo" id="anainfo" aria-live="polite"></div>
+    </div>
     </div>
     <p style="margin-top:18px">The lecture says that "each object defines its own data, implements its own procedures, and specifies through its methods how the data is accessed and modified". The code above shows what this means. Also, you do not call <code>deposit(handle, 50)</code>. You send the message directly to the object: <code>acc.deposit(50)</code>.</p>
     <div class="pager"></div>
@@ -420,7 +470,7 @@ dialog.lb::backdrop{background:rgba(5,8,15,.82)}
 
   <!-- 6 -->
   <section hidden>
-    <h2>The four pillars</h2>
+    <h2>The <span class="hl">four pillars</span></h2>
     <p class="lede">The ring diagram in the lecture has six parts. <b>Class</b> and <b>object</b> are the basic building blocks. <b>Encapsulation, abstraction, inheritance and polymorphism</b> are the four main ideas built on top of them.</p>
     <div class="refs" data-slides="26,27,28,29"></div>
 
@@ -438,37 +488,46 @@ dialog.lb::backdrop{background:rgba(5,8,15,.82)}
     </table></div>
     <p>The lecture defines data abstraction as looking at real objects and finding the class (the general type) they belong to. You did this with the dogs and with the vehicle tree.</p>
 
-    <h3>Polymorphism: one name, many meanings</h3>
+    <h3 data-nav="Polymorphism">Polymorphism: one name, many meanings</h3>
     <p><b>Overloading.</b> Several methods have the same name but different parameters. The compiler chooses one by looking at the arguments. This happens before the program runs. Try a call:</p>
+    <div class="card">
+    <div class="card-h"><b>Live: overloading</b><span>chosen at compile time</span></div>
     <ul class="sigs" id="sigs"></ul>
     <div class="callbtns" id="calls"></div>
     <div class="out" id="ovout" aria-live="polite">Pick a call above.</div>
+    </div>
 
     <p style="margin-top:22px"><b>Overriding.</b> A subclass replaces a method that it got from its parent class. Below, every variable has the same declared type, <code>Animal</code>. But each call runs a different version. Java chooses the version <i>at runtime</i>, based on the real object. Uncheck a box to remove that override.</p>
+    <div class="card">
+    <div class="card-h"><b>Live: overriding</b><span>chosen at runtime</span></div>
     <div class="toggles" id="ovtoggles"></div>
     <pre class="code" id="ovcode"></pre>
     <button class="btn" id="ovrun">Run the loop</button>
     <div class="out" id="ovrout" aria-live="polite"></div>
+    </div>
 
     <div class="heads"><h4>A note about the words on the slide</h4><p>Slide 29 says the meaning of overloading is "implied by the code itself". This means: by the different parameter lists you wrote. It says the meaning of overriding is "implied by the values of the supplied variables". This means: by the object that the variable points to while the program runs, not by the numbers inside it. The easiest way to remember the difference: overloading is decided at compile time, and overriding is decided at runtime.</p></div>
 
-    <h3>Inheritance: build on a class that already exists</h3>
+    <h3 data-nav="Inheritance">Inheritance: build on a class that already exists</h3>
     <p>A new class gets the attributes and methods of an existing class, and then adds its own. In Java, you do this with <code>extends</code>. The Vehicle tree works this way: <code>class Car extends WheeledVehicle</code>. You do not have to write <code>move()</code> again for every vehicle.</p>
     <p>A quick test: use inheritance when "X <b>is a</b> Y" is true. If "X <b>has a</b> Y" is true, make Y a field instead. Try it:</p>
+    <div class="card">
+    <div class="card-h"><b>Quick test: is a, or has a?</b><span>6 pairs</span></div>
     <div class="isa" id="isa"></div>
+    </div>
     <div class="pager"></div>
   </section>
 
   <!-- 7 -->
   <section hidden>
-    <h2>Object-oriented languages</h2>
+    <h2><span class="hl">Object-oriented</span> languages</h2>
     <p class="lede">These are the languages from the lecture, in order of date. When the slide gives a different date from the usual one, the small label shows the date on the slide.</p>
     <div class="refs" data-slides="30"></div>
     <ol class="tl" id="tl"></ol>
     <p><b>Other languages in the lecture:</b> Eiffel (the slide writes it as "Effile"), Objective-C (the main Apple language before Swift), and Ada (OOP was added in Ada 95).</p>
     <div class="heads"><h4>About the dates</h4><p>Each language has a date when work started and a date when it was first released. That is why different sources give different years. In the exam, use the dates on the slide. Your professor will grade using those dates.</p></div>
 
-    <h3>Is Python a pure OO language?</h3>
+    <h3 data-nav="Is Python pure OO?">Is Python a pure OO language?</h3>
     <p>"Pure" means two things: everything is an object, and data can be used only through methods. Smalltalk is the best-known pure OO language. Python is OO, and in Python even numbers and functions are objects. But Python does not really protect private data. A name that starts with an underscore (<code>_</code>) only means "please don't touch". Nothing stops you.</p>
     <pre class="code" data-code="py"></pre>
     <p>Java is not pure either, but for a different reason. Java does protect <code>private</code> data, but simple types like <code>int</code> and <code>double</code> are not objects.</p>
@@ -477,11 +536,14 @@ dialog.lb::backdrop{background:rgba(5,8,15,.82)}
 
   <!-- 8 -->
   <section hidden>
-    <h2>How the course works</h2>
+    <h2>How the <span class="hl">course</span> works</h2>
     <p class="lede">Grades, rules and the textbook, from the first slides of the lecture.</p>
     <div class="refs" data-slides="2,3,4"></div>
+    <div class="card">
+    <div class="card-h"><b>Grade breakdown</b><span>100% total</span></div>
     <div class="bar" id="gbar" role="img" aria-label="Grade breakdown"></div>
     <div class="legendg" id="glegend"></div>
+    </div>
     <p style="margin-top:20px">Labs are 30% of your grade. So when the slides say "the lab sessions are essential", they really mean it. The two lecture quizzes are pop-up quizzes. This means they come with no warning, and they can ask about anything from this lecture.</p>
     <h3>Course rules</h3>
     <ul class="rules">
@@ -496,7 +558,7 @@ dialog.lb::backdrop{background:rgba(5,8,15,.82)}
 
   <!-- 9 -->
   <section hidden>
-    <h2>Test yourself</h2>
+    <h2>Test <span class="hl">yourself</span></h2>
     <p class="lede">Ten questions like the ones you may see in a pop-up quiz. Each answer comes with an explanation.</p>
     <div class="quiz" id="quiz"></div>
     <div class="pager"></div>
@@ -566,8 +628,23 @@ lb.addEventListener('keydown',e=>{if(e.key==='ArrowRight')$('#lbn').click();if(e
 /* ---------- navigation ---------- */
 const SECTIONS=['Class vs object','General to specific','How OOP began','Abstract data types','Inside a class','The four pillars','OO languages','About the course','Test yourself'];
 const secs=$$('main > section');
-$('#navlist').innerHTML=SECTIONS.map((s,i)=>`<button class="navi" data-i="${i}"><span class="n">${i+1}</span><span>${s}</span></button>`).join('');
-$('#navlist').addEventListener('click',e=>{const b=e.target.closest('.navi');if(b)show(+b.dataset.i)});
+const pad=n=>String(n).padStart(2,'0');
+const subs=secs.map((s,i)=>{
+  s.querySelector('h1,h2').insertAdjacentHTML('beforebegin',`<p class="kicker">OOP · Lecture 1 · Part ${pad(i+1)} of ${pad(secs.length)}</p>`);
+  return [...s.querySelectorAll(':scope > h3')].map((h,j)=>{h.id=`s${i}h${j}`;return h});
+});
+$('#navlist').innerHTML=secs.map((s,i)=>`<div class="grp"><button class="navi" data-i="${i}"><span class="n">${pad(i+1)}</span><span>${SECTIONS[i]}</span></button>`+
+  subs[i].map(h=>`<button class="gs" data-i="${i}" data-h="${h.id}">${esc(h.dataset.nav||h.textContent)}</button>`).join('')+`</div>`).join('');
+$('#navlist').addEventListener('click',e=>{const b=e.target.closest('[data-i]');if(!b)return;show(+b.dataset.i);if(b.dataset.h){$('#'+b.dataset.h).scrollIntoView();spy()}});
+/* highlight the sidebar link for the part of the section on screen */
+let curSec=0,spyQueued=false;
+function spy(){
+  let act=null;
+  for(const h of subs[curSec]) if(h.getBoundingClientRect().top<160) act=h.id;
+  $$('.gs').forEach(b=>b.classList.toggle('on',b.dataset.h===act));
+  $$('.navi').forEach((b,j)=>b.classList.toggle('on',j===curSec&&!act));
+}
+addEventListener('scroll',()=>{if(!spyQueued){spyQueued=true;requestAnimationFrame(()=>{spyQueued=false;spy()})}},{passive:true});
 secs.forEach((s,i)=>{
   const p=s.querySelector('.pager');
   p.innerHTML=(i>0?`<button class="btn ghost" data-go="${i-1}">Back: ${SECTIONS[i-1]}</button>`:'<span></span>')+
@@ -576,10 +653,12 @@ secs.forEach((s,i)=>{
 });
 function show(i){
   secs.forEach((s,j)=>s.hidden=j!==i);
+  curSec=i;
   $$('.navi').forEach((b,j)=>b.setAttribute('aria-current',j===i));
   store.set('oop1-sec',i);
   window.scrollTo(0,0);
   const cur=$$('.navi')[i]; if(cur&&window.innerWidth<=860) cur.scrollIntoView({block:'nearest',inline:'center'});
+  spy();
 }
 
 /* theme */
@@ -619,6 +698,7 @@ function renderFactory(){
   $('#finputs').innerHTML=C.ctor.map((fi,j)=>{const f=C.fields[fi];return `<label class="f" for="fi${j}">${f[0]} ${f[1]}</label><input id="fi${j}" ${f[0]==='int'?'type="number"':''} value="${esc(s[j])}">`}).join('');
 }
 function renderObjs(flashId){
+  $('#fmeta').textContent=`objects: ${objs.length} / 8`;
   const box=$('#objs');
   if(!objs.length){box.innerHTML='<div class="empty">No objects yet. The class exists, but no object has been made from it.</div>';return}
   box.innerHTML=objs.map(o=>{
@@ -689,6 +769,7 @@ function renderTree(){
   if(n.ex.length) html+=`<p style="margin:14px 0 0;font-size:15px"><b>Real objects:</b><br>${n.ex.map(e=>`<span class="chipobj">${esc(e)}</span>`).join('')}</p>`;
   else html+=`<p style="margin:14px 0 0;font-size:15px;color:var(--muted)">${n.note||'Still general. Go one level down to find something real that you can point at.'}</p>`;
   $('#tpanel').innerHTML=html;
+  $('#tmeta').textContent=`selected: ${tsel}`;
 }
 $('#tree').addEventListener('click',e=>{const g=e.target.closest('.tnode');if(g){tsel=g.dataset.k;renderTree();$(`.tnode[data-k="${tsel}"]`).focus()}});
 $('#tree').addEventListener('keydown',e=>{const g=e.target.closest('.tnode');if(g&&(e.key==='Enter'||e.key===' ')){e.preventDefault();tsel=g.dataset.k;renderTree();$(`.tnode[data-k="${tsel}"]`).focus()}});
@@ -762,6 +843,7 @@ let stg=0;
 function renderStage(){
   $('#steps').innerHTML=STAGES.map((s,i)=>`<button class="stepb" role="tab" aria-selected="${i===stg}" data-s="${i}"><span class="sn">${i+1}</span>${s.t}</button>`).join('');
   const s=STAGES[stg];
+  $('#smeta').textContent=`stage ${stg+1} / ${STAGES.length}`;
   $('#stage').innerHTML=`<div class="stage"><div class="diag">${s.svg}</div><div><h3 style="margin-top:0">${stg+1}. ${s.h}</h3>${refsHTML(s.sl)}${s.txt}${s.prob?`<p class="prob"><b>The problem:</b> ${s.prob}</p>`:''}${s.fix?`<p class="fix"><b>What it fixes:</b> ${s.fix}</p>`:''}</div></div><pre class="code">${hl(s.code)}</pre>`+
     (stg<STAGES.length-1?`<button class="btn ghost" id="nextstage">See how stage ${stg+2} fixes this</button>`:'');
   const n=$('#nextstage'); if(n) n.onclick=()=>{stg++;renderStage()};
@@ -791,6 +873,7 @@ function renderGame(){
   $('#ctx').innerHTML=Object.keys(CTX).map(k=>`<button class="tab" role="tab" aria-selected="${k===ctx}" data-x="${k}">${CTX[k].label}</button>`).join('');
   $('#traits').innerHTML=TRAITS.map(t=>`<button class="chip" aria-pressed="${kept[t.k]}" data-t="${t.k}">${t.l}</button>`).join('');
   const C=CTX[ctx];
+  $('#gmeta').textContent=`purpose: ${C.label}`;
   const fs=TRAITS.filter(t=>kept[t.k]).map(t=>'    '+t.id+';');
   $('#model').innerHTML=hl(`class ${C.cls} {\n${fs.join('\n')||'    // nothing kept'}\n\n${C.ops.map(o=>'    '+o).join('\n')}\n}`);
 }
