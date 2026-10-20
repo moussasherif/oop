@@ -93,6 +93,7 @@ The site shell is in place. Lectures so far (course id `oop`):
 |---|---|---|
 | `#oop-lec01` | Lecture 1 - Introduction to OOP | Older page with its own script; its 9 parts are paged with Back/Next |
 | `#oop-lec01p2` | Lecture 1 (Part 2) - Introduction to Java Basics | Uses the shared components below; Lab 1 notes and practice at the end |
+| `#oop-lab02` | Lab 2 - Arrays, Control Flow, Classes & Encapsulation | A lab file added on its own page (no lecture file); built with the same lecture page rules. The lab has no hands-on tasks, so no Practice section |
 | `#summary` | Summary & Exam Review | One `.sum-block` per lecture |
 
 **Where things go in `index.html`:**
@@ -109,7 +110,7 @@ The site shell is in place. Lectures so far (course id `oop`):
 - Step-by-step reveal: `<div class="reveal card" data-reveal><ol class="rv-steps"><li>…</li></ol></div>` (buttons are added automatically).
 - Code: `<pre class="code" data-java>` is colored automatically (escape `<` as `&lt;` and `&` as `&amp;`). Console output: `<pre class="out">`.
 - Code anatomy: `[data-anat]` with `.part[data-part]` spans in the code and one `<template data-part data-label>` per explanation.
-- Lab or tutorial pages: `<span class="slide-tag lab">🧪 Lab 1 · p. 25</span>`. Lab 1 references use PDF page numbers (the number printed on each lab slide is one higher).
+- Lab or tutorial pages: `<span class="slide-tag lab">🧪 Lab 1 · p. 25</span>` (Lab 2 uses `🧪 Lab 2 · Slide 6`; its .pptx slide numbers match the numbers printed on the slides). Lab 1 references use PDF page numbers (the number printed on each lab slide is one higher).
 - A lecture's own widgets go in one inline `<script>` at the end of its `<article>`. It can use the helpers defined in the `<head>` script: `$`, `$$`, `esc`, `store`, `hlj`. Do not redeclare them.
 
 **Things to know:**

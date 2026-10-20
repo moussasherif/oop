@@ -404,6 +404,34 @@ details[open]>summary::before{content:"−"}
 .bar-t i{display:block;height:100%;min-width:3px;background:var(--bar);border-radius:0 4px 4px 0;flex:0 0 auto}
 .bar-v{font:600 13.5px var(--mono);color:var(--ink)}
 
+/* lab 2 widgets */
+.g2d{display:inline-grid;grid-template-columns:auto repeat(var(--cols,3),44px);gap:4px;align-items:center;margin:6px 0}
+.g2d b{font:600 12px var(--mono);color:var(--muted);text-align:center;padding:0 6px}
+.g2d i,.g2d u{font:700 15px/40px var(--mono);font-style:normal;text-decoration:none;text-align:center;border:1.5px solid var(--blue);border-radius:6px;background:var(--surface);color:var(--ink)}
+.g2d u{border:1.5px dashed var(--muted);color:var(--muted);font-weight:400;font-size:13px}
+.g2d i.hit{background:var(--obj-soft);border-color:var(--obj)}
+.g2d em{display:block}
+.mem{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-content:start}
+.mem-col{display:flex;flex-direction:column;gap:6px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px}
+.mem-col span{font:600 13.5px var(--mono);border:1.5px solid var(--blue);border-radius:6px;padding:8px 10px;text-align:center;background:var(--blue-soft);color:var(--ink)}
+.mem-col span.ref{border-style:dashed}
+.objbox{display:inline-block;background:var(--obj);color:var(--obj-ink);border-radius:8px;padding:10px 14px;font:600 13.5px/1.4 var(--mono);text-align:center}
+.objbox small{font-weight:400;opacity:.8}
+.mem-col span.objbox{background:var(--obj);border-color:var(--obj);color:var(--obj-ink)}
+.cv-diag{display:flex;flex-direction:column;gap:10px;min-height:120px;justify-content:center}
+.cv-row{display:flex;align-items:center;gap:10px}
+.cv-vars{display:flex;flex-direction:column;gap:8px}
+.cv-var{font:700 14px var(--mono);border:1.5px solid var(--blue);background:var(--blue-soft);color:var(--ink);border-radius:6px;padding:6px 12px}
+.cv-arrow{font:700 18px var(--mono);color:var(--muted)}
+.static-box{display:flex;flex-direction:column;align-items:center;gap:4px;background:var(--blue);color:var(--on-blue);border-radius:10px;padding:12px;margin:14px auto 10px;max-width:340px}
+.static-box .out-label{color:inherit;opacity:.85}
+.static-box b{font:700 18px var(--mono);color:inherit}
+.static-objs{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;min-height:48px}
+.callbtns .btn.on{background:var(--blue);color:var(--on-blue)}
+.access-table td.y{color:var(--green);font-weight:700;text-align:center}
+.access-table td.n{color:var(--muted);text-align:center}
+@media (max-width:860px){.mem{grid-template-columns:1fr}}
+
 /* practice */
 .q-card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px 22px;margin:22px 0;box-shadow:var(--shadow)}
 .q-card h3{margin-top:6px}
@@ -516,6 +544,8 @@ function hlj(src){
         <div class="subnav" data-for="oop-lec01"></div>
         <a class="navi" href="#oop-lec01p2" data-view="oop-lec01p2"><span class="n">L1.2</span><span>Introduction to Java basics</span></a>
         <div class="subnav" data-for="oop-lec01p2"></div>
+        <a class="navi" href="#oop-lab02" data-view="oop-lab02"><span class="n">Lab2</span><span>Arrays, classes &amp; encapsulation</span></a>
+        <div class="subnav" data-for="oop-lab02"></div>
         <!-- NAV:oop:END -->
       </div>
       <!-- NAV:COURSES:END -->
@@ -2073,6 +2103,807 @@ public class HelloWorld {
     })();
     </script>
   </article>
+
+  <article class="view lecture" data-view="oop-lab02" data-title="OOP · Lab 2: Arrays, Control Flow, Classes &amp; Encapsulation" data-short="Lab 2 · Classes &amp; encapsulation" hidden>
+    <header class="lec-head">
+      <p class="kicker">OOP · Lab 2</p>
+      <h1>Arrays, control flow, <span class="hl">classes</span> &amp; encapsulation</h1>
+      <p class="lede">Lab 2 has two halves. First it goes deeper into Java basics: arrays (also 2D ones), loops and decisions. Then it builds real classes: constructors, how objects live in memory, who may see what (access modifiers), getters and setters, and the <code>static</code> and <code>final</code> keywords.</p>
+      <div class="lec-meta"><span class="slide-tag lab">🧪 Lab 2 · Slides 1–35</span><span class="done-count" data-done-count></span></div>
+      <div class="card">
+        <div class="card-h"><b>Agenda</b><span>🧪 Slide 2</span></div>
+        <ol class="road">
+          <li><a href="#oop-lab02:arrays">Arrays in Java</a></li>
+          <li><a href="#oop-lab02:loops">Loops in Java</a></li>
+          <li><a href="#oop-lab02:if-else">Decision making in Java</a>: if-else, switch, break &amp; continue</li>
+          <li><a href="#oop-lab02:vocab">Main OOP vocabulary</a></li>
+          <li>Introduction to OOP: <a href="#oop-lab02:first-class">classes and objects</a>, <a href="#oop-lab02:constructor">class constructor</a>, <a href="#oop-lab02:access">encapsulation</a>, <a href="#oop-lab02:static">access &amp; field modifiers</a> (public, protected, default, private · static, final)</li>
+          <li>Hands-on</li>
+        </ol>
+        <p class="hint" style="margin-bottom:0">The agenda lists a "Hands-on" part, but the lab file has no hands-on slides, so this page has no practice tasks.</p>
+      </div>
+    </header>
+
+    <!-- 01 arrays -->
+    <section class="lec-sec" id="oop-lab02-arrays" data-nav="Arrays in Java">
+      <p class="kicker">Section 01</p>
+      <h2>Arrays in <span class="hl">Java</span></h2>
+      <div class="sec-head"><span class="slide-tag lab">🧪 Lab 2 · Slides 3–4</span></div>
+      <p>An <b>array</b> holds a fixed number of values of one type (<a href="#oop-lec01p2:arrays">Lecture 1, Part 2</a> introduced them). The general form is:</p>
+<pre class="code" data-java>DataType[] variableName = new DataType[size];</pre>
+      <p>In Java, all arrays are <b>dynamically allocated</b>: memory is reserved while the program runs. So you can read the size as an input from the user first, and then create the array.</p>
+      <h3>Getting an array takes two steps</h3>
+      <div class="duo">
+        <div><p class="out-label">1 · Variable declaration</p>
+<pre class="code" data-java>int myArr[];        // or  int[] myArr;
+int multiArr[][];   // or  int[][] multiArr;</pre>
+          <p class="hint">This only makes a name that can point to an array. No array exists yet.</p></div>
+        <div><p class="out-label">2 · Memory allocation (instantiating)</p>
+<pre class="code" data-java>myArr = new int[3];
+multiArr = new int[2][3];</pre>
+          <p class="hint"><code>new</code> creates the array in memory and connects it to the name.</p></div>
+      </div>
+      <details class="more"><summary>Show more detail: from the slide's speaker notes</summary><div class="more-in">
+<pre class="code" data-java>String[] cars = {"Volvo", "BMW", "Ford", "Mazda"};  // same size as new String[4]
+cars[0] = "Opel";
+System.out.println(cars[0]);
+System.out.println(cars.length); // 4</pre>
+        <ul class="rules">
+          <li><code>Arrays.copyOf(array, newLength)</code> creates a resized copy of an array.</li>
+          <li>The <code>ArrayList</code> is a class of the <b>Java Collections framework</b> (a set of ready-made classes for groups of objects), together with <code>Vector</code>, <code>Hashtable</code> and <code>HashMap</code>. An <code>ArrayList</code> can grow; an array cannot.</li>
+        </ul>
+      </div></details>
+      <div class="callout"><p><b>Think of it like…</b> booking a row of seats. First you get a name for the booking (declaration). Then the cinema actually reserves the seats (allocation). Because the reservation happens on the day, you can ask your friends how many are coming before you book.</p></div>
+    </section>
+
+    <!-- 02 one step + 2D -->
+    <section class="lec-sec" id="oop-lab02-arrays-2d" data-nav="One step &amp; 2D arrays">
+      <p class="kicker">Section 02</p>
+      <h2>Creating arrays in one step, and <span class="hl">2D arrays</span></h2>
+      <div class="sec-head"><span class="slide-tag lab">🧪 Lab 2 · Slide 5</span></div>
+      <p>You can declare and allocate (or fill) an array in one line:</p>
+<pre class="code" data-java>int myArr[] = new int[3];
+int myArr[] = {10, 11, 12};
+
+int[][] multiArr = new int[2][3];
+int[][] multiArr = {{1, 2}, {3, 4}};</pre>
+      <p>A <b>2D array</b> is a table with rows (down ↓) and columns (across →). You reach one value with two indexes: <code>multiArr[row][column]</code>.</p>
+      <div class="duo">
+        <div class="pane"><p class="out-label" style="margin-top:0">new int[2][3]</p>
+          <div class="g2d" style="--cols:3"><span></span><b>0</b><b>1</b><b>2</b><b>0</b><i>0</i><i>0</i><i>0</i><b>1</b><i>0</i><i>0</i><i>0</i></div>
+          <p class="hint">int elements start as 0 by default.</p></div>
+        <div class="pane"><p class="out-label" style="margin-top:0">{{1, 2}, {3, 4}}</p>
+          <div class="g2d" style="--cols:2"><span></span><b>0</b><b>1</b><b>0</b><i>1</i><i>2</i><b>1</b><i>3</i><i>4</i></div>
+          <p class="hint"><code>multiArr[1][0]</code> is 3.</p></div>
+      </div>
+      <div class="heads"><h4>Rows and columns</h4><p>A 2D array is an array of rows. <code>multiArr.length</code> is the number of rows; <code>multiArr[0].length</code> is the number of columns. For <code>new int[2][3]</code> they are 2 and 3.</p></div>
+      <div class="callout"><p><b>Think of it like…</b> a cinema seating plan. The first number picks the row, the second picks the seat in that row. <code>seats[1][0]</code> is row 1, seat 0.</p></div>
+    </section>
+
+    <!-- 03 jagged -->
+    <section class="lec-sec" id="oop-lab02-jagged" data-nav="Jagged 2D arrays">
+      <p class="kicker">Section 03</p>
+      <h2>Non-uniform (<span class="hl">jagged</span>) 2D arrays</h2>
+      <div class="sec-head"><span class="slide-tag lab">🧪 Lab 2 · Slide 6</span></div>
+      <p>Rows can have different lengths. Such an array is called <b>jagged</b> (it has an uneven edge). Allocate the rows first, then each row separately:</p>
+      <div class="duo">
+        <div>
+<pre class="code" data-java>int[][] multD = new int[3][];
+multD[0] = new int[3];
+multD[1] = new int[2];
+// multD[2] is still null</pre>
+          <div class="g2d jag"><b>0</b><i>0</i><i>0</i><i>0</i><b>1</b><i>0</i><i>0</i><em></em><b>2</b><u>null</u><em></em><em></em></div>
+        </div>
+        <div>
+<pre class="code" data-java>int[][] arr2 = {{1, 2}, {4}, {1, 1, 1}};</pre>
+          <div class="g2d jag" id="jagGrid"></div>
+        </div>
+      </div>
+      <p>Each row is its own array, so <code>arr2[1].length</code> is 1 while <code>arr2[2].length</code> is 3. A row that was never allocated, like <code>multD[2]</code>, is <code>null</code>: it points to no array.</p>
+      <div class="card">
+        <div class="card-h"><b>Live: read a value from arr2</b><span id="jagMeta"></span></div>
+        <div class="row"><code>System.out.println(arr2[</code><input id="jagR" type="number" value="2" aria-label="Row"><code>][</code><input id="jagC" type="number" value="1" aria-label="Column"><code>]);</code></div>
+        <pre class="out" id="jagOut" aria-live="polite"></pre>
+        <p class="hint">Try row 1, column 1: row 1 has only one element.</p>
+      </div>
+      <div class="callout"><p><b>Think of it like…</b> a bookshelf where every shelf holds a different number of books. Asking for the third book on a shelf that has one book is an error.</p></div>
+    </section>
+
+    <!-- 04 working with arrays -->
+    <section class="lec-sec" id="oop-lab02-working-arrays" data-nav="Working with arrays">
+      <p class="kicker">Section 04</p>
+      <h2>Working with <span class="hl">arrays</span></h2>
+      <div class="sec-head"><span class="slide-tag lab">🧪 Lab 2 · Slide 7</span></div>
+<pre class="code" data-java>String[] cars = {"Volvo", "BMW", "Ford", "Mazda"};
+cars[0] = "Opel";                    // change an element
+System.out.println(cars[0]);         // Opel
+System.out.println(cars.length);     // 4
+
+for (int i = 0; i &lt; cars.length; i++) {
+    System.out.println(cars[i]);
+}
+
+for (String item : cars) {           // for-each
+    System.out.println(item);
+}</pre>
+      <p>Both loops print <code>Opel</code>, <code>BMW</code>, <code>Ford</code>, <code>Mazda</code>. The <b>for-each</b> loop (<code>for (String item : cars)</code>) gives you each element in turn, without an index.</p>
+      <div class="uses">
+        <div><b>Index starts at 0</b>The first element is <code>cars[0]</code> and the last is <code>cars[cars.length - 1]</code>.</div>
+        <div><b>length is a field</b>Use <code>cars.length</code> (no parentheses), unlike String's <code>length()</code>, which is a method.</div>
+        <div><b>Fixed size</b>An array can't grow. <code>Arrays.copyOf(arr, newLength)</code> makes a bigger copy, or use <code>ArrayList</code>.</div>
+      </div>
+      <h3>Passing an array to a method</h3>
+      <p>From the slide's speaker notes: a method can take an array as its parameter and loop over it.</p>
+<pre class="code" data-java>int a[] = {33, 3, 4, 5};
+min(a);
+
+static void min(int arr[]) {
+    int min = arr[0];
+    for (int i = 1; i &lt; arr.length; i++)
+        if (min &gt; arr[i]) min = arr[i];
+    System.out.println(min);
+}</pre>
+      <div class="reveal card" data-reveal>
+        <div class="card-h"><b>Step by step: min(a) with a = {33, 3, 4, 5}</b><span>prints 3</span></div>
+        <ol class="rv-steps">
+          <li>Start with the first element: <code>min = 33</code>.</li>
+          <li>i = 1: is 33 &gt; 3? Yes, so <code>min = 3</code>.</li>
+          <li>i = 2: is 3 &gt; 4? No, min stays 3.</li>
+          <li>i = 3: is 3 &gt; 5? No, min stays 3.</li>
+          <li>The loop ends and the method prints <b>3</b>.</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- 05 loops -->
+    <section class="lec-sec" id="oop-lab02-loops" data-nav="Loops in Java">
+      <p class="kicker">Section 05</p>
+      <h2>Loops in <span class="hl">Java</span></h2>
+      <div class="sec-head"><span class="slide-tag lab">🧪 Lab 2 · Slide 8</span></div>
+      <p>A <b>loop</b> repeats code. Java has four kinds. The first three are also in <a href="#oop-lec01p2:loops">Lecture 1, Part 2</a>; for-each is new here.</p>
+      <div class="duo">
+        <div class="pane"><h4>while</h4><p class="hint" style="margin-top:0">Checks the condition first, then runs the body.</p>
+<pre class="code" data-java>while (condition) {
+    // do these statements
+}</pre></div>
+        <div class="pane"><h4>do – while</h4><p class="hint" style="margin-top:0">Runs the body at least once, then checks.</p>
+<pre class="code" data-java>do {
+    // do these statements
+} while (condition);</pre></div>
+        <div class="pane"><h4>for</h4><p class="hint" style="margin-top:0">Best when you know how many times to repeat.</p>
+<pre class="code" data-java>for (int i = 0; i &lt; N; i++) {
+    // do these statements
+}</pre></div>
+        <div class="pane"><h4>for-each</h4><p class="hint" style="margin-top:0">Visits every element of an array.</p>
+<pre class="code" data-java>for (DataType item : arr) {
+    // use item
+}</pre></div>
+      </div>
+      <div class="callout"><p><b>Think of it like…</b> handing out papers in class. A <code>for</code> loop counts "student 0, student 1, student 2…". A <code>for-each</code> loop just says "for each student in the row", without counting.</p></div>
+    </section>
+
+    <!-- 06 if-else -->
+    <section class="lec-sec" id="oop-lab02-if-else" data-nav="if – else">
+      <p class="kicker">Section 06</p>
+      <h2>Decision making: <span class="hl">if – else</span></h2>
+      <div class="sec-head"><span class="slide-tag lab">🧪 Lab 2 · Slide 9</span></div>
+<pre class="code" data-java>if (condition1) {          // boolean expression
+    statement1;
+    statement2;
+}
+else if (condition2) {
+    statement3;
+    statement4;
+}
+else
+    statement5;            // braces optional</pre>
+      <div class="uses">
+        <div><b>Checked top to bottom</b>Conditions are tested in order; only the first true branch runs.</div>
+        <div><b>else if / else are optional</b>Add as many <code>else if</code> branches as you need; <code>else</code> catches everything else.</div>
+        <div><b>Watch the braces</b>Without <code>{ }</code>, only the next single statement belongs to the branch.</div>
+      </div>
+      <details class="more"><summary>Show more detail: what "watch the braces" means</summary><div class="more-in">
+<pre class="code" data-java>int n = 5;
+if (n &gt; 10)
+    System.out.println("big");
+    System.out.println("always printed");   // not part of the if!</pre>
+        <pre class="out">always printed</pre>
+        <p>The indentation suggests both lines belong to the <code>if</code>, but without braces only the first one does. The second line always runs.</p>
+      </div></details>
+    </section>
+
+    <!-- 07 switch -->
+    <section class="lec-sec" id="oop-lab02-switch" data-nav="switch rules">
+      <p class="kicker">Section 07</p>
+      <h2>Decision making: <span class="hl">switch</span></h2>
+      <div class="sec-head"><span class="slide-tag lab">🧪 Lab 2 · Slide 10</span></div>
+<pre class="code" data-java>switch (expression) {
+    case value1:
+        statement1;
+        break;      // optional
+    case value2:
+        statement2;
+        break;
+    default:        // optional
+        statement3;
+}</pre>
+      <h3>Rules</h3>
+      <ul class="rules">
+        <li><b>Duplicate case values</b> are not allowed (compile-time error, meaning the compiler refuses the code).</li>
+        <li>Case values must be <b>literals or constants</b> of the same type as the expression; variables are not allowed.</li>
+        <li>Without <code>break</code>, execution <b>falls through</b> into the next case, whatever its value.</li>
+        <li>The <code>default</code> label is optional and runs when no case matches.</li>
+        <li>The expression can be <code>char</code>, <code>byte</code>, <code>short</code>, <code>int</code> (and their wrappers), an <code>enum</code> or a <code>String</code>.</li>
+      </ul>
+      <details class="more"><summary>Show more detail: what the compiler says</summary><div class="more-in">
+        <p>A repeated <code>case 1:</code> gives <code>error: duplicate case label</code>. A variable as a case value (<code>case v:</code>) gives <code>error: constant expression required</code>.</p>
+      </div></details>
+    </section>
+
+    <!-- 08 break & continue -->
+    <section class="lec-sec" id="oop-lab02-break-continue" data-nav="break &amp; continue">
+      <p class="kicker">Section 08</p>
+      <h2>Decision making: <span class="hl">break</span> &amp; <span class="hl">continue</span></h2>
+      <div class="sec-head"><span class="slide-tag lab">🧪 Lab 2 · Slide 11</span></div>
+      <div class="duo">
+        <div><h4>break</h4><p>Exits the loop (or switch) immediately.</p>
+<pre class="code" data-java>for (int i = 1; i &lt;= 5; i++) {
+    if (i == 3)
+        break;
+    System.out.print(i + " ");
+}</pre>
+          <p class="out-label">Output</p><pre class="out">1 2</pre></div>
+        <div><h4>continue</h4><p>Skips the rest of this iteration and moves to the next one.</p>
+<pre class="code" data-java>for (int i = 1; i &lt;= 5; i++) {
+    if (i == 3)
+        continue;
+    System.out.print(i + " ");
+}</pre>
+          <p class="out-label">Output</p><pre class="out">1 2 4 5</pre></div>
+      </div>
+      <p>An <b>iteration</b> is one round of a loop. <a href="#oop-lec01p2:break-continue">Lecture 1, Part 2</a> also covers the labelled forms.</p>
+    </section>
+
+    <!-- 09 pillars -->
+    <section class="lec-sec" id="oop-lab02-pillars" data-nav="Principles of OOP">
+      <p class="kicker">Section 09</p>
+      <h2>Classes and objects: the <span class="hl">four pillars</span></h2>
+      <div class="sec-head"><span class="slide-tag lab">🧪 Lab 2 · Slides 12–13</span></div>
+      <p>The second half of the lab builds our first class. It starts from the four principles of OOP from <a href="#oop-lec01">Lecture 1</a>. Today's focus is <b>encapsulation</b>.</p>
+      <div class="flips">
+        <button class="flip" type="button" aria-pressed="false"><span class="flip-in"><span class="flip-f"><b>Encapsulation</b><small>today's focus · tap to flip</small></span><span class="flip-b">Bundle data with the methods that use it.</span></span></button>
+        <button class="flip" type="button" aria-pressed="false"><span class="flip-in"><span class="flip-f"><b>Abstraction</b><small>tap to flip</small></span><span class="flip-b">Show what matters, hide the details.</span></span></button>
+        <button class="flip" type="button" aria-pressed="false"><span class="flip-in"><span class="flip-f"><b>Inheritance</b><small>tap to flip</small></span><span class="flip-b">Build new classes from existing ones.</span></span></button>
+        <button class="flip" type="button" aria-pressed="false"><span class="flip-in"><span class="flip-f"><b>Polymorphism</b><small>tap to flip</small></span><span class="flip-b">One interface, many forms.</span></span></button>
+      </div>
+    </section>
+
+    <!-- 10 vocabulary -->
+    <section class="lec-sec" id="oop-lab02-vocab" data-nav="Classes and objects">
+      <p class="kicker">Section 10</p>
+      <h2>Main OOP vocabulary: <span class="hl">classes and objects</span></h2>
+      <div class="sec-head"><span class="slide-tag lab">🧪 Lab 2 · Slide 14</span></div>
+      <ul class="rules">
+        <li>A <b>class</b> is a kind of data type that you can define yourself.</li>
+        <li>The class defines the <b>characteristics</b> of the object and the <b>operations</b> performed on/by it.</li>
+        <li><b>Objects</b> are variables of type class.</li>
+        <li>Every object belongs to (is an <b>instance</b> of) a class.</li>
+        <li>A <b>program</b> is a set of objects telling each other what to do, by <b>sending messages</b>.</li>
+      </ul>
+      <div class="heads"><h4>Class = blueprint</h4><p>Object = a real thing built from that blueprint.</p></div>
+      <div class="callout"><p><b>Think of it like…</b> an architect's plan for a house. The plan (class) is drawn once. Many real houses (objects) can be built from it, each with its own owner and paint color.</p></div>
+    </section>
+
+    <!-- 11 first class -->
+    <section class="lec-sec" id="oop-lab02-first-class" data-nav="Your first class">
+      <p class="kicker">Section 11</p>
+      <h2>Creating your <span class="hl">first class</span></h2>
+      <div class="sec-head"><span class="slide-tag lab">🧪 Lab 2 · Slide 15</span></div>
+      <p>Here is a class for a rectangle. Tap a colored part of the code, or a button, to see what it is.</p>
+      <div class="card" data-anat>
+        <div class="card-h"><b>Live: the parts of a class</b><span>Rectangle.java</span></div>
+        <div class="legend"></div>
+        <div class="ana">
+<pre class="code" data-java><span class="part" data-part="access">public</span> class <span class="part" data-part="cname">Rectangle</span> {
+    <span class="part" data-part="fields">int len, width;
+    String color;</span>
+
+    <span class="part" data-part="ctor">public Rectangle() {
+        len = 0;
+        width = 0;
+        color = null;
+    }</span>
+
+    <span class="part" data-part="method">public void setColor(String color) {
+        <span class="part" data-part="this">this.color</span> = color;
+    }</span>
+}</pre>
+          <div class="anainfo" aria-live="polite"></div>
+        </div>
+        <template data-part="access" data-label="① public"><h4>Access modifier</h4><p><code>public</code> is an <b>access modifier</b>: it decides who may use the class. <code>public</code> means any other class can. See <a href="#oop-lab02:access">access modifiers</a>.</p></template>
+        <template data-part="cname" data-label="① class name"><h4>Class name</h4><p><code>Rectangle</code> is the class name. By convention it starts with a capital letter, and the file is named <code>Rectangle.java</code>.</p></template>
+        <template data-part="fields" data-label="② attributes"><h4>Attributes (fields)</h4><p>The data every Rectangle object holds: its own <code>len</code>, <code>width</code> and <code>color</code>.</p></template>
+        <template data-part="ctor" data-label="③ constructor"><h4>Constructor (special method)</h4><p>It has the same name as the class and no return type. It runs automatically when an object is created, and gives the fields their starting values: 0, 0 and <code>null</code> (no text yet).</p></template>
+        <template data-part="method" data-label="④ method"><h4>Method</h4><p><code>setColor</code> is an operation the object can do: it stores a new color.</p></template>
+        <template data-part="this" data-label="this"><h4>this</h4><p><code>this</code> refers to the current object. Here it separates the field <code>this.color</code> from the parameter <code>color</code>, which has the same name.</p><p>From the speaker notes: <code>this</code> is a reference variable that refers to the current object. It can be used to refer to an instance variable of the current class, to invoke the current class's constructor, and it can be passed as an argument in a method call.</p></template>
+      </div>
+      <div class="flips">
+        <button class="flip" type="button" aria-pressed="false"><span class="flip-in"><span class="flip-f"><b>Attribute (field)</b><small>tap to flip</small></span><span class="flip-b">A variable inside a class. Each object gets its own copy, like <code>len</code> and <code>width</code>.</span></span></button>
+        <button class="flip" type="button" aria-pressed="false"><span class="flip-in"><span class="flip-f"><b>this</b><small>tap to flip</small></span><span class="flip-b">A reference to the current object. <code>this.color</code> is the field, not the parameter.</span></span></button>
+      </div>
+    </section>
+
+    <!-- 12 making an object -->
+    <section class="lec-sec" id="oop-lab02-new-object" data-nav="Making an object">
+      <p class="kicker">Section 12</p>
+      <h2>Making an <span class="hl">object</span> from a class</h2>
+      <div class="sec-head"><span class="slide-tag lab">🧪 Lab 2 · Slide 16</span></div>
+      <div class="card" data-anat>
+        <div class="card-h"><b>Live: one line, four parts</b><span>tap a part</span></div>
+        <div class="legend"></div>
+        <div class="ana">
+<pre class="code" data-java style="font-size:17px"><span class="part" data-part="cls">Rectangle</span> <span class="part" data-part="obj">myrect</span> = <span class="part" data-part="new">new</span> <span class="part" data-part="call">Rectangle()</span>;</pre>
+          <div class="anainfo" aria-live="polite"></div>
+        </div>
+        <template data-part="cls" data-label="Rectangle"><h4>Class name</h4><p>The type of the variable: this variable can point to a Rectangle object.</p></template>
+        <template data-part="obj" data-label="myrect"><h4>Name of the object</h4><p>The name you use from now on to reach this object: <code>myrect.setColor("red")</code>.</p></template>
+        <template data-part="new" data-label="new"><h4>new</h4><p>Dynamically creates the object, using <code>new</code>: it reserves memory for it while the program runs.</p></template>
+        <template data-part="call" data-label="Rectangle()"><h4>Constructor call</h4><p><code>new</code> automatically calls the constructor, which sets the starting values. Here <code>len = 0</code>, <code>width = 0</code>, <code>color = null</code>.</p></template>
+      </div>
+    </section>
+
+    <!-- 13 many objects -->
+    <section class="lec-sec" id="oop-lab02-many-objects" data-nav="One class, many objects">
+      <p class="kicker">Section 13</p>
+      <h2>One class, <span class="hl">many objects</span></h2>
+      <div class="sec-head"><span class="slide-tag lab">🧪 Lab 2 · Slide 17</span></div>
+      <p>One class can make as many objects as you need. Each object is an <b>instance</b> of the class and has its own values.</p>
+      <svg class="mini-diag" style="max-width:620px" viewBox="0 0 560 300" role="img" aria-label="Class Student with attributes Name and Grade and operations Total and Display; objects Mark (80.0), Peter (60.0) and Sally (90.0) are instances of it">
+        <rect class="d-proc" x="10" y="80" width="200" height="130" rx="8"/>
+        <text class="d-t" x="110" y="102">Student</text>
+        <line class="d-line" x1="10" y1="112" x2="210" y2="112" style="stroke-width:1"/>
+        <text class="d-s" x="110" y="132">+ Name : String</text><text class="d-s" x="110" y="150">+ Grade : double</text>
+        <line class="d-line" x1="10" y1="160" x2="210" y2="160" style="stroke-width:1"/>
+        <text class="d-s" x="110" y="180">+ Total() : double</text><text class="d-s" x="110" y="198">+ Display()</text>
+        <text class="d-s" x="110" y="232">attributes (top) · operations (bottom)</text>
+        <path class="d-line" d="M212 130 L356 52" stroke-dasharray="5 4" marker-end="url(#ah)"/>
+        <path class="d-line" d="M212 145 L356 150" stroke-dasharray="5 4" marker-end="url(#ah)"/>
+        <path class="d-line" d="M212 160 L356 248" stroke-dasharray="5 4" marker-end="url(#ah)"/>
+        <text class="d-s" x="280" y="110">instance of</text>
+        <rect class="d-obj" x="360" y="14" width="190" height="74" rx="10"/><text class="d-t oi" x="455" y="38">Mark</text><text class="d-s oi" x="455" y="58">Name = "Mark"</text><text class="d-s oi" x="455" y="76">Grade = 80.0</text>
+        <rect class="d-obj" x="360" y="112" width="190" height="74" rx="10"/><text class="d-t oi" x="455" y="136">Peter</text><text class="d-s oi" x="455" y="156">Name = "Peter"</text><text class="d-s oi" x="455" y="174">Grade = 60.0</text>
+        <rect class="d-obj" x="360" y="210" width="190" height="74" rx="10"/><text class="d-t oi" x="455" y="234">Sally</text><text class="d-s oi" x="455" y="254">Name = "Sally"</text><text class="d-s oi" x="455" y="272">Grade = 90.0</text>
+      </svg>
+      <p class="hint">This drawing style is called a <b>class diagram</b>: the class name on top, attributes in the middle, operations (behavior) at the bottom. <code>+</code> means public.</p>
+    </section>
+
+    <!-- 14 stack vs heap -->
+    <section class="lec-sec" id="oop-lab02-stack-heap" data-nav="Stack vs heap">
+      <p class="kicker">Section 14</p>
+      <h2>Memory: <span class="hl">stack</span> vs <span class="hl">heap</span></h2>
+      <div class="sec-head"><span class="slide-tag lab">🧪 Lab 2 · Slide 18</span></div>
+      <p>Java uses two areas of memory. The <b>stack</b> holds the local variables of a method while it runs. The <b>heap</b> holds every object made with <code>new</code>.</p>
+      <div class="duo">
+<pre class="code" data-java>public void method1() {
+    int a = 10;
+    int b = 20;
+    Class1 obj = new Class1();
+}</pre>
+        <div class="mem">
+          <div class="mem-col"><p class="out-label" style="margin-top:0">Stack</p><span>a = 10</span><span>b = 20</span><span class="ref">obj (ref) →</span></div>
+          <div class="mem-col heap"><p class="out-label" style="margin-top:0">Heap</p><span class="objbox">Class1 object</span></div>
+        </div>
+      </div>
+      <div class="uses">
+        <div><b>Stack</b>Local variables of a method: primitive values (<code>a</code>, <code>b</code>) and references (<code>obj</code>). Freed when the method ends.</div>
+        <div><b>Heap</b>Objects created with <code>new</code> live here. The variable on the stack only holds a reference to them.</div>
+      </div>
+      <div class="callout"><p><b>Think of it like…</b> your desk and a storage room. While you work, you keep small notes on your desk (the stack): numbers, and slips that say where a box is stored. The big boxes themselves (objects) sit in the storage room (the heap). When the work is done, the desk is cleared.</p></div>
+    </section>
+
+    <!-- 15 constructor -->
+    <section class="lec-sec" id="oop-lab02-constructor" data-nav="Constructor">
+      <p class="kicker">Section 15</p>
+      <h2>Class <span class="hl">constructor</span></h2>
+      <div class="sec-head"><span class="slide-tag lab">🧪 Lab 2 · Slides 19–20</span></div>
+      <p>How do objects get their first values? Through the constructor.</p>
+      <ul class="rules">
+        <li>A member function with the <b>same name as the class</b>. It <b>can take arguments</b> but has <b>no return type</b> (not even <code>void</code>).</li>
+        <li>A special method used to <b>initialize a newly created object</b>. It is <b>called automatically</b> just after memory is allocated for the object.</li>
+        <li>It initializes objects to <b>required or default values</b> at the time of creation.</li>
+        <li>A class can have <b>any number of constructors</b> that differ in their parameter lists. This is called <b>constructor overloading</b>.</li>
+        <li><b>Public</b> constructors let any class create objects; <b>private</b> constructors prevent other classes from using them.</li>
+      </ul>
+      <div class="callout"><p><b>Think of it like…</b> the setup screen of a new phone. It runs once, right after the phone is made, and puts in the starting settings. You never call it again for that phone.</p></div>
+    </section>
+
+    <!-- 16 constructor types -->
+    <section class="lec-sec" id="oop-lab02-constructor-types" data-nav="Types of constructors">
+      <p class="kicker">Section 16</p>
+      <h2>Types of <span class="hl">constructors</span></h2>
+      <div class="sec-head"><span class="slide-tag lab">🧪 Lab 2 · Slide 21</span></div>
+      <div class="flips">
+        <button class="flip" type="button" aria-pressed="false"><span class="flip-in"><span class="flip-f"><b>Default constructor</b><small><code>Rectangle()</code> · tap to flip</small></span><span class="flip-b">Takes no arguments. It has no parameters and no return type.</span></span></button>
+        <button class="flip" type="button" aria-pressed="false"><span class="flip-in"><span class="flip-f"><b>Parameterized constructor</b><small><code>Rectangle(int l, int w)</code> · tap to flip</small></span><span class="flip-b">Takes parameters, so you can give different values to the data members of different objects.</span></span></button>
+        <button class="flip" type="button" aria-pressed="false"><span class="flip-in"><span class="flip-f"><b>Copy constructor</b><small><code>Rectangle(Rectangle r)</code> · tap to flip</small></span><span class="flip-b">Takes an object of the same class and copies its data members into the new object.</span></span></button>
+      </div>
+    </section>
+
+    <!-- 17 copy vs assignment -->
+    <section class="lec-sec" id="oop-lab02-copy-vs-assign" data-nav="Copy vs assignment">
+      <p class="kicker">Section 17</p>
+      <h2>Copy constructor vs. <span class="hl">assignment</span></h2>
+      <div class="sec-head"><span class="slide-tag lab">🧪 Lab 2 · Slide 22</span></div>
+      <p>A <b>copy constructor</b> creates a new object by initializing it with an existing object of the same class.</p>
+<pre class="code" data-java>Student(String sName) {
+    name = sName;
+}
+
+// copy constructor
+Student(Student student) {
+    name = student.name;
+}</pre>
+      <div class="card">
+        <div class="card-h"><b>Live: copy or assign?</b><span id="cvMeta"></span></div>
+        <div class="tabs" id="cvTabs" style="margin-top:0">
+          <button class="tab" type="button" data-m="copy">Copy constructor</button>
+          <button class="tab" type="button" data-m="assign">Assignment</button>
+        </div>
+        <div class="refgrid">
+          <pre class="code" id="cvCode"></pre>
+          <div><div class="cv-diag" id="cvDiag"></div><p class="out-label">Output</p><pre class="out" id="cvOut"></pre></div>
+        </div>
+        <p class="rv-note" id="cvNote"></p>
+      </div>
+      <ul class="rules">
+        <li><b>Copy constructor</b> (<code>Student s2 = new Student(s1);</code>): a new, separate object.</li>
+        <li><b>Assignment operator</b> (<code>Student s2 = s1;</code>): the same object. In Java, <code>s2 = s1</code> copies the <b>reference</b>, not the object: both names point to the same object. (<a href="#oop-lec01p2:references">Lecture 1, Part 2</a> shows the same idea with <code>n1 = n2</code>.)</li>
+      </ul>
+    </section>
+
+    <!-- 18 constructor example -->
+    <section class="lec-sec" id="oop-lab02-constructor-example" data-nav="Constructors example">
+      <p class="kicker">Section 18</p>
+      <h2>Example on <span class="hl">constructors</span></h2>
+      <div class="sec-head"><span class="slide-tag lab">🧪 Lab 2 · Slide 23</span></div>
+      <p>One class with all three kinds of constructor. Java picks the one whose parameter list matches the call.</p>
+      <div class="card">
+        <div class="card-h"><b>Live: which constructor runs?</b><span id="ctMeta"></span></div>
+        <div class="callbtns" id="ctCalls" style="margin-bottom:12px">
+          <button class="btn ghost small" type="button" data-k="0">Rectangle r1 = new Rectangle();</button>
+          <button class="btn ghost small" type="button" data-k="1">Rectangle r2 = new Rectangle(5, 3);</button>
+          <button class="btn ghost small" type="button" data-k="2">Rectangle r3 = new Rectangle(r2);</button>
+        </div>
+        <div class="refgrid" style="grid-template-columns:minmax(0,1.7fr) minmax(0,1fr)">
+<pre class="code" data-java>public class Rectangle {
+    int len, width;
+    String color;
+
+    <span class="part" data-c="0">public Rectangle() {
+        len = 0; width = 0; color = null;
+    }</span>
+
+    <span class="part" data-c="1">public Rectangle(int l, int w) {
+        len = l; width = w; color = null;
+    }</span>
+
+    <span class="part" data-c="2">public Rectangle(Rectangle r) {
+        len = r.len; width = r.width; color = r.color;
+    }</span>
+}</pre>
+          <div><p class="out-label" style="margin-top:0">The new object</p><pre class="out" id="ctOut" aria-live="polite"></pre><p class="rv-note" id="ctNote"></p></div>
+        </div>
+      </div>
+      <ol class="props">
+        <li><b>Default constructor:</b> no parameters. <code>public</code> lets other classes create objects.</li>
+        <li><b>Parameterized constructor:</b> takes any number of parameters.</li>
+        <li><b>Copy constructor:</b> one parameter of the same class; copies all data members.</li>
+      </ol>
+      <div class="heads"><h4>Different from C++</h4><p>Unlike C++, Java doesn't create a copy constructor if you don't write your own.</p></div>
+    </section>
+
+    <!-- 19 constructor notes -->
+    <section class="lec-sec" id="oop-lab02-constructor-notes" data-nav="Notes on constructors">
+      <p class="kicker">Section 19</p>
+      <h2>Notes on <span class="hl">constructors</span></h2>
+      <div class="sec-head"><span class="slide-tag lab">🧪 Lab 2 · Slide 24</span></div>
+      <ul class="rules">
+        <li>If you do <b>not define ANY</b> constructor, the compiler provides a default constructor and gives the fields their default values (0 for numbers, <code>null</code> for objects).</li>
+        <li>If you define <b>any other</b> constructor (parameterized or copy), the compiler will <b>NOT</b> provide a default constructor.</li>
+      </ul>
+<pre class="code" data-java>public class Rectangle {
+    int len, width;
+
+    public Rectangle(int l, int w) {
+        len = l;
+        width = w;
+    }
+
+    public static void main(String[] args) {
+        Rectangle rec = new Rectangle();  // Error!
+    }
+}</pre>
+      <pre class="out bad">✗ compile error: constructor Rectangle in class Rectangle cannot be applied to given types;</pre>
+      <p><b>Fix:</b> add <code>public Rectangle() { }</code> yourself, or create the object with <code>new Rectangle(5, 3)</code>.</p>
+      <details class="more"><summary>Show more detail: from the slide's speaker notes</summary><div class="more-in"><p>A Java constructor cannot be <code>abstract</code>, <code>static</code> or <code>final</code>. (For example, <code>static</code> on a constructor gives "modifier static not allowed here".)</p></div></details>
+      <div class="callout"><p><b>Think of it like…</b> a free basic plan from a phone company. You get it only if you choose no plan at all. As soon as you pick your own plan, the free one is gone, unless you add it back yourself.</p></div>
+    </section>
+
+    <!-- 20 access modifiers -->
+    <section class="lec-sec" id="oop-lab02-access" data-nav="Access modifiers">
+      <p class="kicker">Section 20</p>
+      <h2>Encapsulation: <span class="hl">access modifiers</span></h2>
+      <div class="sec-head"><span class="slide-tag lab">🧪 Lab 2 · Slides 25–26</span></div>
+      <p>Encapsulation is about controlling who can see what. Java provides <b>access modifiers</b> to set access levels for <b>classes</b>, <b>variables</b>, <b>methods</b> and <b>constructors</b>. A <b>subclass</b> is a class built from another class (inheritance); the <b>world</b> means any class anywhere. The four levels are:</p>
+      <div class="tablewrap"><table class="cmp access-table">
+        <thead><tr><th>Modifier</th><th>Meaning</th><th>Class</th><th>Package</th><th>Subclass</th><th>World</th></tr></thead>
+        <tbody>
+          <tr><th><code>private</code></th><td>Visible to the class only.</td><td class="y">✓</td><td class="n">—</td><td class="n">—</td><td class="n">—</td></tr>
+          <tr><th><code>default</code></th><td>No modifier: visible to the package.</td><td class="y">✓</td><td class="y">✓</td><td class="n">—</td><td class="n">—</td></tr>
+          <tr><th><code>protected</code></th><td>Visible to the package and all subclasses.</td><td class="y">✓</td><td class="y">✓</td><td class="y">✓</td><td class="n">—</td></tr>
+          <tr><th><code>public</code></th><td>Visible to the world, anywhere.</td><td class="y">✓</td><td class="y">✓</td><td class="y">✓</td><td class="y">✓</td></tr>
+        </tbody>
+      </table></div>
+      <p class="hint">Most restrictive (top) → least restrictive (bottom). "default" is not a keyword you write: it is what you get when you write no modifier.</p>
+      <div class="callout"><p><b>Think of it like…</b> rooms in a house. <code>private</code> is your bedroom (only you). Default is the family home (everyone in the same package). <code>protected</code> adds relatives who live elsewhere (subclasses). <code>public</code> is the front garden: anyone in the street can see it.</p></div>
+    </section>
+
+    <!-- 21 getters and setters -->
+    <section class="lec-sec" id="oop-lab02-getters-setters" data-nav="Getters and setters">
+      <p class="kicker">Section 21</p>
+      <h2>Getters and <span class="hl">setters</span></h2>
+      <div class="sec-head"><span class="slide-tag lab">🧪 Lab 2 · Slides 27–29</span></div>
+      <p>A class's <code>private</code> members cannot be accessed by other classes, <b>but we can access them using getters and setters</b>. A <b>getter</b> is a public method that returns a field's value. A <b>setter</b> is a public method that changes it.</p>
+      <h3>Why use getters and setters?</h3>
+      <div class="uses">
+        <div><b>Public fields break encapsulation</b>Making a field public instead of using a getter and setter exposes the internals of the class.</div>
+        <div><b>Hard to change later</b>Once internals are exposed, you can't change or improve the internal representation without changing all client code (the code that uses the class).</div>
+        <div><b>The IDE writes them for you</b>You can generate getters and setters with a wizard in the IDE.</div>
+      </div>
+      <div class="reveal card" data-reveal>
+        <div class="card-h"><b>Generating getters and setters in IntelliJ</b><span>🧪 Slide 28</span></div>
+        <ol class="rv-steps">
+          <li><b>Place the cursor:</b> click inside the class body, below the fields.</li>
+          <li><b>Open Generate:</b> press <code>Alt + Insert</code> (Windows/Linux) or <code>⌘ + N</code> (macOS), or right-click → Generate…</li>
+          <li><b>Choose Getter and Setter:</b> pick Getter, Setter, or Getter and Setter from the menu (it also offers Constructor, <code>equals()</code> and <code>hashCode()</code>, and <code>toString()</code>).</li>
+          <li><b>Select the fields:</b> select the fields you want (<code>Ctrl/⌘ + A</code> for all), then press OK.</li>
+        </ol>
+      </div>
+      <h3>Example</h3>
+      <div class="duo">
+        <div><p class="out-label">Rectangle.java</p>
+<pre class="code" data-java>class Rectangle {
+    private int len, width;
+
+    public void setLen(int len) {
+        this.len = len;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public int getLen() {
+        return len;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+}</pre></div>
+        <div><p class="out-label">Main.java · using it from another class</p>
+<pre class="code" data-java>Rectangle r = new Rectangle();
+r.setLen(5);
+System.out.println(r.getLen()); // 5
+
+r.len = 5;  // Error: len is private</pre>
+          <pre class="out bad">error: len has private access in Rectangle</pre>
+          <ul class="rules">
+            <li><b>private fields:</b> the data is hidden inside the class.</li>
+            <li><b>public methods:</b> controlled access. Setters can validate (check) values before storing them.</li>
+          </ul></div>
+      </div>
+      <div class="callout"><p><b>Think of it like…</b> a bank counter. You cannot walk into the vault (private field). You ask the cashier (a getter or setter), who can check your request before doing anything.</p></div>
+      <div class="flips">
+        <button class="flip" type="button" aria-pressed="false"><span class="flip-in"><span class="flip-f"><b>Getter</b><small>tap to flip</small></span><span class="flip-b">A public method that returns a private field's value, like <code>getLen()</code>.</span></span></button>
+        <button class="flip" type="button" aria-pressed="false"><span class="flip-in"><span class="flip-f"><b>Setter</b><small>tap to flip</small></span><span class="flip-b">A public method that changes a private field, like <code>setLen(5)</code>. It can check the value first.</span></span></button>
+      </div>
+    </section>
+
+    <!-- 22 static -->
+    <section class="lec-sec" id="oop-lab02-static" data-nav="static">
+      <p class="kicker">Section 22</p>
+      <h2>Field modifiers: <span class="hl">static</span></h2>
+      <div class="sec-head"><span class="slide-tag lab">🧪 Lab 2 · Slides 30–32</span></div>
+      <p>Sometimes you want a variable that is common to all objects (speaker notes). That is what <code>static</code> does.</p>
+      <ul class="rules">
+        <li>A <b>static</b> member has <b>only one copy</b> that is <b>shared</b> among all objects of the class, while a <b>non-static</b> member has its own copy in each object.</li>
+        <li>Static fields are accessed by the <b>class name</b>, but can also be accessed with an object name.</li>
+        <li>A common use for static fields is to <b>count the number of objects</b> created from the class.</li>
+      </ul>
+<pre class="code" data-java>public class Item {
+    static int numOfItems = 0;
+
+    public Item() {
+        numOfItems++;
+    }
+
+    public static void main(String[] args) {
+        Item item1 = new Item();   // numOfItems = 1
+        Item item2 = new Item();   // numOfItems = 2
+        Item.numOfItems++;         // numOfItems = 3
+    }
+}</pre>
+      <div class="card">
+        <div class="card-h"><b>Live: one shared counter</b><span id="itMeta"></span></div>
+        <div class="row" style="margin-top:0"><button class="btn small" type="button" id="itNew">new Item()</button><button class="btn ghost small" type="button" id="itInc">Item.numOfItems++</button><button class="btn ghost small" type="button" id="itReset">Start again</button></div>
+        <div class="static-box"><span class="out-label" style="margin:0">Item class · static: one shared copy</span><b id="itCount">numOfItems = 0</b></div>
+        <div class="static-objs" id="itObjs"></div>
+        <p class="hint">Each object has its own <code>name</code> (non-static), but they all share one <code>numOfItems</code>.</p>
+      </div>
+      <div class="uses">
+        <div><b>Shared by all</b>Both objects increase the same counter.</div>
+        <div><b>Use the class name</b><code>Item.numOfItems</code> works without any object.</div>
+        <div><b>Final value</b><code>numOfItems = 3</code></div>
+      </div>
+      <div class="callout"><p><b>Think of it like…</b> a classroom whiteboard. Each student has their own notebook (non-static fields), but there is one whiteboard that everyone sees and writes on (the static field).</p></div>
+    </section>
+
+    <!-- 23 final -->
+    <section class="lec-sec" id="oop-lab02-final" data-nav="final">
+      <p class="kicker">Section 23</p>
+      <h2>Field modifiers: <span class="hl">final</span></h2>
+      <div class="sec-head"><span class="slide-tag lab">🧪 Lab 2 · Slides 33–34</span></div>
+      <p><code>final</code> declares a <b>constant</b> attribute. It takes its value <b>once</b> (in the constructor or where it is declared), and then can never be changed.</p>
+      <div class="uses">
+        <div><b>Math.PI</b><code>3.141592653589793</code></div>
+        <div><b>Math.E</b><code>2.718281828459045</code></div>
+        <div><b>From the Java library</b>Both are declared in class <code>Math</code> as <code>public static final</code>.</div>
+      </div>
+      <div class="duo">
+        <div><p class="out-label">Rectangle.java</p>
+<pre class="code" data-java>package oop_lab2;
+
+class Rectangle {
+    int len, width;
+    final String msg;
+
+    public Rectangle() {
+        len = 0;
+        width = 0;
+        msg = "This is constant string";
+        // assigned once, never changes
+    }
+}</pre></div>
+        <div><p class="out-label">OOP_lab2.java</p>
+<pre class="code" data-java>public class OOP_lab2 {
+    public static void main(String[] args) {
+        Rectangle rec = new Rectangle();
+        rec.msg = "try to change!";  // Error
+    }
+}</pre>
+          <pre class="out bad">✗ compile error: cannot assign a value to final variable msg</pre></div>
+      </div>
+      <div class="callout"><p><b>Think of it like…</b> writing your name on a form in pen. You fill it in once, and after that it cannot be erased.</p></div>
+    </section>
+
+    <!-- recap -->
+    <section class="lec-sec recap" id="oop-lab02-recap" data-nav="Lab recap" data-num="R">
+      <p class="kicker">Recap</p>
+      <h2>Lab <span class="hl">recap</span></h2>
+      <div class="sec-head"><span class="slide-tag lab">🧪 Lab 2 · Slides 3–34</span></div>
+      <h3 style="margin-top:.6em">Key points</h3>
+      <ul class="rules">
+        <li>Getting an array is two steps: declare it, then allocate it with <code>new</code>. The size can come from user input.</li>
+        <li>A 2D array is an array of rows: <code>arr.length</code> = rows, <code>arr[0].length</code> = columns. Rows can have different lengths (jagged).</li>
+        <li>Array length is a field (<code>arr.length</code>); String length is a method (<code>s.length()</code>). Arrays cannot grow.</li>
+        <li>Four loops: while, do-while, for, for-each. if-else picks the first true branch; braces matter.</li>
+        <li>switch: no duplicate cases, constant case values only, falls through without <code>break</code>.</li>
+        <li>A class is a blueprint; objects are built with <code>new</code>, which calls the constructor automatically.</li>
+        <li>Local variables and references live on the stack; objects live on the heap.</li>
+        <li>Constructors: same name as the class, no return type; default, parameterized and copy. Defining any constructor removes the free default one.</li>
+        <li>Access levels from tight to open: private, default, protected, public. Private fields + public getters/setters = encapsulation.</li>
+        <li><code>static</code> fields have one shared copy; <code>final</code> fields get their value once.</li>
+      </ul>
+      <h3>Key syntax</h3>
+      <div class="tablewrap"><table class="cmp">
+        <thead><tr><th>What</th><th>Java</th><th>Slide</th></tr></thead>
+        <tbody>
+          <tr><th>Create an array</th><td><code>DataType[] name = new DataType[size];</code></td><td>4</td></tr>
+          <tr><th>2D / jagged array</th><td><code>new int[2][3]</code> · <code>new int[3][]</code> then <code>multD[0] = new int[3];</code></td><td>5–6</td></tr>
+          <tr><th>for-each</th><td><code>for (String item : cars) { ... }</code></td><td>7–8</td></tr>
+          <tr><th>Resize a copy</th><td><code>Arrays.copyOf(arr, newLength)</code></td><td>7</td></tr>
+          <tr><th>Create an object</th><td><code>Rectangle myrect = new Rectangle();</code></td><td>16</td></tr>
+          <tr><th>Constructors</th><td><code>Rectangle()</code> · <code>Rectangle(int l, int w)</code> · <code>Rectangle(Rectangle r)</code></td><td>21, 23</td></tr>
+          <tr><th>Copy vs assign</th><td><code>new Student(s1)</code> (new object) · <code>s2 = s1</code> (same object)</td><td>22</td></tr>
+          <tr><th>Getter / setter</th><td><code>public int getLen() { return len; }</code> · <code>public void setLen(int len) { this.len = len; }</code></td><td>29</td></tr>
+          <tr><th>Static counter</th><td><code>static int numOfItems = 0;</code> · <code>Item.numOfItems</code></td><td>32</td></tr>
+          <tr><th>Constant</th><td><code>final String msg;</code> · <code>public static final</code> (Math.PI)</td><td>33–34</td></tr>
+        </tbody>
+      </table></div>
+      <h3>Common exam traps</h3>
+      <ul class="rules traps">
+        <li><code>arr.length</code> has no parentheses; <code>str.length()</code> does.</li>
+        <li>The last index is <code>length − 1</code>; in a jagged array each row has its own length.</li>
+        <li>A row of <code>new int[3][]</code> is <code>null</code> until you allocate it.</li>
+        <li>Without braces, only one statement belongs to an <code>if</code>.</li>
+        <li>A constructor has no return type, not even <code>void</code>.</li>
+        <li>Once you write a parameterized constructor, <code>new Rectangle()</code> no longer compiles unless you add a default constructor.</li>
+        <li><code>s2 = s1</code> does not copy the object; a copy constructor does.</li>
+        <li>Java never writes a copy constructor for you (unlike C++).</li>
+        <li><code>default</code> access is not written; it is the absence of a modifier.</li>
+        <li>Changing a <code>static</code> field through one object changes it for all objects.</li>
+      </ul>
+    </section>
+
+    <script>
+    /* ---------- Lab 2 (oop-lab02): live widgets ---------- */
+    (()=>{
+      /* 03 jagged array arr2 */
+      const ARR2=[[1,2],[4],[1,1,1]];
+      const oob=(i,n)=>`Exception in thread "main" java.lang.ArrayIndexOutOfBoundsException: Index ${i} out of bounds for length ${n}`;
+      function jag(){
+        const r=parseInt($('#jagR').value,10),c=parseInt($('#jagC').value,10),out=$('#jagOut');
+        $('#jagGrid').innerHTML=ARR2.map((row,i)=>`<b>${i}</b>`+[0,1,2].map(j=>j<row.length?`<i class="${i===r&&j===c?'hit':''}">${row[j]}</i>`:'<em></em>').join('')).join('');
+        let t='',bad=false;
+        if(!isNaN(r)&&!isNaN(c)){
+          if(r<0||r>=ARR2.length){t=oob(r,ARR2.length);bad=true}
+          else if(c<0||c>=ARR2[r].length){t=oob(c,ARR2[r].length);bad=true}
+          else t=String(ARR2[r][c]);
+        }
+        out.textContent=t;out.classList.toggle('bad',bad);
+        $('#jagMeta').textContent=r>=0&&r<ARR2.length?`arr2[${r}].length = ${ARR2[r].length}`:'';
+      }
+      $('#jagR').addEventListener('input',jag);$('#jagC').addEventListener('input',jag);jag();
+
+      /* 17 copy constructor vs assignment */
+      const CV={
+        copy:{code:'Student s1 = new Student("Ali");\nStudent s2 = new Student(s1);   // copy constructor\ns2.name = "Sara";\nSystem.out.println(s1.name);',
+          out:'Ali',note:'Two separate objects. Changing s2 does not touch s1.',
+          diag:'<div class="cv-row"><span class="cv-var">s1</span><span class="cv-arrow">→</span><span class="objbox">Student<br>name = "Ali"</span></div><div class="cv-row"><span class="cv-var">s2</span><span class="cv-arrow">→</span><span class="objbox">Student<br>name = "Sara"</span></div>'},
+        assign:{code:'Student s1 = new Student("Ali");\nStudent s2 = s1;                // assignment\ns2.name = "Sara";\nSystem.out.println(s1.name);',
+          out:'Sara',note:'One object with two names. Changing it through s2 also changes what s1 sees.',
+          diag:'<div class="cv-row"><span class="cv-vars"><span class="cv-var">s1</span><span class="cv-var">s2</span></span><span class="cv-arrow">→</span><span class="objbox">Student<br>name = "Sara"</span></div>'}
+      };
+      function cv(m){
+        $$('#cvTabs .tab').forEach(b=>b.setAttribute('aria-selected',b.dataset.m===m));
+        $('#cvCode').innerHTML=hlj(CV[m].code);$('#cvDiag').innerHTML=CV[m].diag;
+        $('#cvOut').textContent=CV[m].out;$('#cvNote').textContent=CV[m].note;
+        $('#cvMeta').textContent=m==='copy'?'a new, separate object':'same object';
+      }
+      $('#cvTabs').addEventListener('click',e=>{const b=e.target.closest('[data-m]');if(b)cv(b.dataset.m)});
+      cv('copy');
+
+      /* 18 which constructor runs? */
+      const CT=[
+        {name:'default',out:'r1: len = 0, width = 0, color = null',note:'No arguments, so Java runs the default constructor.'},
+        {name:'parameterized',out:'r2: len = 5, width = 3, color = null',note:'Two int arguments match Rectangle(int l, int w).'},
+        {name:'copy',out:'r3: len = 5, width = 3, color = null',note:'A Rectangle argument matches the copy constructor: r3 is a separate copy of r2.'}
+      ];
+      function ct(k){
+        $$('#ctCalls [data-k]').forEach(b=>b.classList.toggle('on',+b.dataset.k===k));
+        $$('#oop-lab02-constructor-example [data-c]').forEach(s=>s.classList.toggle('on',+s.dataset.c===k));
+        $('#ctOut').textContent=CT[k].out;$('#ctNote').textContent=CT[k].note;
+        $('#ctMeta').textContent=CT[k].name+' constructor';
+      }
+      $('#ctCalls').addEventListener('click',e=>{const b=e.target.closest('[data-k]');if(b)ct(+b.dataset.k)});
+      ct(1);
+
+      /* 22 static counter */
+      let objs=0,count=0;
+      function items(){
+        $('#itCount').textContent=`numOfItems = ${count}`;
+        $('#itObjs').innerHTML=Array.from({length:objs},(_,i)=>`<span class="objbox">item${i+1}<br><small>name = …</small></span>`).join('');
+        $('#itMeta').textContent=`${objs} object${objs===1?'':'s'}, 1 shared counter`;
+        $('#itNew').disabled=objs>=6;
+      }
+      $('#itNew').onclick=()=>{objs++;count++;items()};
+      $('#itInc').onclick=()=>{count++;items()};
+      $('#itReset').onclick=()=>{objs=0;count=0;items()};
+      items();
+    })();
+    </script>
+  </article>
   <!-- LECTURES:END -->
 
   <article class="view summary" data-view="summary" data-title="Summary &amp; Exam Review" data-short="Summary &amp; Exam Review" hidden>
@@ -2212,6 +3043,43 @@ if (tempType.equals("c")) {
     System.out.println(convertedTemp);
 }</pre></div></details>
         </div>
+      </div>
+      <div class="sum-block" id="sum-oop-lab02">
+        <div class="sum-top"><h3>Lab 2 · Arrays, Control Flow, Classes &amp; Encapsulation</h3><a class="btn small" href="#oop-lab02">Open the lab</a></div>
+        <h4>Must-know points</h4>
+        <ol class="must">
+          <li>Getting an array is two steps: declaration (<code>int[] myArr;</code>) and allocation (<code>myArr = new int[3];</code>). Arrays are dynamically allocated, so the size can come from user input. <span class="ref">🧪 Slides 3–4</span></li>
+          <li>A 2D array is an array of rows: <code>arr.length</code> is the number of rows, <code>arr[0].length</code> the columns. Jagged arrays have rows of different lengths; an unallocated row is <code>null</code>. <span class="ref">🧪 Slides 5–6</span></li>
+          <li>Index starts at 0; the last element is <code>arr[arr.length - 1]</code>. <code>length</code> is a field (no parentheses). Arrays can't grow: use <code>Arrays.copyOf</code> or <code>ArrayList</code>. <span class="ref">🧪 Slide 7</span></li>
+          <li>Four loops: while (check first), do-while (run at least once), for (known count), for-each (every element). <span class="ref">🧪 Slide 8</span></li>
+          <li>if-else runs only the first true branch; without braces only one statement belongs to it. switch: no duplicate cases, constant case values, falls through without break, default optional; works on char, byte, short, int (and wrappers), enum, String. <span class="ref">🧪 Slides 9–11</span></li>
+          <li>A class is a blueprint (attributes + constructor + methods); <code>new</code> creates an object and calls the constructor automatically. <code>this</code> refers to the current object. <span class="ref">🧪 Slides 13–17</span></li>
+          <li>Local variables and references live on the stack and are freed when the method ends; objects made with <code>new</code> live on the heap. <span class="ref">🧪 Slide 18</span></li>
+          <li>A constructor has the class's name and no return type. Types: default, parameterized, copy. Any constructor you write removes the compiler's default one; Java never writes a copy constructor for you. <span class="ref">🧪 Slides 20–24</span></li>
+          <li>Copy constructor (<code>new Student(s1)</code>) makes a separate object; assignment (<code>s2 = s1</code>) copies the reference. <span class="ref">🧪 Slide 22</span></li>
+          <li>Access levels: private (class) → default (package) → protected (package + subclasses) → public (world). Private fields with public getters/setters give encapsulation. <code>static</code> = one shared copy; <code>final</code> = assigned once. <span class="ref">🧪 Slides 26–34</span></li>
+        </ol>
+        <h4>Definitions and syntax</h4>
+        <div class="tablewrap"><table class="cmp">
+          <thead><tr><th>Term</th><th>Meaning / syntax</th><th>Ref</th></tr></thead>
+          <tbody>
+            <tr><th>Array</th><td><code>DataType[] name = new DataType[size];</code></td><td>🧪 4</td></tr>
+            <tr><th>2D array</th><td><code>int[][] m = new int[2][3];</code> or <code>{{1, 2}, {3, 4}}</code></td><td>🧪 5</td></tr>
+            <tr><th>Jagged array</th><td>Rows of different lengths: <code>new int[3][]</code>, then allocate each row.</td><td>🧪 6</td></tr>
+            <tr><th>for-each</th><td><code>for (DataType item : arr) { ... }</code></td><td>🧪 7–8</td></tr>
+            <tr><th>Class / object</th><td>Blueprint / a real thing built from it; an object is an instance of a class.</td><td>🧪 14</td></tr>
+            <tr><th>this</th><td>Reference to the current object.</td><td>🧪 15</td></tr>
+            <tr><th>Stack / heap</th><td>Local variables and references / objects created with <code>new</code>.</td><td>🧪 18</td></tr>
+            <tr><th>Constructor</th><td>Same name as the class, no return type, runs automatically on <code>new</code>.</td><td>🧪 20</td></tr>
+            <tr><th>Constructor overloading</th><td>Several constructors with different parameter lists.</td><td>🧪 20</td></tr>
+            <tr><th>Default / parameterized / copy constructor</th><td><code>Rectangle()</code> / <code>Rectangle(int l, int w)</code> / <code>Rectangle(Rectangle r)</code></td><td>🧪 21, 23</td></tr>
+            <tr><th>Access modifiers</th><td>private · default (no modifier) · protected · public</td><td>🧪 26</td></tr>
+            <tr><th>Getter / setter</th><td>Public methods that read / change a private field.</td><td>🧪 27–29</td></tr>
+            <tr><th>static</th><td>One copy shared by all objects; use <code>ClassName.field</code>.</td><td>🧪 31–32</td></tr>
+            <tr><th>final</th><td>Constant: assigned once, never changed (<code>Math.PI</code> is <code>public static final</code>).</td><td>🧪 33–34</td></tr>
+          </tbody>
+        </table></div>
+        <p class="hint">Lab 2 has no hands-on tasks in the file, so there are no practice questions for it.</p>
       </div>
       <!-- SUMMARY:oop:END -->
     </section>
