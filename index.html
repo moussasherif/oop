@@ -207,6 +207,7 @@ label.f{display:block;font-size:13.5px;color:var(--muted);margin:10px 0 3px;font
 .props li{counter-increment:p;position:relative;padding-left:46px;margin-bottom:14px}
 .props li::before{content:counter(p);position:absolute;left:0;top:-1px;width:30px;height:30px;border-radius:8px;background:var(--blue);color:var(--on-blue);font:800 14px/30px var(--mono);text-align:center}
 .duo{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.duo>*{min-width:0}
 .pane{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;min-width:0}
 .pane pre.code{font-size:12.5px;margin:.4em 0 .8em}
 .row{display:flex;align-items:center;gap:8px;margin:8px 0;flex-wrap:wrap}
@@ -432,6 +433,20 @@ details[open]>summary::before{content:"−"}
 .access-table td.n{color:var(--muted);text-align:center}
 @media (max-width:860px){.mem{grid-template-columns:1fr}}
 
+/* UML class boxes (Lecture 2, Lecture 3, Lab 3) */
+.uml-row{display:flex;flex-wrap:wrap;align-items:center;gap:14px 22px;margin:14px 0}
+.uml{display:inline-flex;flex-direction:column;min-width:200px;max-width:100%;background:var(--surface);border:2px solid var(--ink);border-radius:4px;font:13px/1.55 var(--mono);color:var(--ink);box-shadow:var(--shadow)}
+.uml>div{padding:7px 12px;overflow-wrap:anywhere}
+.uml>div+div{border-top:2px solid var(--ink)}
+.uml>div:first-child{font-weight:700;text-align:center;background:var(--blue-soft)}
+.uml-key{margin:0;padding-left:1.1em;font-size:.95rem}
+.uml-key li{margin:3px 0}
+.uml-pair{align-items:flex-start;column-gap:0}
+.uml-link{width:120px;height:40px;flex:0 0 auto;align-self:center;margin:0 -2px}
+.uml-link.v{display:none}
+@media (max-width:640px){.uml-pair{flex-direction:column;align-items:stretch;row-gap:0}.uml-link.h{display:none}.uml-link.v{display:block;width:160px;height:64px;align-self:flex-start;margin:-2px 0 -2px 18px}}
+.cmp td.bad code{color:var(--red)}
+
 /* practice */
 .q-card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px 22px;margin:22px 0;box-shadow:var(--shadow)}
 .q-card h3{margin-top:6px}
@@ -546,6 +561,12 @@ function hlj(src){
         <div class="subnav" data-for="oop-lec01p2"></div>
         <a class="navi" href="#oop-lab02" data-view="oop-lab02"><span class="n">Lab2</span><span>Arrays, classes &amp; encapsulation</span></a>
         <div class="subnav" data-for="oop-lab02"></div>
+        <a class="navi" href="#oop-lec02" data-view="oop-lec02"><span class="n">L2</span><span>Classes and objects</span></a>
+        <div class="subnav" data-for="oop-lec02"></div>
+        <a class="navi" href="#oop-lec03" data-view="oop-lec03"><span class="n">L3</span><span>Methods and strings</span></a>
+        <div class="subnav" data-for="oop-lec03"></div>
+        <a class="navi" href="#oop-lab03" data-view="oop-lab03"><span class="n">Lab3</span><span>this, strings &amp; UML</span></a>
+        <div class="subnav" data-for="oop-lab03"></div>
         <!-- NAV:oop:END -->
       </div>
       <!-- NAV:COURSES:END -->
@@ -2904,6 +2925,2511 @@ class Rectangle {
     })();
     </script>
   </article>
+
+  <article class="view lecture" data-view="oop-lec02" data-title="OOP · Lecture 2: Classes and Objects" data-short="L2 · Classes and objects" hidden>
+    <header class="lec-head">
+      <p class="kicker">OOP · Lecture 2</p>
+      <h1>Classes and <span class="hl">objects</span></h1>
+      <p class="lede">This lecture looks closely at what a class is made of: fields, methods and constructors. It shows how to draw classes with UML, how packages group classes, and how the modifiers <code>public</code>, <code>private</code>, <code>static</code> and <code>final</code> change the way fields behave.</p>
+      <div class="lec-meta"><span class="slide-tag">📄 Slides 1–38</span><span class="done-count" data-done-count></span></div>
+      <div class="card">
+        <div class="card-h"><b>In this lecture</b><span>📄 Slides 2, 11</span></div>
+        <ol class="road">
+          <li><a href="#oop-lec02:concept">OOP concepts: classes and objects</a></li>
+          <li><a href="#oop-lec02:uml-intro">Introduction to UML: class design</a></li>
+          <li><a href="#oop-lec02:packages">Packages, class access and fields</a></li>
+          <li><a href="#oop-lec02:access">Access control, static and final</a></li>
+        </ol>
+        <p class="hint" style="margin-bottom:0">Lab 3 practises this lecture: see its <a href="#oop-lab03:practice">"Find the mistake" tasks and UML practice</a>.</p>
+      </div>
+    </header>
+
+    <!-- 01 concept -->
+    <section class="lec-sec" id="oop-lec02-concept" data-nav="Class and object">
+      <p class="kicker">Section 01</p>
+      <h2>Concept of <span class="hl">class</span> and <span class="hl">object</span></h2>
+      <div class="sec-head"><span class="slide-tag">📄 Slides 2–3</span></div>
+      <ul class="rules">
+        <li>A <b>"class"</b> refers to a <b>blueprint</b>: an abstract data type (a type you design yourself; see <a href="#oop-lec01">Lecture 1</a>).</li>
+        <li>It defines the <b>attributes</b> and <b>methods</b> that all objects of that class will support.</li>
+        <li>An <b>"object"</b> is an <b>instance of a class</b> that precisely defines its attributes and methods.</li>
+        <li>Each object has a class that defines its data and behavior.</li>
+      </ul>
+      <div class="callout"><p><b>Think of it like…</b> a cake recipe and the cakes. The recipe (class) lists the ingredients and steps. Every cake you bake (object) follows it, but each one is a real cake you can eat.</p></div>
+      <div class="flips">
+        <button class="flip" type="button" aria-pressed="false"><span class="flip-in"><span class="flip-f"><b>Class</b><small>tap to flip</small></span><span class="flip-b">A blueprint (abstract data type) that defines the attributes and methods its objects support.</span></span></button>
+        <button class="flip" type="button" aria-pressed="false"><span class="flip-in"><span class="flip-f"><b>Object (instance)</b><small>tap to flip</small></span><span class="flip-b">A real thing made from a class, with its own values for the attributes.</span></span></button>
+      </div>
+    </section>
+
+    <!-- 02 members -->
+    <section class="lec-sec" id="oop-lec02-members" data-nav="Class members">
+      <p class="kicker">Section 02</p>
+      <h2>Class <span class="hl">members</span></h2>
+      <div class="sec-head"><span class="slide-tag">📄 Slide 4</span></div>
+      <p>A class can have three kinds of <b>members</b> (things that belong to it):</p>
+      <ul class="rules">
+        <li><b>Fields / attributes:</b> data variables which determine the status (state) of the class or an object.</li>
+        <li><b>Methods:</b> the executable code of the class. They let us manipulate or change the status of an object, or access the value of a data member.</li>
+        <li><b>Nested classes and nested interfaces</b> (classes inside a class): covered later.</li>
+      </ul>
+    </section>
+
+    <!-- 03 general form -->
+    <section class="lec-sec" id="oop-lec02-general-form" data-nav="General form of a class">
+      <p class="kicker">Section 03</p>
+      <h2>General form of a class, and a <span class="hl">sample class</span></h2>
+      <div class="sec-head"><span class="slide-tag">📄 Slides 5–6</span></div>
+      <p>Every class follows the same pattern: fields first, then constructors, then methods. Each one can start with a <b>modifier</b> (a word like <code>public</code> or <code>private</code> that changes who may use it).</p>
+<pre class="code" data-java>modifier class Classname {
+    modifier data-type field1;
+    modifier data-type field2;
+    ...
+    modifier data-type fieldN;
+
+    modifier Constructor(parameters) {
+    }
+    modifier Return-Type methodName1(parameters) {
+        //statements
+    }
+    ...
+    modifier Return-Type methodName2(parameters) {
+        //statements
+    }
+}</pre>
+      <div class="card" data-anat>
+        <div class="card-h"><b>Live: the sample class</b><span>tap a part</span></div>
+        <div class="legend"></div>
+        <div class="ana">
+<pre class="code" data-java>class Rectangle {
+    <span class="part" data-part="fields">int length;
+    int width;</span>
+    <span class="part" data-part="init">String color = "red";</span>
+
+    <span class="part" data-part="ctor">public Rectangle(int l, int w) {
+        length = l;
+        width = w;
+    }</span>
+    <span class="part" data-part="method">public void setColor (String newColor) {
+        color = newColor;
+    }</span>
+}</pre>
+          <div class="anainfo" aria-live="polite"></div>
+        </div>
+        <template data-part="fields" data-label="fields"><h4>Fields</h4><p><code>length</code> and <code>width</code> are data variables. Each Rectangle object has its own copy.</p></template>
+        <template data-part="init" data-label="field with a start value"><h4>Field with an initialization</h4><p>A field can be given a starting value where it is declared. Every new Rectangle starts with <code>color = "red"</code>.</p></template>
+        <template data-part="ctor" data-label="constructor"><h4>Constructor</h4><p>Same name as the class, no return type. It sets <code>length</code> and <code>width</code> from the values passed to <code>new Rectangle(l, w)</code>.</p></template>
+        <template data-part="method" data-label="method"><h4>Method</h4><p><code>setColor</code> changes the object's state: it replaces the color with a new one.</p></template>
+      </div>
+      <p class="hint">The slide writes the string with curly quotes (“red”). Java needs straight quotes: <code>"red"</code>.</p>
+    </section>
+
+    <!-- 04 constructor -->
+    <section class="lec-sec" id="oop-lec02-constructor" data-nav="Class constructor">
+      <p class="kicker">Section 04</p>
+      <h2>Class <span class="hl">constructor</span></h2>
+      <div class="sec-head"><span class="slide-tag">📄 Slide 7</span></div>
+      <ul class="rules">
+        <li>When you create a new instance (a new object) of a class using the <code>new</code> keyword, the <b>constructor</b> of this class is called.</li>
+        <li>Constructors are used to <b>initialize the instance variables</b> (fields) of an object. An <b>instance variable</b> is a field that each object has its own copy of.</li>
+        <li><b>Default constructor:</b> created by the compiler if you don't define a constructor for a class. It has no parameters.
+          <ul>
+            <li>The default constructor calls the default parent constructor, <code>super()</code> (the parent class's constructor; inheritance comes later).</li>
+            <li>It initializes all instance variables to their <b>default value</b>: zero for numeric types, <code>null</code> for object references, and <code>false</code> for booleans.</li>
+          </ul>
+        </li>
+      </ul>
+      <details class="more"><summary>Show more detail: the slide asks "What is the difference between methods and constructors?"</summary><div class="more-in">
+        <div class="tablewrap"><table class="cmp">
+          <thead><tr><th></th><th>Constructor</th><th>Method</th></tr></thead>
+          <tbody>
+            <tr><th>Name</th><td>Always the class's name</td><td>Any name you choose</td></tr>
+            <tr><th>Return type</th><td>None (not even <code>void</code>)</td><td>Has one (or <code>void</code>)</td></tr>
+            <tr><th>When it runs</th><td>Automatically, once, when <code>new</code> creates the object</td><td>Whenever you call it, as often as you like</td></tr>
+            <tr><th>Job</th><td>Give the new object its starting values</td><td>Do work with the object's data</td></tr>
+          </tbody>
+        </table></div>
+      </div></details>
+      <div class="callout"><p><b>Think of it like…</b> the welcome desk of a hotel. Every guest passes it exactly once, on arrival, and gets a room key and a room number (starting values). After that, the guest uses the hotel's other services (methods) as often as needed.</p></div>
+    </section>
+
+    <!-- 05 declare instantiate initialize -->
+    <section class="lec-sec" id="oop-lec02-creating" data-nav="Declare, instantiate, initialize">
+      <p class="kicker">Section 05</p>
+      <h2>Notes on constructors: three steps in <span class="hl">one line</span></h2>
+      <div class="sec-head"><span class="slide-tag">📄 Slide 8</span></div>
+<pre class="code" data-java>Rectangle myRectangle = new Rectangle(15, 10);</pre>
+      <div class="reveal card" data-reveal>
+        <div class="card-h"><b>Step by step</b><span>one line, three jobs</span></div>
+        <ol class="rv-steps">
+          <li><b>Declaration:</b> <code>Rectangle myRectangle</code> is the code that associates a variable name with an object type.</li>
+          <li><b>Instantiation:</b> the <code>new</code> keyword is a Java operator that creates the object.</li>
+          <li><b>Initialization:</b> <code>new</code> is followed by a call to a constructor, <code>Rectangle(15, 10)</code>, which initializes the new object.</li>
+        </ol>
+      </div>
+      <div class="flips">
+        <button class="flip" type="button" aria-pressed="false"><span class="flip-in"><span class="flip-f"><b>Instantiation</b><small>tap to flip</small></span><span class="flip-b">Creating an object (an instance) with <code>new</code>.</span></span></button>
+        <button class="flip" type="button" aria-pressed="false"><span class="flip-in"><span class="flip-f"><b>Initialization</b><small>tap to flip</small></span><span class="flip-b">Giving the new object its first values: the constructor's job.</span></span></button>
+      </div>
+    </section>
+
+    <!-- 06 Point & Rectangle -->
+    <section class="lec-sec" id="oop-lec02-point-rectangle" data-nav="Point &amp; Rectangle">
+      <p class="kicker">Section 06</p>
+      <h2>Class Point and class Rectangle: <span class="hl">overloading</span> constructors</h2>
+      <div class="sec-head"><span class="slide-tag">📄 Slides 9–10</span></div>
+      <p>A class can have several constructors. Giving many methods or constructors the same name with different parameters is called <b>overloading</b>.</p>
+      <div class="duo">
+        <div><p class="out-label">Point.java</p>
+<pre class="code" data-java>public class Point {
+    public int x = 0;
+    public int y = 0;
+    //constructor
+    public Point(int a, int b) {
+        x = a;
+        y = b;
+    }
+}
+
+Point originOne = new Point(23, 94);</pre></div>
+        <div><p class="out-label">Rectangle.java</p>
+<pre class="code" data-java>public class Rectangle {
+    public int width = 0;
+    public int height = 0;
+    public Point origin;
+
+    // Constructors
+    public Rectangle() {
+        origin = new Point(0, 0);
+    }
+    public Rectangle(Point p) {
+        origin = p;
+    }
+    public Rectangle(int w, int h) {
+        origin = new Point(0, 0);
+        width = w;
+        height = h;
+    }
+    public Rectangle(Point p, int w, int h) {
+        origin = p;
+        width = w;
+        height = h;
+    }
+
+    // a method for moving the rectangle
+    public void move(int x, int y) {
+        origin.x = x;
+        origin.y = y;
+    }
+
+    // a method for computing the area of the rectangle
+    public int getArea() {
+        return width * height;
+    }
+}</pre></div>
+      </div>
+      <h3>Notes</h3>
+      <ul class="rules">
+        <li>Each constructor lets you provide <b>initial values</b> for the fields.</li>
+        <li>If a class has multiple constructors, they must have <b>different signatures</b>. A <b>signature</b> is the method's name plus the number and types of its parameters.</li>
+        <li>The Java compiler differentiates the constructors based on the <b>number and the type</b> of the arguments.</li>
+      </ul>
+      <div class="reveal card" data-reveal>
+        <div class="card-h"><b>Step by step: Rectangle rectOne = new Rectangle(originOne, 100, 200);</b><span>checked with Java</span></div>
+        <ol class="rv-steps">
+          <li>Three arguments (a Point, an int, an int) match only <code>Rectangle(Point p, int w, int h)</code>, so that constructor runs.</li>
+          <li><code>origin = p</code> stores a reference to the same Point object as <code>originOne</code> (23, 94). No new Point is made.</li>
+          <li><code>rectOne.getArea()</code> returns 100 × 200 = <b>20000</b>.</li>
+          <li><code>rectOne.move(40, 72)</code> changes <code>origin.x</code> and <code>origin.y</code>. Because origin and originOne are the same object, <code>originOne</code> is now (40, 72) too.</li>
+        </ol>
+      </div>
+      <p class="hint">The slide's <code>getArea()</code> is missing the semicolon after <code>width * height</code>; it is added above so the code compiles.</p>
+    </section>
+
+    <!-- 07 UML intro -->
+    <section class="lec-sec" id="oop-lec02-uml-intro" data-nav="Introduction to UML">
+      <p class="kicker">Section 07</p>
+      <h2>Introduction to <span class="hl">UML</span></h2>
+      <div class="sec-head"><span class="slide-tag">📄 Slides 11–13</span></div>
+      <ul class="rules">
+        <li><b>UML</b> stands for "<b>Unified Modeling Language</b>".</li>
+        <li>It <b>graphically</b> represents classes in a class model.</li>
+        <li>An <b>industry-standard graphical language</b> for specifying, visualizing and documenting the components of software systems.</li>
+        <li>UML uses mostly graphical notations to express the <b>OO analysis and design</b> of software projects.</li>
+        <li>An aid to <b>simplify</b> and <b>standardize</b> the process of software design.</li>
+      </ul>
+      <h3>Why UML for modeling?</h3>
+      <ul class="rules">
+        <li>A graphical notation communicates <b>more clearly than natural language</b> (imprecise) <b>and code</b> (too detailed).</li>
+        <li>It helps you get an <b>overall view of a system</b>.</li>
+        <li>UML is <b>not dependent on any language or technology</b>.</li>
+        <li>UML moves us to <b>standardization</b>.</li>
+      </ul>
+      <div class="callout"><p><b>Think of it like…</b> an architect's floor plan. Builders from any country can read it, it shows the whole house at a glance, and it does not say which brand of bricks to use.</p></div>
+    </section>
+
+    <!-- 08 class diagram -->
+    <section class="lec-sec" id="oop-lec02-class-diagram" data-nav="Class diagrams">
+      <p class="kicker">Section 08</p>
+      <h2>Class <span class="hl">diagrams</span></h2>
+      <div class="sec-head"><span class="slide-tag">📄 Slides 14–16</span></div>
+      <ul class="rules">
+        <li>A <b>class diagram</b> is used for describing <b>structure</b> and <b>behavior</b> in the class.</li>
+        <li>It provides a <b>conceptual model</b> of the system in terms of <b>entities</b> and their <b>relationships</b>.</li>
+        <li>It is used for <b>requirement capture</b> (writing down what the system must do) and <b>end-user interaction</b>.</li>
+        <li><b>Detailed</b> class diagrams are used for developers.</li>
+      </ul>
+      <h3>Example</h3>
+      <p>Suppose we defined this class in Java:</p>
+      <div class="uml-row">
+        <div class="uml" role="img" aria-label="UML class GradeBook"><div>GradeBook</div><div>-coursename: String</div><div>"constructor": GradeBook()<br>+displayMsg()<br>+displayMsg(msg: String)<br>+setCourseName(name: String)<br>+getCourseName(): String</div></div>
+        <ul class="uml-key"><li><b>Name</b> (top box)</li><li><b>Attributes</b> (middle box)</li><li><b>Methods</b> (bottom box)</li></ul>
+      </div>
+      <p>To create a new object of this class, we type:</p>
+<pre class="code" data-java>GradeBook myGradeBook = new GradeBook();</pre>
+      <h3>Class representation</h3>
+      <ul class="rules">
+        <li>Each class is represented by a <b>rectangle</b> divided into three partitions: <b>name</b>, <b>attributes</b>, <b>operations/methods</b>.</li>
+        <li><b>Modifiers</b> are used to indicate the visibility of attributes and operations:
+          <code>+</code> public (everyone), <code>#</code> protected (friends and derived classes), <code>-</code> private (no one else).</li>
+        <li>By default, attributes are hidden and operations are visible.</li>
+      </ul>
+      <div class="flips">
+        <button class="flip" type="button" aria-pressed="false"><span class="flip-in"><span class="flip-f"><b>+ &nbsp; # &nbsp; -</b><small>tap to flip</small></span><span class="flip-b"><code>+</code> public · <code>#</code> protected · <code>-</code> private</span></span></button>
+        <button class="flip" type="button" aria-pressed="false"><span class="flip-in"><span class="flip-f"><b>Class diagram</b><small>tap to flip</small></span><span class="flip-b">A UML drawing of classes: name, attributes and operations, plus their relationships.</span></span></button>
+      </div>
+    </section>
+
+    <!-- 09 reference variables -->
+    <section class="lec-sec" id="oop-lec02-reference" data-nav="Reference variables">
+      <p class="kicker">Section 09</p>
+      <h2>What if we said… <span class="hl">GradeBook myGradeBook;</span></h2>
+      <div class="sec-head"><span class="slide-tag">📄 Slides 17–18</span></div>
+<pre class="code" data-java>GradeBook myGradeBook;</pre>
+      <ul class="rules">
+        <li>This is <b>legal</b>, but it only makes a <b>"reference variable"</b> named <code>myGradeBook</code>.</li>
+        <li>This variable can refer to any GradeBook object, but <b>currently refers to nothing</b>.</li>
+        <li>The operator <b><code>new</code></b> actually causes an <b>object to be created</b>, so we tell it what kind we want.</li>
+      </ul>
+      <h3>Many GradeBooks</h3>
+<pre class="code" data-java>GradeBook[] term1GradeBooks;          // only a reference to an (empty) array
+term1GradeBooks = new GradeBook[6];   // the array of 6 references</pre>
+      <p>The first line only declares a <b>reference</b> to an (empty) array. To actually create the GradeBooks array, we need the second line. (The slide writes <code>new GradeBooks[6]</code>; the class is named <code>GradeBook</code>.)</p>
+      <div class="heads"><h4>Careful</h4><p><code>new GradeBook[6]</code> makes room for 6 references, and each one starts as <code>null</code>. You still need <code>new GradeBook()</code> for every place before using it. Lab 3's <a href="#oop-lab03:m2">Find the Mistake #2</a> is exactly this error.</p></div>
+      <div class="callout"><p><b>Think of it like…</b> an empty name tag. <code>GradeBook myGradeBook;</code> prints a tag, but nobody is wearing it yet. <code>new</code> brings the person.</p></div>
+    </section>
+
+    <!-- 10 designers design -->
+    <section class="lec-sec" id="oop-lec02-interface" data-nav="Designers design, users use">
+      <p class="kicker">Section 10</p>
+      <h2>Designers design, <span class="hl">users use</span></h2>
+      <div class="sec-head"><span class="slide-tag">📄 Slide 19</span></div>
+      <p>The <b>interface</b> (the public part a class shows to others) is the critical part, but the details (the <b>implementation</b>, how it works inside) are important too.</p>
+      <div class="uml-row"><div class="uml" role="img" aria-label="UML class GradeBook"><div>GradeBook</div><div>-coursename: String</div><div>"constructor": GradeBook()<br>+displayMsg()<br>+displayMsg(msg: String)<br>+setCourseName(name: String)<br>+getCourseName(): String</div></div></div>
+      <p><b>Users use the interface (the "public part"); the implementation is hidden by the "access control".</b></p>
+      <div class="callout"><p><b>Think of it like…</b> a TV remote. You use its buttons (the interface). The circuits inside (the implementation) are hidden, and the maker can change them without changing how you use the remote.</p></div>
+    </section>
+
+    <!-- 11 practice 1-2 -->
+    <section class="lec-sec" id="oop-lec02-practice-12" data-nav="Practice 1 &amp; 2 (slides)">
+      <p class="kicker">Section 11</p>
+      <h2>Practice 1 and 2 <span class="hl">from the slides</span></h2>
+      <div class="sec-head"><span class="slide-tag">📄 Slides 20–22</span></div>
+      <p>The lecture asks you to design classes yourself. These are the slides' own tasks; the slides give no model answer.</p>
+      <div class="duo">
+        <div class="pane"><h4>Practice 1</h4><ol><li>Create a class to represent a personal <b>bank account</b> – using <b>UML</b>.</li><li>Name the class <b>BankAccount</b>.</li><li>Decide what <b>fields</b> (attributes) and <b>methods</b> should be created for this class.</li></ol></div>
+        <div class="pane"><h4>Practice 2</h4><ol><li>Create a class to represent a <b>client</b> in a bank – using UML.</li><li>Name the class <b>Client</b>.</li><li>Decide what <b>fields</b> (attributes) and <b>methods</b> should be created for this class.</li></ol></div>
+      </div>
+      <div class="heads"><h4>What do you think?</h4><p>What is the <b>relationship</b> between <b>BankAccount</b> and <b>Client</b>? What other <b>classes</b> do you think should be created if we are implementing a computerized <b>system</b> for <b>Personal Bank Accounts inside a bank</b>?</p></div>
+      <p class="hint">Lab 3 teaches how to draw relationships (association, aggregation, composition): <a href="#oop-lab03:relationships">UML relationships</a>.</p>
+    </section>
+
+    <!-- 12 packages -->
+    <section class="lec-sec" id="oop-lec02-packages" data-nav="Packages">
+      <p class="kicker">Section 12</p>
+      <h2>Modularity in Java: <span class="hl">packages</span></h2>
+      <div class="sec-head"><span class="slide-tag">📄 Slides 23–24</span></div>
+      <ul class="rules">
+        <li>A package is Java's concept of a <b>"module"</b>: <b>a group of related classes</b>. Declare a class's package with <code>package myPackage;</code></li>
+        <li>A package can have a <b>name</b>, but there is also the <b>unnamed package</b>, which holds all the classes in your program that you haven't put into a named package.</li>
+      </ul>
+      <h3>Creating a package</h3>
+      <ul class="rules">
+        <li>The very first line in all the files intended for the package named myPackage: <code>package myPackage;</code></li>
+        <li>Put all of the <code>.class</code>/<code>.java</code> files in a directory (folder) named <code>myPackage</code>.</li>
+        <li>Bringing in a package of classes: <code>import java.util.*;</code></li>
+        <li>Bringing in a single class: <code>import java.util.ArrayList;</code></li>
+        <li>The compiler can find these things through the <b>classpath</b> (the list of folders and files where Java looks for classes).</li>
+      </ul>
+      <details class="more"><summary>Show more detail: the slide asks "What is the difference between a package and a library?"</summary><div class="more-in">
+        <p>A <b>package</b> is a named group of related classes inside your code, like <code>java.util</code>. A <b>library</b> is a ready-made collection of code that someone else wrote and that you add to your project, usually as one file (a <code>.jar</code>). A library normally contains many packages.</p>
+      </div></details>
+      <p class="hint">Lab 1 also covers packages and name conflicts: <a href="#oop-lec01p2:lab-packages">Lab notes 3</a>.</p>
+      <div class="callout"><p><b>Think of it like…</b> folders on your computer. A package is one folder of related files. A library is a whole box of folders you download from someone else.</p></div>
+    </section>
+
+    <!-- 13 class access -->
+    <section class="lec-sec" id="oop-lec02-class-access" data-nav="Class access">
+      <p class="kicker">Section 13</p>
+      <h2>Class <span class="hl">access</span></h2>
+      <div class="sec-head"><span class="slide-tag">📄 Slide 25</span></div>
+      <ul class="rules">
+        <li>Classes can be <b>public</b> or not.</li>
+        <li><b>Non-public</b> classes are available only <b>within the package</b> they are defined in.</li>
+        <li>There can be only <b>one public class</b> in a "<b>compilation unit</b>" (a <code>.java</code> file).</li>
+        <li><b>Non-public classes are "helper" classes, not for public use.</b></li>
+      </ul>
+      <details class="more"><summary>Show more detail: what the compiler says</summary><div class="more-in">
+        <p>A second public class in <code>One.java</code> gives: <code>error: class Two is public, should be declared in a file named Two.java</code>.</p>
+      </div></details>
+    </section>
+
+    <!-- 14 fields declaration -->
+    <section class="lec-sec" id="oop-lec02-fields" data-nav="Field declaration">
+      <p class="kicker">Section 14</p>
+      <h2>Fields: <span class="hl">declaration</span></h2>
+      <div class="sec-head"><span class="slide-tag">📄 Slide 26</span></div>
+      <ul class="rules">
+        <li>A field is declared with a type name followed by the field name, and optionally an initialization clause (<code>= value</code>).</li>
+        <li>The type is either a <b>primitive data type</b> (<code>boolean</code>, <code>char</code>, <code>byte</code>, <code>short</code>, <code>int</code>, <code>long</code>, <code>float</code>, <code>double</code>) or an <b>object reference</b>.</li>
+        <li>Field declarations can be preceded by different modifiers: <b>access control modifiers</b>, the <b><code>static</code></b> keyword and the <b><code>final</code></b> keyword. The next sections cover each one.</li>
+      </ul>
+    </section>
+
+    <!-- 15 access control -->
+    <section class="lec-sec" id="oop-lec02-access" data-nav="Access control modifiers">
+      <p class="kicker">Section 15</p>
+      <h2>Fields: access control <span class="hl">modifiers</span></h2>
+      <div class="sec-head"><span class="slide-tag">📄 Slides 27–29</span></div>
+      <ul class="rules">
+        <li><b>public:</b> public members are accessible anywhere the class is accessible.</li>
+        <li><b>private:</b> private members are accessible only in the class itself.</li>
+        <li><b>package (default):</b> package members are accessible in classes in the same package and the class itself.</li>
+        <li><b>protected:</b> protected members are accessible in classes in the same package, in <b>subclasses</b> of the class (classes built from it by inheritance), and in the class itself.</li>
+      </ul>
+      <div class="tablewrap"><table class="cmp access-table">
+        <thead><tr><th>Visibility</th><th>Public</th><th>Protected</th><th>Default</th><th>Private</th></tr></thead>
+        <tbody>
+          <tr><th>From the same class</th><td class="y">Yes</td><td class="y">Yes</td><td class="y">Yes</td><td class="y">Yes</td></tr>
+          <tr><th>From any class in the same package</th><td class="y">Yes</td><td class="y">Yes</td><td class="y">Yes</td><td class="n">No</td></tr>
+          <tr><th>From a subclass in the same package</th><td class="y">Yes</td><td class="y">Yes (package, inheritance)</td><td class="y">Yes (package)</td><td class="n">No</td></tr>
+          <tr><th>From a subclass outside the same package</th><td class="y">Yes</td><td class="y">Yes (inheritance)</td><td class="n">No</td><td class="n">No</td></tr>
+          <tr><th>From any non-subclass class outside the package</th><td class="y">Yes</td><td class="n">No</td><td class="n">No</td><td class="n">No</td></tr>
+        </tbody>
+      </table></div>
+      <h3>Example: a private field</h3>
+      <div class="duo">
+        <div><p class="out-label">Pencil.java</p>
+<pre class="code" data-java>public class Pencil {
+    public String color = "red";
+    public int length;
+    public float diameter;
+    private float price;
+    public static long nextID = 0;
+
+    public void setPrice (float newPrice) {
+        price = newPrice;
+    }
+}</pre></div>
+        <div><p class="out-label">CreatePencil.java</p>
+<pre class="code" data-java>public class CreatePencil {
+    public static void main (String args[]) {
+        Pencil p1 = new Pencil();
+        p1.price = 0.5f;    // not allowed
+    }
+}</pre>
+          <pre class="out bad">%&gt; javac Pencil.java
+%&gt; javac CreatePencil.java
+CreatePencil.java:4: price has private access in Pencil
+        p1.price = 0.5f;</pre>
+          <p>Only code inside <code>Pencil</code> can touch <code>price</code>. Other classes must use the public method: <code>p1.setPrice(0.5f);</code></p></div>
+      </div>
+      <div class="callout"><p><b>Think of it like…</b> the rooms of a house again: <code>private</code> is your bedroom, default is open to the family (the package), <code>protected</code> adds your children who moved away (subclasses), and <code>public</code> is the front garden.</p></div>
+    </section>
+
+    <!-- 16 static -->
+    <section class="lec-sec" id="oop-lec02-static" data-nav="Static fields">
+      <p class="kicker">Section 16</p>
+      <h2>The <span class="hl">static</span> field modifier</h2>
+      <div class="sec-head"><span class="slide-tag">📄 Slides 30–31</span></div>
+      <ul class="rules">
+        <li>Only <b>one copy</b> of a static field exists, <b>shared by all objects</b> of this class.</li>
+        <li>It can be accessed directly in the class itself.</li>
+        <li>Access from outside the class must be preceded by the <b>class name</b>: <code>System.out.println(Pencil.nextID);</code></li>
+        <li>…or via an object belonging to the class: <code>System.out.println(p1.nextID);</code></li>
+        <li>From outside the class, <b>non-static fields</b> must be accessed through an <b>object reference</b>.</li>
+      </ul>
+      <h3>What is the result?</h3>
+<pre class="code" data-java>public class CreatePencil {
+    public static void main (String args[]) {
+        Pencil p1 = new Pencil();
+        Pencil.nextID++;
+        System.out.println(p1.nextID);   //Result?
+
+        Pencil p2 = new Pencil();
+        Pencil.nextID++;
+        System.out.println(p2.nextID);   //Result?
+
+        System.out.println(p1.nextID);   //Result?
+    }
+}</pre>
+      <div class="reveal card" data-reveal>
+        <div class="card-h"><b>Step by step (answers from the slide)</b><span>one shared nextID</span></div>
+        <ol class="rv-steps">
+          <li><code>nextID</code> starts at 0. <code>Pencil.nextID++</code> makes it 1. <code>p1.nextID</code> prints <b>1</b>.</li>
+          <li>A second Pencil does not get its own copy. <code>Pencil.nextID++</code> makes the shared value 2. <code>p2.nextID</code> prints <b>2</b>.</li>
+          <li><code>p1.nextID</code> reads the same shared field: <b>still 2!</b></li>
+        </ol>
+      </div>
+      <p class="hint">Lab 2 has a live demo of a shared static counter: <a href="#oop-lab02:static">Lab 2 · static</a>.</p>
+    </section>
+
+    <!-- 17 final -->
+    <section class="lec-sec" id="oop-lec02-final" data-nav="The final keyword">
+      <p class="kicker">Section 17</p>
+      <h2>The <span class="hl">final</span> keyword</h2>
+      <div class="sec-head"><span class="slide-tag">📄 Slides 32–35</span></div>
+      <ul class="rules">
+        <li>Vaguely like <code>const</code> in C++. It says "<b>this is invariant</b>" (it does not change).</li>
+        <li>It can be used for <b>data fields</b>, <b>methods</b> (later) and <b>classes</b> (later). It is a kind of <b>protection mechanism</b>.</li>
+      </ul>
+      <h3>Final field modifiers</h3>
+      <ul class="rules">
+        <li>Once initialized, the value <b>cannot be changed</b>.</li>
+        <li>Often used to define <b>named constants</b>.</li>
+        <li><b><code>static final</code></b> fields must be initialized when the <b>class</b> is initialized.</li>
+        <li><b>Non-static final</b> fields must be initialized when an <b>object</b> of the class is constructed.</li>
+      </ul>
+      <div class="duo">
+        <div class="pane"><h4>final data (compile-time)</h4>
+          <p>For primitive types (int, float, etc.), <code>final</code> means "<b>this can't change value</b>".</p>
+<pre class="code" data-java>class Sedan {
+    final int numDoors = 4;
+}</pre>
+          <p>For references to objects, <code>final</code> means "<b>this reference must always refer to the same object</b>".</p>
+<pre class="code" data-java>final Engine e = new Engine(300);</pre>
+          <p class="hint">The object itself can still change (<code>e.hp = 400</code> is fine); only <code>e = new Engine(1)</code> is an error.</p></div>
+        <div class="pane"><h4>final data (run-time)</h4>
+          <p>Called a "<b>blank final</b>": the value is filled in during execution, by the constructor.</p>
+<pre class="code" data-java>class Car {
+    final int topSpeed;
+
+    Car(int ts) {
+        topSpeed = ts;
+        // …
+    }
+}
+class Race {
+    Car Vw = new Car(180), ford = new Car(160);
+    // you cannot say Vw.topSpeed = 150;
+}</pre>
+          <pre class="out bad">error: cannot assign a value to final variable topSpeed</pre></div>
+      </div>
+      <div class="callout"><p><b>Think of it like…</b> a birth certificate. The date of birth is written once (when the person is "constructed") and can never be changed afterwards.</p></div>
+      <div class="flips">
+        <button class="flip" type="button" aria-pressed="false"><span class="flip-in"><span class="flip-f"><b>Blank final</b><small>tap to flip</small></span><span class="flip-b">A final field with no value in its declaration; the constructor gives it its one value.</span></span></button>
+        <button class="flip" type="button" aria-pressed="false"><span class="flip-in"><span class="flip-f"><b>final reference</b><small>tap to flip</small></span><span class="flip-b">Must always point to the same object, but that object's fields can still change.</span></span></button>
+      </div>
+    </section>
+
+    <!-- 18 default values -->
+    <section class="lec-sec" id="oop-lec02-defaults" data-nav="Default values">
+      <p class="kicker">Section 18</p>
+      <h2>Fields: <span class="hl">initialization</span></h2>
+      <div class="sec-head"><span class="slide-tag">📄 Slide 36</span></div>
+      <p>If a field has no initialization, a <b>default initial value</b> is assigned depending on its type:</p>
+      <div class="tablewrap" style="max-width:520px"><table class="cmp narrow">
+        <thead><tr><th>Type</th><th>Initial value</th></tr></thead>
+        <tbody>
+          <tr><th><code>boolean</code></th><td><code>false</code></td></tr>
+          <tr><th><code>char</code></th><td><code>'\u0000'</code> (the "empty" character, number 0)</td></tr>
+          <tr><th><code>byte</code>, <code>short</code>, <code>int</code>, <code>long</code></th><td><code>0</code></td></tr>
+          <tr><th><code>float</code></th><td><code>+0.0f</code></td></tr>
+          <tr><th><code>double</code></th><td><code>+0.0</code></td></tr>
+          <tr><th>object reference</th><td><code>null</code></td></tr>
+        </tbody>
+      </table></div>
+      <p class="hint">This applies to fields. Local variables inside a method get no default value: using one before giving it a value is a compile error (see Lab 3, <a href="#oop-lab03:m1">Find the Mistake #1</a>).</p>
+    </section>
+
+    <!-- 19 practice 3 -->
+    <section class="lec-sec" id="oop-lec02-practice-3" data-nav="Practice 3 (slides)">
+      <p class="kicker">Section 19</p>
+      <h2>Practice (3) <span class="hl">from the slides</span></h2>
+      <div class="sec-head"><span class="slide-tag">📄 Slide 37</span></div>
+      <div class="pane">
+        <ul class="rules" style="margin:0">
+          <li>Using <b>UML</b>, draw the interface of the classes: <b>Student</b>, <b>Professor</b>, <b>Course</b>.</li>
+          <li>What are the attributes, the methods? What access modifiers will you use?</li>
+        </ul>
+      </div>
+      <p class="hint">The slides give no model answer. Use the <a href="#oop-lec02:class-diagram">class representation rules</a> above.</p>
+    </section>
+
+    <!-- recap -->
+    <section class="lec-sec recap" id="oop-lec02-recap" data-nav="Lecture recap" data-num="R">
+      <p class="kicker">Recap</p>
+      <h2>Lecture <span class="hl">recap</span></h2>
+      <div class="sec-head"><span class="slide-tag">📄 Slides 3–37</span></div>
+      <h3 style="margin-top:.6em">Key points</h3>
+      <ul class="rules">
+        <li>A class is a blueprint (abstract data type); an object is an instance with its own values.</li>
+        <li>Class members: fields (state), methods (behavior), and nested classes/interfaces.</li>
+        <li><code>new</code> creates the object and calls a constructor. With no constructor written, the compiler adds a default one that gives fields their default values.</li>
+        <li>One line does three jobs: declaration, instantiation (<code>new</code>), initialization (constructor call).</li>
+        <li>Constructors can be overloaded; the compiler picks one by the number and types of the arguments.</li>
+        <li>UML class diagram: a box with name, attributes, operations; <code>+</code> public, <code>#</code> protected, <code>-</code> private.</li>
+        <li>A declared variable or array of objects holds references; each still needs <code>new</code>.</li>
+        <li>A package groups related classes; only one public class per <code>.java</code> file.</li>
+        <li>Access: public (anywhere), protected (package + subclasses), default (package), private (class only).</li>
+        <li><code>static</code> fields have one shared copy; <code>final</code> fields get one value and keep it.</li>
+      </ul>
+      <h3>Key syntax</h3>
+      <div class="tablewrap"><table class="cmp">
+        <thead><tr><th>What</th><th>Java</th><th>Slide</th></tr></thead>
+        <tbody>
+          <tr><th>Create an object</th><td><code>Rectangle myRectangle = new Rectangle(15, 10);</code></td><td>8</td></tr>
+          <tr><th>Array of object references</th><td><code>GradeBook[] t = new GradeBook[6];</code></td><td>18</td></tr>
+          <tr><th>Package / import</th><td><code>package myPackage;</code> · <code>import java.util.*;</code> · <code>import java.util.ArrayList;</code></td><td>23–24</td></tr>
+          <tr><th>Static field from outside</th><td><code>Pencil.nextID</code> (or <code>p1.nextID</code>)</td><td>30</td></tr>
+          <tr><th>Constant</th><td><code>final int numDoors = 4;</code> · blank final set in the constructor</td><td>34–35</td></tr>
+          <tr><th>UML attribute / operation</th><td><code>-coursename: String</code> · <code>+getCourseName(): String</code></td><td>15–16</td></tr>
+        </tbody>
+      </table></div>
+      <h3>Common exam traps</h3>
+      <ul class="rules traps">
+        <li><code>GradeBook g;</code> creates no object; <code>g</code> refers to nothing until you use <code>new</code>.</li>
+        <li><code>new GradeBook[6]</code> creates 6 <code>null</code> references, not 6 GradeBooks.</li>
+        <li>The default constructor exists only if you wrote no constructor at all.</li>
+        <li>Constructors differ by signature (number and types of parameters), not by parameter names.</li>
+        <li>A private field cannot be used from another class, even with an object: <code>p1.price</code> is an error.</li>
+        <li>Changing a static field through one object changes it for all (<code>p1.nextID</code> is "still 2").</li>
+        <li>A <code>final</code> reference can't point to another object, but the object's fields can change.</li>
+        <li>Fields get default values; local variables do not.</li>
+      </ul>
+    </section>
+  </article>
+  <article class="view lecture" data-view="oop-lec03" data-title="OOP · Lecture 3: Methods and Strings" data-short="L3 · Methods and strings" hidden>
+    <header class="lec-head">
+      <p class="kicker">OOP · Lecture 3</p>
+      <h1>Methods and <span class="hl">strings</span></h1>
+      <p class="lede">The first half explains methods in detail: their kinds, how they are declared and called, how parameters are passed, the <code>this</code> keyword, and how Java cleans up objects you no longer use. The second half is about strings: creating them, their methods, converting them to and from numbers, and comparing them.</p>
+      <div class="lec-meta"><span class="slide-tag">📄 Slides 1–43</span><span class="done-count" data-done-count></span></div>
+      <div class="card">
+        <div class="card-h"><b>In this lecture</b><span>📄 Slides 2, 30</span></div>
+        <ol class="road">
+          <li><a href="#oop-lec03:method-types">Methods in Java</a>: types, declaration, modifiers, calling, overloading, parameters</li>
+          <li><a href="#oop-lec03:pass-by-value">Passing values to methods</a>, <a href="#oop-lec03:this">this</a>, <a href="#oop-lec03:return">return</a>, <a href="#oop-lec03:main">main</a></li>
+          <li><a href="#oop-lec03:destroying">Destroying objects and garbage collection</a></li>
+          <li><a href="#oop-lec03:strings">Strings</a>: creating, methods, numbers, comparison</li>
+        </ol>
+        <p class="hint" style="margin-bottom:0">Lab 3 also covers <a href="#oop-lab03:this">this</a> and <a href="#oop-lab03:strings">strings</a>, with memory pictures of the string pool.</p>
+      </div>
+    </header>
+
+    <!-- 01 method types -->
+    <section class="lec-sec" id="oop-lec03-method-types" data-nav="Method types">
+      <p class="kicker">Section 01</p>
+      <h2>Methods in Java: <span class="hl">types</span></h2>
+      <div class="sec-head"><span class="slide-tag">📄 Slides 2–3</span></div>
+      <p>A <b>method</b> is a named block of code inside a class. A method in Java is one of these types:</p>
+      <div class="uses">
+        <div><b>Instance methods</b>Belong to each object and work with its fields.</div>
+        <div><b>Class methods</b>Marked <code>static</code>; belong to the class itself.</div>
+        <div><b>Constructor(s)</b>Run once when <code>new</code> creates an object.</div>
+        <div><b>Main method</b>Where the program starts.</div>
+      </div>
+    </section>
+
+    <!-- 02 declaration -->
+    <section class="lec-sec" id="oop-lec03-declaration" data-nav="Method declaration">
+      <p class="kicker">Section 02</p>
+      <h2>Method <span class="hl">declaration</span></h2>
+      <div class="sec-head"><span class="slide-tag">📄 Slide 4</span></div>
+      <p>A method declaration has two parts: the <b>method header</b> (its first line) and the <b>method body</b> (the code in braces). The header consists of modifiers (optional), the return type, the method name, the parameters list (and a <code>throws</code> clause, optional, covered later).</p>
+      <div class="card" data-anat>
+        <div class="card-h"><b>Live: the parts of a method header</b><span>tap a part</span></div>
+        <div class="legend"></div>
+        <div class="ana">
+<pre class="code" data-java style="font-size:16px"><span class="part" data-part="mods">public static</span> <span class="part" data-part="ret">int</span> <span class="part" data-part="name">Add</span> <span class="part" data-part="params">(int x, int y)</span></pre>
+          <div class="anainfo" aria-live="polite"></div>
+        </div>
+        <template data-part="mods" data-label="modifiers"><h4>Modifiers (optional)</h4><p><code>public</code> is an access modifier; <code>static</code> makes it a class method. See the list below.</p></template>
+        <template data-part="ret" data-label="return type"><h4>Return type</h4><p>The type of value the method gives back: here an <code>int</code>. <code>void</code> means nothing.</p></template>
+        <template data-part="name" data-label="name"><h4>Method name</h4><p>The name you call it by: <code>Add(2, 3)</code>.</p></template>
+        <template data-part="params" data-label="parameters"><h4>Parameters list</h4><p>The inputs, each with a type and a name, separated by commas.</p></template>
+      </div>
+      <h3>Types of modifiers</h3>
+      <ol class="props">
+        <li><b>Access control modifiers</b>: visibility (public, private, protected).</li>
+        <li><b><code>static</code></b>: represents the whole class, not a specific object. It can only access static fields and other static methods of the same class.</li>
+        <li><b><code>final</code></b>: the method cannot be overridden in subclasses (inheritance, discussed later).</li>
+        <li><b><code>abstract</code></b>: the method body is empty (inheritance, discussed later): <code>abstract void sampleMethod();</code></li>
+      </ol>
+    </section>
+
+    <!-- 03 access -->
+    <section class="lec-sec" id="oop-lec03-method-access" data-nav="Access modifiers">
+      <p class="kicker">Section 03</p>
+      <h2>Methods: <span class="hl">access modifiers</span></h2>
+      <div class="sec-head"><span class="slide-tag">📄 Slide 5</span></div>
+      <div class="tablewrap"><table class="cmp">
+        <thead><tr><th>Modifier</th><th>Who can use the method</th></tr></thead>
+        <tbody>
+          <tr><th><code>private</code></th><td>Only code inside the class. If you don't want any other class to use it, declare it private. Such a method is called a <b>helper function</b>.</td></tr>
+          <tr><th>None (package)</th><td>If you don't write anything, the default visibility lets only classes in the same package (directory) see it. This is a common choice.</td></tr>
+          <tr><th><code>protected</code></th><td>Only this class's children (subclasses) can use it (inheritance).</td></tr>
+          <tr><th><code>public</code></th><td>Lets anyone see it. Choose this if the method will be used by others outside your project. It is common to use public when package visibility would be more appropriate. Note that <code>main</code> must be public so the run-time system can call it.</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <!-- 04 static methods -->
+    <section class="lec-sec" id="oop-lec03-static-methods" data-nav="static methods">
+      <p class="kicker">Section 04</p>
+      <h2>Methods: the <span class="hl">static</span> modifier</h2>
+      <div class="sec-head"><span class="slide-tag">📄 Slide 6</span></div>
+      <ul class="rules">
+        <li>A method should be declared <code>static</code> <b>if it doesn't need to use instance variables or methods</b>.</li>
+        <li>If the <code>static</code> modifier is used, it is called a <b>class method</b>.</li>
+      </ul>
+<pre class="code" data-java>private static double convertKmToMi(double kilometers) {
+    double miles = kilometers * MILES_PER_KILOMETER;
+    return miles;
+}</pre>
+      <p>A static method can only use: its own <b>parameters</b>, <b>local variables</b>, the class's <b>static constants/variables</b>, and <b>other static methods</b> in the same class.</p>
+      <ul class="rules">
+        <li>An <b>instance method CAN use static fields</b>.</li>
+        <li>If the <code>static</code> keyword is left out, the method is an instance method.</li>
+      </ul>
+      <div class="callout"><p><b>Think of it like…</b> a calculator on the classroom wall. Anyone can use it, and it needs nothing from any one student (no instance data). Converting kilometers to miles is the same for every object, so it can be static.</p></div>
+    </section>
+
+    <!-- 05 gradebook practice -->
+    <section class="lec-sec" id="oop-lec03-gradebook" data-nav="GradeBook practice (slides)">
+      <p class="kicker">Section 05</p>
+      <h2>Practice <span class="hl">from the slides</span>: GradeBook</h2>
+      <div class="sec-head"><span class="slide-tag">📄 Slides 7–8</span></div>
+      <p>In a class diagram, <b>static methods are drawn underlined</b>.</p>
+      <div class="uml-row">
+        <div class="uml" role="img" aria-label="UML class GradeBook with two underlined static methods"><div>GradeBook</div><div>-coursename: String</div><div>+GradeBook(name: String)<br>+displayMsg()<br>+displayMsg(msg: String)<br>+setCourseName(name: String)<br>+getCourseName(): String<br><u>+LetterGrade(numGrade:int):char</u><br><u>+ComputeClassAverage(grades[]:float):float</u></div></div>
+      </div>
+<pre class="code" data-java>GradeBook OOPGradeBook;
+OOPGradeBook = new GradeBook("OOP");</pre>
+      <div class="pane">
+        <h4>The slide's task</h4>
+        <p style="margin:0 0 6px">For the class GradeBook, implement the following static methods:</p>
+        <ul class="rules" style="margin:0">
+          <li><code>GradeBook.LetterGrade(float numGrade)</code></li>
+          <li><code>GradeBook.ComputeClassAverage(float []grades)</code></li>
+          <li>Implement the remaining methods in the interface of class GradeBook.</li>
+        </ul>
+      </div>
+      <p class="hint">The slides give no model answer. Two small slide inconsistencies: the second line is written <code>OOPGaredBook</code> (typo), and the diagram gives <code>LetterGrade</code> an <code>int</code> parameter while the task says <code>float</code>.</p>
+    </section>
+
+    <!-- 06 invocation -->
+    <section class="lec-sec" id="oop-lec03-invocation" data-nav="Calling methods">
+      <p class="kicker">Section 06</p>
+      <h2>Methods: <span class="hl">invocation</span></h2>
+      <div class="sec-head"><span class="slide-tag">📄 Slide 9</span></div>
+      <p>To <b>invoke</b> (call) a method, use it as an operation on an object or class with the dot (<code>.</code>) operator:</p>
+<pre class="code" data-java>reference.method(arguments);</pre>
+      <div class="tablewrap"><table class="cmp">
+        <thead><tr><th></th><th>Outside the class</th><th>Inside the class</th></tr></thead>
+        <tbody>
+          <tr><th>static method</th><td>"reference" can be the <b>class name</b> (or an object reference belonging to the class): <code>GradeBook.LetterGrade(85)</code></td><td>"reference" is omitted: <code>LetterGrade(85)</code></td></tr>
+          <tr><th>non-static method</th><td>"reference" must be an <b>object reference</b>: <code>OOPGradeBook.displayMsg()</code></td><td>"reference" is omitted: <code>displayMsg()</code></td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <!-- 07 overloading -->
+    <section class="lec-sec" id="oop-lec03-overloading" data-nav="Overloading">
+      <p class="kicker">Section 07</p>
+      <h2>Methods: <span class="hl">overloading</span></h2>
+      <div class="sec-head"><span class="slide-tag">📄 Slide 10</span></div>
+      <p>A class can have more than one method with the same name as long as they have different parameter lists: <b>same name but different signature</b>.</p>
+<pre class="code" data-java>public class Pencil {
+    . . .
+    public void setPrice (float newPrice) {
+        price = newPrice;
+    }
+    public void setPrice (Pencil p) {
+        price = p.getPrice();
+    }
+}</pre>
+      <p><b>How does the compiler know which method you're invoking?</b> It compares the number and type of the parameters and uses the matching one: <code>p1.setPrice(0.5f)</code> runs the first, <code>p1.setPrice(p2)</code> the second.</p>
+      <p class="hint"><a href="#oop-lec01">Lecture 1</a> has a live overloading demo in "The four pillars".</p>
+    </section>
+
+    <!-- 08 parameters -->
+    <section class="lec-sec" id="oop-lec03-parameters" data-nav="Parameters &amp; arguments">
+      <p class="kicker">Section 08</p>
+      <h2>Methods: <span class="hl">parameters</span> and arguments</h2>
+      <div class="sec-head"><span class="slide-tag">📄 Slides 11–12</span></div>
+      <ul class="rules">
+        <li><b>Parameters</b> are the list of variables in the method declaration.</li>
+        <li><b>Arguments</b> are the actual values passed in when the method is invoked. If there is more than one, they are separated by commas.</li>
+        <li>Parameters are <b>local</b> variables that only exist inside the method. They get their first values from the arguments when the method is called.</li>
+      </ul>
+      <details class="more"><summary>Show more detail: the slide asks "Can a parameter have the same name as a field in the class?"</summary><div class="more-in"><p>Yes. Inside the method, the name then means the parameter: the parameter <b>shadows</b> (hides) the field. To reach the field, write <code>this.name</code>. The slides answer this in <a href="#oop-lec03:this">Using this keyword</a>.</p></div></details>
+      <h3>Parameter types</h3>
+      <p>You can use any data type for a parameter of a method or a constructor: <b>primitive data types</b> (such as doubles, floats and integers) and <b>reference data types</b> (such as objects and arrays).</p>
+<pre class="code" data-java>public Rectangle rectangleFrom(Point[] corners) {
+    // method body goes here
+    return Rect;
+}</pre>
+      <div class="callout"><p><b>Think of it like…</b> a recipe that says "add X grams of sugar". X is the parameter (the empty slot in the recipe). When you cook and use 200 grams, 200 is the argument.</p></div>
+      <div class="flips">
+        <button class="flip" type="button" aria-pressed="false"><span class="flip-in"><span class="flip-f"><b>Parameter</b><small>tap to flip</small></span><span class="flip-b">A variable in the method declaration, like <code>int a</code>. It exists only inside the method.</span></span></button>
+        <button class="flip" type="button" aria-pressed="false"><span class="flip-in"><span class="flip-f"><b>Argument</b><small>tap to flip</small></span><span class="flip-b">The actual value passed in the call, like the <code>b</code> in <code>method1(b)</code>.</span></span></button>
+      </div>
+    </section>
+
+    <!-- 09 pass by value -->
+    <section class="lec-sec" id="oop-lec03-pass-by-value" data-nav="Passed by value">
+      <p class="kicker">Section 09</p>
+      <h2>Parameters are always <span class="hl">passed by value</span></h2>
+      <div class="sec-head"><span class="slide-tag">📄 Slides 13–18</span></div>
+      <p><b>Passed by value</b> means the method gets a <b>copy</b> of the argument's value. Changing the copy does not change the original.</p>
+      <h3>A primitive parameter</h3>
+<pre class="code" data-java>public void method1 (int a) {
+    a = 6;
+}
+
+public void method2 ( ) {
+    int b = 3;
+    method1(b);   // now b = ?
+                  // b = 3
+}</pre>
+      <p><code>a</code> is a copy of <code>b</code>, so setting <code>a = 6</code> leaves <code>b</code> at <b>3</b>.</p>
+      <h3>An object parameter</h3>
+      <p>When the parameter is an object reference, it is the <b>object reference</b> that is passed, not the object itself. "Haven't you said it's passed by value, not reference?" Yes: <b>reference type parameters, such as objects, are also passed by value</b> (sometimes called <b>passed by sharing</b>). The value that is copied is the reference (the arrow).</p>
+      <ul class="rules">
+        <li>When the method returns, the passed-in reference still references the <b>same object</b> as before.</li>
+        <li>However, the values of the <b>object's fields can be changed</b> in the method, if they have the proper access level.</li>
+      </ul>
+      <div class="duo">
+        <div>
+<pre class="code" data-java>public class Pencil {
+    public String color = "red";
+    private float price;
+    public Pencil(String color) {
+        this.color = color;
+    }
+    public void setPrice (float newPrice) {
+        price = newPrice;
+    }
+}</pre></div>
+        <div>
+<pre class="code" data-java>class PassRef {
+    public static void main(String[] args) {
+        Pencil plainPencil = new Pencil("PLAIN");
+        System.out.println("original color: " + plainPencil.color);
+        paintRed(plainPencil);
+        System.out.println("new color: " + plainPencil.color);
+    }
+    public static void paintRed(Pencil p) {
+        p.color = "RED";
+        p = null;
+        p = new Pencil("Blue");   // is it effective?
+    }
+}</pre></div>
+      </div>
+      <div class="reveal card" data-reveal>
+        <div class="card-h"><b>Step by step: what happens to plainPencil and p</b><span>📄 Slide 16</span></div>
+        <ol class="rv-steps">
+          <li><code>plainPencil</code> → Pencil object with <b>color: PLAIN</b>. Output: <code>original color: PLAIN</code></li>
+          <li><code>paintRed(plainPencil)</code>: <code>p</code> gets a copy of the reference, so <code>plainPencil</code> and <code>p</code> point to the same object.</li>
+          <li><code>p.color = "RED"</code> changes that shared object: <b>color: RED</b> for both.</li>
+          <li><code>p = null</code> changes only the copy <code>p</code>. <code>plainPencil</code> still points to the red pencil.</li>
+          <li><code>p = new Pencil("Blue")</code> points <code>p</code> at a new Blue pencil. Is it effective? <b>No</b>: <code>plainPencil</code> never sees it. Output: <code>new color: RED</code></li>
+        </ol>
+      </div>
+      <h3>Passing an object reference by value</h3>
+      <ul class="rules">
+        <li>If you change any <b>field</b> of the object the parameter refers to, that field is changed for every variable that holds a reference to this object.</li>
+        <li>However, you can change <b>which object</b> a parameter refers to inside a method without affecting the original reference that was passed.</li>
+        <li>What is passed is the object reference, and it is passed in the manner of "<b>PASSING BY VALUE</b>"!</li>
+      </ul>
+<pre class="code" data-java>public void moveCircle(Circle circle, int deltaX, int deltaY) {
+    // code to move origin of circle to x+deltaX, y+deltaY
+    circle.setX(circle.getX() + deltaX);
+    circle.setY(circle.getY() + deltaY);
+    // code to assign a new reference to circle
+    circle = new Circle(0, 0);
+}
+// Method is invoked with these arguments:
+moveCircle(myCircle, 23, 56)</pre>
+      <ul class="rules">
+        <li>The method changes the x and y of the object that <code>circle</code> references (that is, <code>myCircle</code>). These changes <b>persist</b> when the method returns.</li>
+        <li>Then <code>circle</code> is assigned a reference to a new Circle with x = y = 0. This reassignment has <b>no permanence</b>, because the reference was passed in by value.</li>
+      </ul>
+      <div class="callout"><p><b>Think of it like…</b> giving a friend a photocopy of your house address. Your friend can go to your house and paint the door red (change a field): you will see it. If your friend writes a different address on their copy, your own paper still has your address.</p></div>
+    </section>
+
+    <!-- 10 this -->
+    <section class="lec-sec" id="oop-lec03-this" data-nav="Using this">
+      <p class="kicker">Section 10</p>
+      <h2>Using the <span class="hl">this</span> keyword</h2>
+      <div class="sec-head"><span class="slide-tag">📄 Slides 19–20</span></div>
+      <ul class="rules">
+        <li>Within an instance method or a constructor, <code>this</code> is a reference to the <b>current object</b>.</li>
+        <li>The most common reason for using <code>this</code> is that <b>a field is shadowed by a method or constructor parameter</b> (they have the same name).</li>
+      </ul>
+<pre class="code" data-java>public class Point {
+    public int x = 0;
+    public int y = 0;
+    public Point(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+}</pre>
+      <h3>Calling another constructor with this(…)</h3>
+      <p>From within a constructor, you can use <code>this</code> to call another constructor in the same class:</p>
+<pre class="code" data-java>public class Rectangle {
+    private int x, y;
+    private int width, height;
+    public Rectangle(int x, int y, int width, int height) {
+        this.x = x; this.y = y;
+        this.width = width; this.height = height;
+    }
+    public Rectangle() {
+        this(0, 0, 0, 0);
+    }
+    public Rectangle(int width, int height) {
+        this(0, 0, width, height);
+    }
+}</pre>
+      <p><code>new Rectangle()</code> ends up with 0, 0, 0, 0, and <code>new Rectangle(5, 7)</code> with x = 0, y = 0, width = 5, height = 7: the short constructors reuse the full one.</p>
+      <p class="hint">Lab 3 shows what goes wrong without <code>this</code> (fields stay 0 and null): <a href="#oop-lab03:this-fields">Lab 3 · this and instance variables</a>.</p>
+    </section>
+
+    <!-- 11 return -->
+    <section class="lec-sec" id="oop-lec03-return" data-nav="return">
+      <p class="kicker">Section 11</p>
+      <h2>Methods: <span class="hl">return</span></h2>
+      <div class="sec-head"><span class="slide-tag">📄 Slide 21</span></div>
+      <ul class="rules">
+        <li>A method returns to the caller after it finishes executing its statements. If the method returns a value (it is not a <code>void</code> method), it must contain a <b>return statement</b> that specifies a value to return.</li>
+        <li>When execution reaches the <code>return</code> statement, control transfers back to the calling method, passing the return value to it.</li>
+      </ul>
+<pre class="code" data-java>    ....
+    return miles;
+    return kilometers * MILES_PER_KILOMETER;   // returning an expression also works
+}</pre>
+    </section>
+
+    <!-- 12 main -->
+    <section class="lec-sec" id="oop-lec03-main" data-nav="The main method">
+      <p class="kicker">Section 12</p>
+      <h2>The <span class="hl">main</span> method</h2>
+      <div class="sec-head"><span class="slide-tag">📄 Slides 22–23</span></div>
+      <ul class="rules">
+        <li>The system locates and runs the <code>main</code> method for a class when you run a program.</li>
+        <li>Other methods run when <code>main</code> calls them, explicitly or implicitly.</li>
+        <li><code>main</code> must be <b>public</b>, <b>static</b> and <b>void</b>.</li>
+      </ul>
+      <details class="more"><summary>Show more detail: the slide asks WHY</summary><div class="more-in">
+        <ul class="rules">
+          <li><b>public:</b> the run-time system (the JVM) calls it from outside the class.</li>
+          <li><b>static:</b> no object exists yet when the program starts, so <code>main</code> must belong to the class itself.</li>
+          <li><b>void:</b> there is no caller in your program waiting for a value from <code>main</code>.</li>
+        </ul>
+      </div></details>
+      <h3>Getting input from the command line</h3>
+      <p>When you run a program with the <code>java</code> command, you can give a list of strings as the arguments of <code>main</code>. Inside <code>main</code>, use <code>args[index]</code> to get each one.</p>
+<pre class="code" data-java>class Greetings {
+    public static void main (String args[]) {
+        String name1 = args[0];
+        String name2 = args[1];
+        System.out.println("Hello " + name1 + "&" + name2);
+    }
+}</pre>
+      <pre class="out">C:\java Greetings Jacky Mary
+Hello Jacky&amp;Mary</pre>
+      <p class="hint">The slide shows the output as "Hello Jacky &amp; Mary". With the code as written there are no spaces around &amp;; running it gives <code>Hello Jacky&amp;Mary</code>.</p>
+      <p><b>Note:</b> what you get are <b>strings</b>! You have to convert them into other types when needed (see <a href="#oop-lec03:numbers-strings">Numbers and strings</a>).</p>
+    </section>
+
+    <!-- 13 destroying -->
+    <section class="lec-sec" id="oop-lec03-destroying" data-nav="Destroying objects">
+      <p class="kicker">Section 13</p>
+      <h2>Destroying objects and <span class="hl">scope</span></h2>
+      <div class="sec-head"><span class="slide-tag">📄 Slides 24–25</span></div>
+      <p>The <b>scope</b> of a variable is the part of the code where it exists.</p>
+      <ul class="rules">
+        <li>If an object goes "out of scope", it can no longer be used.</li>
+        <li><b>Primitives'</b> scope is set by the placement of curly braces <code>{}</code>.</li>
+        <li>Java <b>objects</b> do not have the same lifetimes as primitives. When you create a Java object using <code>new</code>, it hangs around past the end of the <code>{}</code> scope.</li>
+      </ul>
+<pre class="code" data-java>{ String s = new String("a string");
+} // End of scope</pre>
+      <p>The reference <code>s</code> vanishes at the end of the scope. However, the String object that <code>s</code> was pointing to is still in memory. There is no way to reach it, because the only reference to it is out of scope.</p>
+      <ul class="rules">
+        <li>In C++, we might need to write an explicit function to free the memory of an object.</li>
+        <li>Java uses <b>"garbage collection"</b> to destroy unreferenced objects.</li>
+      </ul>
+    </section>
+
+    <!-- 14 gc -->
+    <section class="lec-sec" id="oop-lec03-gc" data-nav="Garbage collection">
+      <p class="kicker">Section 14</p>
+      <h2>Garbage <span class="hl">collection</span> in Java</h2>
+      <div class="sec-head"><span class="slide-tag">📄 Slides 26–29</span></div>
+      <ul class="rules">
+        <li>The <b>garbage collector</b> frees the memory of <b>unreachable</b> objects while the program runs, by deleting them.</li>
+        <li>The <b>JVM</b> controls the garbage collector.</li>
+        <li>An object becomes <b>eligible</b> for garbage collection when no live reference can access it.</li>
+      </ul>
+      <h3>When does this happen? An object becomes eligible if:</h3>
+      <ul class="rules">
+        <li>A reference to it is set to <code>null</code> (all references to it).</li>
+        <li>The reference to the object is made to <b>refer to another object</b>.</li>
+      </ul>
+      <h3>Requesting garbage collection</h3>
+      <ul class="rules">
+        <li>Call <code>System.gc()</code>, which requests the JVM to perform garbage collection.</li>
+        <li>Almost NEVER done! Don't worry about it: Java does it efficiently.</li>
+      </ul>
+      <h3>The method finalize</h3>
+      <ul class="rules">
+        <li>Provided by the <code>java.lang.Object</code> class (the parent of every class). Object's own <code>finalize</code> does nothing.</li>
+        <li>The garbage collector calls it when it determines that no more references to the object exist.</li>
+        <li>It should be implemented (<b>overridden</b>) to clean up non-Java (system) resources before the object is collected, for example closing a file or sending a message to a printer.</li>
+      </ul>
+      <p class="hint">Newer Java versions mark <code>finalize</code> as deprecated (old, planned for removal), but the idea is what the lecture tests.</p>
+      <div class="callout"><p><b>Think of it like…</b> a cleaner in a library. Books that nobody has borrowed and that no shelf label points to are collected and removed. You don't call the cleaner; they come when needed.</p></div>
+      <div class="flips">
+        <button class="flip" type="button" aria-pressed="false"><span class="flip-in"><span class="flip-f"><b>Garbage collector</b><small>tap to flip</small></span><span class="flip-b">The part of the JVM that deletes objects no live reference can reach.</span></span></button>
+        <button class="flip" type="button" aria-pressed="false"><span class="flip-in"><span class="flip-f"><b>Eligible for GC</b><small>tap to flip</small></span><span class="flip-b">All references set to <code>null</code>, or pointed at other objects.</span></span></button>
+      </div>
+    </section>
+
+    <!-- 15 strings -->
+    <section class="lec-sec" id="oop-lec03-strings" data-nav="Strings in Java">
+      <p class="kicker">Section 15</p>
+      <h2><span class="hl">Strings</span> in Java</h2>
+      <div class="sec-head"><span class="slide-tag">📄 Slides 30–32</span></div>
+      <p>Strings are sequences of characters. In Java, strings are <b>objects</b> of the class <code>String</code>.</p>
+<pre class="code" data-java>String s = "Hi There!";
+char[] charArray = {'H', 'i', ' ', 'T', 'h', 'e', 'r', 'e'};</pre>
+      <h3>String constructors (around 13 of them)</h3>
+      <div class="tablewrap"><table class="cmp">
+        <thead><tr><th>Code</th><th>Result</th></tr></thead>
+        <tbody>
+          <tr><td><code>String s1 = new String();</code></td><td>empty string <code>""</code>, length = 0</td></tr>
+          <tr><td><code>String s2 = new String(s);</code></td><td><code>"Hi There!"</code>, length = 9</td></tr>
+          <tr><td><code>String s3 = new String(charArray);</code></td><td><code>"Hi There"</code>, length = 8</td></tr>
+          <tr><td><code>String s4 = new String(charArray, 3, 2);</code></td><td><code>"Th"</code>, length = 2 (from index 3, take 2 chars)</td></tr>
+        </tbody>
+      </table></div>
+      <div class="heads"><h4>Strings are immutable</h4><p>Strings are constant (<b>immutable</b>): their values cannot be changed after they are created. If they are "changed", a new string object is created and returned. An <b>immutable class</b> is a class whose instances (objects) cannot be modified.</p></div>
+      <div class="callout"><p><b>Think of it like…</b> words carved in stone. You can't change the carving; to "edit" it, you carve a new stone and move your sign to point at it.</p></div>
+      <div class="flips">
+        <button class="flip" type="button" aria-pressed="false"><span class="flip-in"><span class="flip-f"><b>Immutable</b><small>tap to flip</small></span><span class="flip-b">Cannot be changed after it is created. Every "change" to a String makes a new String.</span></span></button>
+      </div>
+    </section>
+
+    <!-- 16 toString -->
+    <section class="lec-sec" id="oop-lec03-tostring" data-nav="toString()">
+      <p class="kicker">Section 16</p>
+      <h2>Conversion to String: <span class="hl">toString()</span></h2>
+      <div class="sec-head"><span class="slide-tag">📄 Slide 33</span></div>
+      <ul class="rules">
+        <li>All Java objects have a method <code>toString()</code>, which returns a String that best "describes" the object.</li>
+        <li>Example: printing a red color object:</li>
+      </ul>
+<pre class="code" data-java>Color color = new Color(255, 0, 0);
+String colorStr = color.toString();
+System.out.println(colorStr);</pre>
+      <pre class="out">java.awt.Color[r=255,g=0,b=0]</pre>
+      <p>Sometimes you do not even need to call <code>toString()</code> yourself. <code>println()</code> has a version that takes an Object; it calls <code>toString()</code> for you and prints the result: <code>System.out.println(color);</code> prints the same line.</p>
+      <p class="hint">The slide writes <code>Console.println</code>; in standard Java it is <code>System.out.println</code>. <code>Color</code> is in the <code>java.awt</code> package.</p>
+    </section>
+
+    <!-- 17 string api -->
+    <section class="lec-sec" id="oop-lec03-string-api" data-nav="String methods">
+      <p class="kicker">Section 17</p>
+      <h2>The String <span class="hl">API</span></h2>
+      <div class="sec-head"><span class="slide-tag">📄 Slides 34–35</span></div>
+      <p>An <b>API</b> (Application Programming Interface) is the set of methods a class offers. The String API provides methods to work with strings:</p>
+      <div class="tablewrap"><table class="cmp">
+        <thead><tr><th>Method</th><th>What it does</th></tr></thead>
+        <tbody>
+          <tr><th><code>length()</code></th><td>Gets the number of characters in a string.</td></tr>
+          <tr><th><code>charAt()</code></th><td>Gets the character at a given position within the string.</td></tr>
+          <tr><th><code>indexOf()</code></th><td>Sees if a character or string exists within a string (its position, or −1).</td></tr>
+          <tr><th><code>substring(int, int)</code></th><td>Extracts a substring from a string.</td></tr>
+          <tr><th><code>concat(String str)</code></th><td>Concatenates (joins) two strings.</td></tr>
+          <tr><th><code>startsWith(String prefix)</code>, <code>endsWith(String suffix)</code></th><td>Tests if the string starts/ends with the given text.</td></tr>
+          <tr><th><code>toLowerCase()</code>, <code>toUpperCase()</code></th><td>Converts all characters to lower case / upper case.</td></tr>
+          <tr><th><code>toCharArray()</code></th><td>Returns an array of the string's characters.</td></tr>
+        </tbody>
+      </table></div>
+      <h3>Some string methods</h3>
+<pre class="code" data-java>String s1 = "Hi There ", s2 = "my friend!";
+s1.length();                       // returns no. of chars in the string: 9
+String s = s1.concat(s2);          // returns new string w/ the 2 strings attached
+System.out.println(s1 + s2);       // Hi There my friend!
+String s = "I teach ".concat(" OOP");
+String s = "I teach" + "OOP";
+s1 = String.format("The student got %f in his final and %d in the lab of the course %s",
+                   floatVar, intVar, stringVar);</pre>
+      <p><code>String.format</code> builds a string with the same format codes as <code>printf</code> (<a href="#oop-lec01p2:lab-output">Lab 1 notes</a>), but returns it instead of printing it.</p>
+      <div class="card">
+        <div class="card-h"><b>Live: try the String methods</b><span id="strMeta"></span></div>
+        <div class="row"><code>String s = "</code><input id="strS" value="Hello World" aria-label="The string s" style="max-width:260px" spellcheck="false"><code>";</code></div>
+        <div class="row"><code>i =</code><input id="strI" type="number" value="4" aria-label="Index for charAt"><code>a =</code><input id="strA" type="number" value="0" aria-label="Substring start"><code>b =</code><input id="strB" type="number" value="5" aria-label="Substring end"><code>t = "</code><input id="strT" value="World" aria-label="Text t" style="width:120px" spellcheck="false"><code>"</code></div>
+        <div class="tablewrap" style="box-shadow:none"><table class="cmp"><tbody id="strOut"></tbody></table></div>
+        <p class="hint">Positions start at 0. <code>substring(a, b)</code> takes from a up to, but not including, b.</p>
+      </div>
+    </section>
+
+    <!-- 18 sorting -->
+    <section class="lec-sec" id="oop-lec03-sorting" data-nav="Sorting a string">
+      <p class="kicker">Section 18</p>
+      <h2>Sorting a <span class="hl">string</span></h2>
+      <div class="sec-head"><span class="slide-tag">📄 Slide 36</span></div>
+      <p>How would you sort the characters in a string? Turn it into a <code>char</code> array, sort the array, and build a new string from it:</p>
+<pre class="code" data-java>protected static String sort(String myString) {
+    char[] charArray = myString.toCharArray();
+    java.util.Arrays.sort(charArray);
+    return new String(charArray);
+}</pre>
+      <div class="reveal card" data-reveal>
+        <div class="card-h"><b>Step by step: sort("hello world")</b><span>checked with Java</span></div>
+        <ol class="rv-steps">
+          <li><code>toCharArray()</code> gives <code>{'h','e','l','l','o',' ','w','o','r','l','d'}</code>.</li>
+          <li><code>Arrays.sort</code> puts the characters in order by their code. The space comes first.</li>
+          <li><code>new String(charArray)</code> returns <code>" dehllloorw"</code> (starting with a space). The original string is unchanged: strings are immutable.</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- 19 exercise -->
+    <section class="lec-sec" id="oop-lec03-exercise" data-nav="Exercise (slides)">
+      <p class="kicker">Section 19</p>
+      <h2>Exercise <span class="hl">from the slides</span></h2>
+      <div class="sec-head"><span class="slide-tag">📄 Slide 37</span></div>
+<pre class="code" data-java>String sent = "I am a student in OOP course! It is difficult, but I enjoy it!";</pre>
+      <div class="pane">
+        <ol style="margin:0">
+          <li>What is the value displayed by the expression: <code>sent.length()</code>?</li>
+          <li>What is the value returned by the method call <code>sent.charAt(19)</code>?</li>
+          <li>Write an expression that refers to the letter 'P' in the string referred to by sent.</li>
+          <li>How long is the string returned by the following expression? <code>sent.substring(7, 14)</code> What is the string?</li>
+        </ol>
+        <p style="margin:10px 0 0"><b>How can you reverse a String?</b></p>
+        <p style="margin:6px 0 0"><b>Take home exercise:</b> Write a program that figures out whether one string is an <b>anagram</b> of another string (ignore white space and punctuation). An anagram uses the same letters in a different order, like LISTEN and SILENT.</p>
+      </div>
+      <details class="sol"><summary>Show answers to 1–4 (worked out by running the code; the slides give none)</summary><div class="more-in">
+        <ol>
+          <li><code>sent.length()</code> is <b>62</b>.</li>
+          <li><code>sent.charAt(19)</code> is <b>'O'</b> (the second O of "OOP": positions 18, 19, 20 are O, O, P).</li>
+          <li><code>sent.charAt(20)</code> (also <code>sent.indexOf('P')</code> gives 20).</li>
+          <li>It is <b>7</b> characters long: <code>"student"</code> (positions 7 to 13).</li>
+        </ol>
+        <p class="hint">The reverse and anagram questions are left as exercises in the slides. Tip: the <a href="#oop-lec03:sorting">sort</a> method above is a good start for the anagram check.</p>
+      </div></details>
+    </section>
+
+    <!-- 20 numbers and strings -->
+    <section class="lec-sec" id="oop-lec03-numbers-strings" data-nav="Numbers and strings">
+      <p class="kicker">Section 20</p>
+      <h2>Numbers and <span class="hl">strings</span></h2>
+      <div class="sec-head"><span class="slide-tag">📄 Slides 38–39</span></div>
+      <h3 style="margin-top:.6em">a) From a string to a number</h3>
+      <ul class="rules">
+        <li>The classes <code>Byte</code>, <code>Double</code>, <code>Float</code>, <code>Integer</code>, <code>Long</code> and <code>Short</code> inherit from an abstract class <code>Number</code>, which extends <code>Object</code>.</li>
+        <li>They have a class method named <b><code>valueOf</code></b> that converts a string to an object of the class type:</li>
+      </ul>
+<pre class="code" data-java>float a = (Float.valueOf(str1)).floatValue();
+int b = (Integer.valueOf(str2)).intValue();</pre>
+      <ul class="rules"><li>The wrapper classes also provide a <b>parse</b> method, used to convert strings to primitive numbers:</li></ul>
+<pre class="code" data-java>float a = Float.parseFloat(str1);
+int b = Integer.parseInt(str2);</pre>
+      <p class="hint">The slide writes <code>Integer.parseInteger</code>; that method does not exist. The real name is <code>Integer.parseInt</code>.</p>
+      <h3>b) From a number to a string</h3>
+<pre class="code" data-java>int age = 18;
+String s1 = "He is " + age;        // "He is 18"
+// Or
+String s2 = String.valueOf(age);   // "18"
+s1 = s1 + s2;                      // "He is 1818"</pre>
+      <p>The Number subclasses include a class method, <code>toString()</code>, that converts its primitive type to a string:</p>
+<pre class="code" data-java>int i;
+double d;
+String s3 = Integer.toString(i);
+String s4 = Double.toString(d);</pre>
+      <div class="callout"><p><b>Think of it like…</b> money and a cheque. "200" written as text is a cheque: you can't add it until you cash it with <code>Integer.parseInt</code>. Going back, <code>String.valueOf</code> writes a number onto a cheque.</p></div>
+    </section>
+
+    <!-- 21 comparison -->
+    <section class="lec-sec" id="oop-lec03-comparison" data-nav="String comparison">
+      <p class="kicker">Section 21</p>
+      <h2>String <span class="hl">comparison</span></h2>
+      <div class="sec-head"><span class="slide-tag">📄 Slides 40–41</span></div>
+      <ul class="rules">
+        <li><b>The <code>==</code> operator compares object references.</b> If two String variables point to the same object in memory, it returns <code>true</code>; otherwise <code>false</code>. It does <b>not</b> compare the text inside.</li>
+        <li><b><code>equals()</code></b> compares the content of the text. Note: <code>equalsIgnoreCase()</code> does the same but ignores upper/lower case.</li>
+        <li><b><code>compareTo()</code></b> returns 0 when <code>equals()</code> returns true. Note: if the parameter is not a string, it throws a <code>ClassCastException</code>.</li>
+        <li>Strings <b>cannot</b> be compared with <code>&lt;</code>, <code>&lt;=</code>, <code>&gt;</code> or <code>&gt;=</code>.</li>
+      </ul>
+<pre class="code" data-java>public class StringComparison {
+    public static void main(String[] args) {
+        String name1 = "Bob";
+        String name2 = new String("Bob");
+        String name3 = "Bob";
+        if (name1 == name2)          // case 1
+            System.out.println("The strings are equal.");
+        else
+            System.out.println("The strings are unequal.");
+        if (name1 == name3)          // case 2
+            System.out.println("The strings are equal.");
+        else
+            System.out.println("The strings are unequal.");
+        if (name1.equals(name2))     // case 3
+            System.out.println("The strings are equal.");
+        else
+            System.out.println("The strings are unequal.");
+        if (name1.equals(name3))     // case 4
+            System.out.println("The strings are equal.");
+        else
+            System.out.println("The strings are unequal.");
+    }
+}</pre>
+      <pre class="out">The strings are unequal.
+The strings are equal.
+The strings are equal.
+The strings are equal.</pre>
+      <div class="reveal card" data-reveal>
+        <div class="card-h"><b>Step by step: why each case gives that result</b><span>📄 Slide 41</span></div>
+        <ol class="rv-steps">
+          <li>Case 1, <code>name1 == name2</code>: <code>new String("Bob")</code> is a separate object, so the references differ: <b>unequal</b>.</li>
+          <li>Case 2, <code>name1 == name3</code>: both are the literal <code>"Bob"</code>, and Java reuses one object for equal literals (the string pool, explained in <a href="#oop-lab03:pool">Lab 3</a>): <b>equal</b>.</li>
+          <li>Case 3, <code>name1.equals(name2)</code>: same text: <b>equal</b>.</li>
+          <li>Case 4, <code>name1.equals(name3)</code>: same text: <b>equal</b>.</li>
+        </ol>
+      </div>
+      <details class="more"><summary>Show more detail: compareTo and ClassCastException today</summary><div class="more-in"><p>With today's Java, <code>"abc".compareTo(5)</code> does not compile at all. The <code>ClassCastException</code> appears when strings are compared through the general <code>Comparable</code> type, for example inside a sort of mixed objects. Lab 3 explains what the number returned by <code>compareTo</code> means: <a href="#oop-lab03:comparison">Lab 3 · compareTo</a>.</p></div></details>
+    </section>
+
+    <!-- 22 nulls -->
+    <section class="lec-sec" id="oop-lec03-nulls" data-nav="Beware of nulls">
+      <p class="kicker">Section 22</p>
+      <h2>But, beware of <span class="hl">nulls</span>…</h2>
+      <div class="sec-head"><span class="slide-tag">📄 Slide 42</span></div>
+<pre class="code" data-java>String nullString1 = null;
+String nullString2 = null;
+
+// Evaluates to true
+nullString1 == nullString2;
+
+// Throws an Exception
+nullString1.equals(nullString2);</pre>
+      <p>Both references are <code>null</code>, so <code>==</code> is <code>true</code>. But calling a method on <code>null</code> throws a <code>NullPointerException</code>: there is no object to run <code>equals</code> on.</p>
+      <div class="heads"><h4>Exam tip</h4><p>A safe habit is to call <code>equals</code> on the value you know is not null: <code>"yes".equals(answer)</code> works even if <code>answer</code> is null.</p></div>
+    </section>
+
+    <!-- recap -->
+    <section class="lec-sec recap" id="oop-lec03-recap" data-nav="Lecture recap" data-num="R">
+      <p class="kicker">Recap</p>
+      <h2>Lecture <span class="hl">recap</span></h2>
+      <div class="sec-head"><span class="slide-tag">📄 Slides 3–42</span></div>
+      <h3 style="margin-top:.6em">Key points</h3>
+      <ul class="rules">
+        <li>Method types: instance methods, class (static) methods, constructors, main.</li>
+        <li>Header = modifiers + return type + name + parameters. Modifiers: access, static, final, abstract.</li>
+        <li>A static method may use only parameters, local variables, static fields and other static methods.</li>
+        <li>Call static methods with the class name; instance methods need an object reference (both omit it inside the class).</li>
+        <li>Overloading: same name, different parameter lists; the compiler matches number and types.</li>
+        <li>Java always passes by value. For objects, the copied value is the reference: field changes are visible, reassignments are not.</li>
+        <li><code>this</code> refers to the current object; <code>this(...)</code> calls another constructor.</li>
+        <li>Unreachable objects (all references null or moved) are freed by the garbage collector.</li>
+        <li>Strings are immutable objects with many methods (length, charAt, indexOf, substring…).</li>
+        <li>Convert with <code>parseInt</code>/<code>valueOf</code>; compare text with <code>equals</code>, not <code>==</code>.</li>
+      </ul>
+      <h3>Key syntax</h3>
+      <div class="tablewrap"><table class="cmp">
+        <thead><tr><th>What</th><th>Java</th><th>Slide</th></tr></thead>
+        <tbody>
+          <tr><th>Method header</th><td><code>public static int Add(int x, int y)</code></td><td>4</td></tr>
+          <tr><th>Call a method</th><td><code>reference.method(arguments);</code></td><td>9</td></tr>
+          <tr><th>Constructor chaining</th><td><code>public Rectangle() { this(0, 0, 0, 0); }</code></td><td>20</td></tr>
+          <tr><th>Command-line argument</th><td><code>String name1 = args[0];</code></td><td>23</td></tr>
+          <tr><th>Request GC</th><td><code>System.gc();</code></td><td>28</td></tr>
+          <tr><th>String constructors</th><td><code>new String(charArray, 3, 2)</code> → <code>"Th"</code></td><td>31–32</td></tr>
+          <tr><th>String → number</th><td><code>Integer.parseInt(s)</code> · <code>Float.valueOf(s).floatValue()</code></td><td>38</td></tr>
+          <tr><th>Number → String</th><td><code>String.valueOf(age)</code> · <code>Integer.toString(i)</code> · <code>"He is " + age</code></td><td>39</td></tr>
+          <tr><th>Compare text</th><td><code>s1.equals(s2)</code> · <code>equalsIgnoreCase</code> · <code>compareTo</code></td><td>40</td></tr>
+        </tbody>
+      </table></div>
+      <h3>Common exam traps</h3>
+      <ul class="rules traps">
+        <li>After <code>method1(b)</code> sets its parameter to 6, <code>b</code> is still 3.</li>
+        <li>Setting an object parameter to <code>null</code> or a new object inside a method does not affect the caller's variable.</li>
+        <li>…but changing a field through the parameter does (the pencil becomes RED).</li>
+        <li>A static method cannot use instance fields directly.</li>
+        <li><code>main</code> must be <code>public static void</code>; command-line arguments arrive as strings.</li>
+        <li><code>==</code> on strings compares references: <code>"Bob" == new String("Bob")</code> is false.</li>
+        <li><code>null.equals(...)</code> throws an exception; <code>null == null</code> is true.</li>
+        <li><code>substring(7, 14)</code> excludes position 14; its length is 14 − 7 = 7.</li>
+        <li>String methods return new strings; the original never changes.</li>
+      </ul>
+    </section>
+
+    <script>
+    /* ---------- Lecture 3 (oop-lec03): live widgets ---------- */
+    (()=>{
+      /* 17 String methods, with Java's error messages for bad positions */
+      const sioobe=m=>`StringIndexOutOfBoundsException: ${m}`;
+      function str(){
+        const s=$('#strS').value,t=$('#strT').value,n=s.length;
+        const i=parseInt($('#strI').value,10),a=parseInt($('#strA').value,10),b=parseInt($('#strB').value,10);
+        const q=v=>`"${v}"`;
+        const charAt=isNaN(i)?'':(i<0||i>=n?sioobe(`Index ${i} out of bounds for length ${n}`):`'${s.charAt(i)}'`);
+        const sub=isNaN(a)||isNaN(b)?'':(a<0||b>n||a>b?sioobe(`Range [${a}, ${b}) out of bounds for length ${n}`):q(s.substring(a,b)));
+        const rows=[
+          ['s.length()',String(n)],
+          [`s.charAt(${isNaN(i)?'i':i})`,charAt],
+          [`s.indexOf("${t}")`,String(s.indexOf(t))],
+          [`s.substring(${isNaN(a)?'a':a}, ${isNaN(b)?'b':b})`,sub],
+          [`s.concat("${t}")`,q(s+t)],
+          [`s.startsWith("${t}")`,String(s.startsWith(t))],
+          [`s.endsWith("${t}")`,String(s.endsWith(t))],
+          ['s.toUpperCase()',q(s.toUpperCase())],
+          ['s.toLowerCase()',q(s.toLowerCase())],
+          [`s.equals("${t}")`,String(s===t)]
+        ];
+        $('#strOut').innerHTML=rows.map(([c,r])=>`<tr><th><code>${esc(c)}</code></th><td class="${r.startsWith('StringIndex')?'bad':''}"><code>${esc(r)}</code></td></tr>`).join('');
+        $('#strMeta').textContent=`${n} character${n===1?'':'s'}`;
+      }
+      ['#strS','#strI','#strA','#strB','#strT'].forEach(sel=>$(sel).addEventListener('input',str));str();
+    })();
+    </script>
+  </article>
+  <article class="view lecture" data-view="oop-lab03" data-title="OOP · Lab 3: this Keyword, Modifiers, Strings &amp; UML Class Diagrams" data-short="Lab 3 · this, strings &amp; UML" hidden>
+    <header class="lec-head">
+      <p class="kicker">OOP · Lab 3</p>
+      <h1><span class="hl">this</span>, modifiers, strings &amp; UML class diagrams</h1>
+      <p class="lede">Lab 3 practises <a href="#oop-lec02">Lecture 2</a> and <a href="#oop-lec03">Lecture 3</a>. It explains the <code>this</code> keyword, recaps access and field modifiers, goes deeper into strings (the string pool, comparison, useful methods), and shows how to draw UML class diagrams with relationships. The practice section at the end has the lab's 8 "find the mistake" tasks, 2 class diagram tasks and a hands-on task.</p>
+      <div class="lec-meta"><span class="slide-tag lab">🧪 Lab 3 · Slides 1–58</span><span class="done-count" data-done-count></span></div>
+      <div class="card">
+        <div class="card-h"><b>Agenda</b><span>🧪 Slide 2</span></div>
+        <ol class="road">
+          <li><a href="#oop-lab03:this">this keyword</a>: instance variables · methods · this()</li>
+          <li><a href="#oop-lab03:modifiers">Access &amp; field modifiers</a>: private, default, protected, public · static, final</li>
+          <li><a href="#oop-lab03:strings">Strings</a>: string pool · comparison · methods</li>
+          <li><a href="#oop-lab03:uml-basics">UML – class diagram</a>: basics, generalization &amp; association, aggregation vs composition, practice</li>
+          <li><a href="#oop-lab03:practice">Hands-on and practice</a></li>
+        </ol>
+      </div>
+    </header>
+
+    <!-- 01 this -->
+    <section class="lec-sec" id="oop-lab03-this" data-nav="The this keyword">
+      <p class="kicker">Section 01</p>
+      <h2>The <span class="hl">this</span> keyword</h2>
+      <div class="sec-head"><span class="slide-tag lab">🧪 Lab 3 · Slides 3–4</span></div>
+      <p>In Java, <code>this</code> is a <b>reference variable</b> that refers to the <b>current object</b>: the object whose method or constructor is running right now. That object has a state (its fields) and a behavior (its methods).</p>
+      <div class="tablewrap"><table class="cmp">
+        <thead><tr><th>Use</th><th>Form</th><th>What it does</th></tr></thead>
+        <tbody>
+          <tr><th>1</th><td><code>this.x</code></td><td>Refers to the current class's instance variable (field).</td></tr>
+          <tr><th>2</th><td><code>this.m()</code></td><td>Invokes a method of the current class.</td></tr>
+          <tr><th>3</th><td><code>this()</code></td><td>Invokes a constructor of the current class.</td></tr>
+        </tbody>
+      </table></div>
+      <div class="callout"><p><b>Think of it like…</b> the word "my". When you say "my name", it means the name of whoever is speaking. Inside an object, <code>this.name</code> means the name of the object that is running the code.</p></div>
+      <p class="hint">Lecture 3 covers <code>this</code> too: <a href="#oop-lec03:this">Using this keyword</a>.</p>
+    </section>
+
+    <!-- 02 this fields -->
+    <section class="lec-sec" id="oop-lab03-this-fields" data-nav="this: instance variables">
+      <p class="kicker">Section 02</p>
+      <h2>1) this: refer to <span class="hl">instance variables</span></h2>
+      <div class="sec-head"><span class="slide-tag lab">🧪 Lab 3 · Slides 5–6</span></div>
+      <ul class="rules">
+        <li><code>this</code> can be used to refer to the current class's <b>instance variable</b>.</li>
+        <li>If an instance variable and a parameter have the <b>same name</b>, <code>this</code> resolves the <b>ambiguity</b> (the confusion about which one is meant).</li>
+        <li>If the local variables (parameters) and instance variables have <b>different names</b>, there is no need to use <code>this</code>.</li>
+      </ul>
+<pre class="code" data-java>class TestThis1 {
+    public static void main(String args[]) {
+        Student s1 = new Student(111, "ali", 5000f);
+        Student s2 = new Student(112, "samy", 6000f);
+        s1.display();
+        s2.display();
+    }
+}</pre>
+      <p><b>What will this print?</b> It depends on how Student's constructor is written. Compare both versions:</p>
+      <div class="duo">
+        <div class="pane"><h4 style="color:var(--red)">✗ Without this</h4>
+<pre class="code" data-java>class Student {
+    int rollno;
+    String name;
+    float fee;
+    Student(int rollno, String name, float fee) {
+        rollno = rollno;
+        name = name;
+        fee = fee;
+    }
+    void display() {
+        System.out.println(rollno + " " + name + " " + fee);
+    }
+}</pre>
+          <pre class="out">0 null 0.0
+0 null 0.0</pre>
+          <p class="hint">The parameters are assigned to themselves, so the fields keep their default values.</p></div>
+        <div class="pane"><h4 style="color:var(--green)">✓ With this</h4>
+<pre class="code" data-java>class Student {
+    int rollno;
+    String name;
+    float fee;
+    Student(int rollno, String name, float fee) {
+        this.rollno = rollno;
+        this.name = name;
+        this.fee = fee;
+    }
+    void display() {
+        System.out.println(rollno + " " + name + " " + fee);
+    }
+}</pre>
+          <pre class="out">111 ali 5000.0
+112 samy 6000.0</pre>
+          <p class="hint"><code>this.rollno</code> is the field; <code>rollno</code> alone is the parameter.</p></div>
+      </div>
+    </section>
+
+    <!-- 03 this method -->
+    <section class="lec-sec" id="oop-lab03-this-method" data-nav="this: methods">
+      <p class="kicker">Section 03</p>
+      <h2>2) this: invoke a current class <span class="hl">method</span></h2>
+      <div class="sec-head"><span class="slide-tag lab">🧪 Lab 3 · Slides 7–8</span></div>
+      <p>You may invoke a method of the current class using <code>this</code>. If you don't write <code>this</code>, the compiler adds it automatically when invoking the method.</p>
+      <div class="duo">
+        <div><p class="out-label">What you write</p>
+<pre class="code" data-java>class A {
+    void m() { }
+
+    void n() {
+        m();
+    }
+}</pre></div>
+        <div><p class="out-label">What the compiler sees</p>
+<pre class="code" data-java>class A {
+    void m() { }
+
+    void n() {
+        this.m();
+    }
+}</pre></div>
+      </div>
+      <p><code>m()</code> and <code>this.m()</code> do exactly the same thing inside the class. Writing <code>this</code> just makes it explicit.</p>
+      <h3>Example</h3>
+      <div class="duo">
+<pre class="code" data-java>class A {
+    void m() {
+        System.out.println("hello m");
+    }
+
+    void n() {
+        System.out.println("hello n");
+        // m();  same as this.m()
+        this.m();
+    }
+}
+
+class TestThis4 {
+    public static void main(String args[]) {
+        A a = new A();
+        a.n();
+    }
+}</pre>
+        <div><p class="out-label">Console output</p><pre class="out">hello n
+hello m</pre>
+          <ul class="rules"><li><b>Call order:</b> main calls <code>n()</code>, which prints "hello n" and then calls <code>m()</code>.</li><li><b>Same result:</b> replacing <code>this.m()</code> with <code>m()</code> prints the same output.</li></ul></div>
+      </div>
+    </section>
+
+    <!-- 04 this() -->
+    <section class="lec-sec" id="oop-lab03-this-ctor" data-nav="this(): constructors">
+      <p class="kicker">Section 04</p>
+      <h2>3) this(): invoke the current class <span class="hl">constructor</span></h2>
+      <div class="sec-head"><span class="slide-tag lab">🧪 Lab 3 · Slide 9</span></div>
+      <ul class="rules">
+        <li>The <code>this()</code> call invokes another constructor of the same class.</li>
+        <li>It is used to <b>reuse</b> a constructor. In other words, it is used for <b>constructor chaining</b>.</li>
+        <li><code>this()</code> must be the <b>first statement</b> in the constructor.</li>
+      </ul>
+      <div class="duo">
+<pre class="code" data-java>class A {
+    A() {
+        System.out.println("hello a");
+    }
+
+    A(int x) {
+        this();
+        System.out.println(x);
+    }
+}
+
+class TestThis5 {
+    public static void main(String args[]) {
+        A a = new A(10);
+    }
+}</pre>
+        <div><p class="out-label">Console output</p><pre class="out">hello a
+10</pre>
+          <div class="reveal card" data-reveal>
+            <ol class="rv-steps">
+              <li><code>new A(10)</code> runs the constructor <code>A(int x)</code>.</li>
+              <li>Its first statement, <code>this()</code>, runs <code>A()</code>: prints <b>hello a</b>.</li>
+              <li>Back in <code>A(int x)</code>: prints <b>10</b>.</li>
+            </ol>
+          </div></div>
+      </div>
+      <div class="flips">
+        <button class="flip" type="button" aria-pressed="false"><span class="flip-in"><span class="flip-f"><b>Constructor chaining</b><small>tap to flip</small></span><span class="flip-b">One constructor calling another of the same class with <code>this(...)</code>, as its first statement.</span></span></button>
+      </div>
+    </section>
+
+    <!-- 05 modifiers -->
+    <section class="lec-sec" id="oop-lab03-modifiers" data-nav="Modifiers recap">
+      <p class="kicker">Section 05</p>
+      <h2>Recap: access and <span class="hl">field modifiers</span></h2>
+      <div class="sec-head"><span class="slide-tag lab">🧪 Lab 3 · Slides 10–12</span></div>
+      <p>Access modifiers specify the accessibility (<b>scope</b>) of a field, method, constructor or class. We can change the access level by applying the modifier to it.</p>
+      <div class="tablewrap"><table class="cmp access-table">
+        <thead><tr><th>Access modifier</th><th>Within class</th><th>Within package</th><th>Outside package (subclass only)</th><th>Outside package</th></tr></thead>
+        <tbody>
+          <tr><th><code>private</code></th><td class="y">✓</td><td class="n">—</td><td class="n">—</td><td class="n">—</td></tr>
+          <tr><th><code>default</code></th><td class="y">✓</td><td class="y">✓</td><td class="n">—</td><td class="n">—</td></tr>
+          <tr><th><code>protected</code></th><td class="y">✓</td><td class="y">✓</td><td class="y">✓</td><td class="n">—</td></tr>
+          <tr><th><code>public</code></th><td class="y">✓</td><td class="y">✓</td><td class="y">✓</td><td class="y">✓</td></tr>
+        </tbody>
+      </table></div>
+      <p class="hint">default = no modifier written. More detail in <a href="#oop-lec02:access">Lecture 2 · access control modifiers</a>.</p>
+      <div class="duo">
+        <div class="pane"><h4>static: static field (class variable)</h4><p>Sometimes you want variables that are common to all objects. Fields declared with <code>static</code> are called <b>static fields</b> or <b>class variables</b>.</p><pre class="code" data-java>static int citizenNumber = 0;</pre></div>
+        <div class="pane"><h4>final: final field</h4><p>A final field cannot have its value changed once it has been assigned.</p><pre class="code" data-java>final String name = "Nada";</pre></div>
+      </div>
+      <p>Test yourself with the <a href="#oop-lab03:practice">8 "find the mistake" tasks</a> in the practice section.</p>
+    </section>
+
+    <!-- 06 strings -->
+    <section class="lec-sec" id="oop-lab03-strings" data-nav="Strings in Java">
+      <p class="kicker">Section 06</p>
+      <h2><span class="hl">Strings</span> in Java</h2>
+      <div class="sec-head"><span class="slide-tag lab">🧪 Lab 3 · Slides 29–30</span></div>
+      <ul class="rules">
+        <li>Generally, a String is a <b>sequence of characters</b>.</li>
+        <li>In Java, a string is an <b>object</b> that represents a sequence of characters.</li>
+        <li>The <code>java.lang.String</code> class is used to create a string object.</li>
+      </ul>
+      <h3>Two ways to create a string</h3>
+      <div class="duo">
+        <div class="pane"><h4>1 · String literal</h4><pre class="code" data-java>String s2 = "Hello";</pre></div>
+        <div class="pane"><h4>2 · new keyword</h4><pre class="code" data-java>String s1 = new String("Hello");</pre></div>
+      </div>
+<pre class="code" data-java>String s1 = new String("Hello");
+String s2 = "Hello";
+if (s1.equals(s2))
+    System.out.println("They are equal");</pre>
+      <pre class="out">They are equal</pre>
+      <details class="more"><summary>Show more detail: from the slide's speaker notes</summary><div class="more-in">
+        <ul class="rules">
+          <li>The String class has many methods for working with strings, such as <code>compare()</code>, <code>concat()</code>, <code>equals()</code>, <code>split()</code>, <code>length()</code>, <code>replace()</code>, <code>compareTo()</code>, <code>intern()</code> and <code>substring()</code>.</li>
+          <li><code>java.lang.String</code> implements the <code>Serializable</code>, <code>Comparable</code> and <code>CharSequence</code> interfaces (sets of methods a class promises to have).</li>
+          <li>A Java String is <b>immutable</b>: it cannot be changed. Whenever we change a string, a new instance is created. For <b>mutable</b> (changeable) strings, use the <code>StringBuffer</code> and <code>StringBuilder</code> classes.</li>
+        </ul>
+      </div></details>
+    </section>
+
+    <!-- 07 pool -->
+    <section class="lec-sec" id="oop-lab03-pool" data-nav="The string pool">
+      <p class="kicker">Section 07</p>
+      <h2>The <span class="hl">string pool</span>, and strings made with new</h2>
+      <div class="sec-head"><span class="slide-tag lab">🧪 Lab 3 · Slides 31–32</span></div>
+      <h3 style="margin-top:.6em">1) String literal and the string pool</h3>
+      <ul class="rules">
+        <li>A <b>string literal</b> is created using double quotes.</li>
+        <li>Each time you create a literal, the JVM checks the <b>string constant pool</b> first (a special area of the heap that stores literals).</li>
+        <li>If the string <b>already exists</b> in the pool, a reference to the pooled instance is returned.</li>
+        <li>If it <b>doesn't exist</b>, a new string instance is created and placed in the pool.</li>
+      </ul>
+      <div class="duo">
+<pre class="code" data-java>String s1 = "welcome";
+String s2 = "welcome";</pre>
+        <svg class="mini-diag" viewBox="0 0 400 170" role="img" aria-label="s1 and s2 on the stack both point to one welcome string inside the string constant pool on the heap">
+          <text class="d-s" x="60" y="16">Stack</text><text class="d-s" x="285" y="16">Heap</text>
+          <rect class="d-proc" x="20" y="34" width="80" height="34" rx="6"/><text class="d-t" x="60" y="56">s1</text>
+          <rect class="d-proc" x="20" y="96" width="80" height="34" rx="6"/><text class="d-t" x="60" y="118">s2</text>
+          <rect class="d-adt" x="190" y="26" width="190" height="120" rx="12"/><text class="d-s" x="285" y="138">String Constant Pool</text>
+          <rect class="d-obj" x="225" y="60" width="120" height="36" rx="8"/><text class="d-t oi" x="285" y="83">"welcome"</text>
+          <path class="d-line" d="M102 51 L221 74" marker-end="url(#ah)"/><path class="d-line" d="M102 113 L221 84" marker-end="url(#ah)"/>
+        </svg>
+      </div>
+      <p>Only <b>ONE</b> object: <code>s1</code> and <code>s2</code> point to the same pooled string. Why the pool? It makes Java more memory-efficient: no new object is created if the string already exists in the pool (speaker notes).</p>
+      <h3>2) Creating strings with new</h3>
+      <div class="duo">
+<pre class="code" data-java>// String created using a literal
+String s1 = "TAT";
+String s2 = "TAT";
+
+// String created using the new keyword
+String s3 = new String("TAT");
+String s4 = new String("TAT");</pre>
+        <svg class="mini-diag" viewBox="0 0 400 230" role="img" aria-label="s1 and s2 point to one TAT in the pool; s3 and s4 each point to their own TAT object outside the pool">
+          <text class="d-s" x="60" y="14">Stack</text><text class="d-s" x="285" y="14">Heap</text>
+          <rect class="d-proc" x="20" y="24" width="80" height="30" rx="6"/><text class="d-t" x="60" y="44">s1</text>
+          <rect class="d-proc" x="20" y="66" width="80" height="30" rx="6"/><text class="d-t" x="60" y="86">s2</text>
+          <rect class="d-proc" x="20" y="132" width="80" height="30" rx="6"/><text class="d-t" x="60" y="152">s3</text>
+          <rect class="d-proc" x="20" y="182" width="80" height="30" rx="6"/><text class="d-t" x="60" y="202">s4</text>
+          <rect class="d-adt" x="190" y="20" width="190" height="92" rx="12"/><text class="d-s" x="285" y="104">String Constant Pool</text>
+          <rect class="d-obj" x="235" y="38" width="100" height="32" rx="8"/><text class="d-t oi" x="285" y="59">"TAT"</text>
+          <rect class="d-obj" x="235" y="130" width="100" height="32" rx="8"/><text class="d-t oi" x="285" y="151">"TAT"</text>
+          <rect class="d-obj" x="235" y="180" width="100" height="32" rx="8"/><text class="d-t oi" x="285" y="201">"TAT"</text>
+          <path class="d-line" d="M102 39 L231 52" marker-end="url(#ah)"/><path class="d-line" d="M102 81 L231 58" marker-end="url(#ah)"/>
+          <path class="d-line" d="M102 147 L231 146" marker-end="url(#ah)"/><path class="d-line" d="M102 197 L231 196" marker-end="url(#ah)"/>
+        </svg>
+      </div>
+      <p><b><code>new</code> always makes a new object.</b> Using <code>new</code>, <code>s3</code> and <code>s4</code> are 2 different objects in heap memory, outside the pool, even though their text is the same.</p>
+      <details class="more"><summary>Show more detail: intern(), from the speaker notes</summary><div class="more-in">
+<pre class="code" data-java>String value1 = "70";
+String value2 = "70";
+String value3 = new Integer(70).toString();
+
+value1 == value2           // true
+value1 == value3           // false
+value1.equals(value3)      // true
+value1 == value3.intern()  // true</pre>
+        <p><code>String.intern()</code> makes sure all strings with the same contents share the same memory: it returns the pooled copy. If "john" appears 1000 times, interning means only one "john" is actually allocated.</p>
+      </div></details>
+      <div class="callout"><p><b>Think of it like…</b> a shared dictionary on the class shelf. When two students need the word "welcome", they both point to the same dictionary page (the pool). Writing <code>new String(...)</code> is like photocopying the page: you get your own separate copy.</p></div>
+    </section>
+
+    <!-- 08 same reference or value -->
+    <section class="lec-sec" id="oop-lab03-same-ref" data-nav="Same reference or value?">
+      <p class="kicker">Section 08</p>
+      <h2>Same <span class="hl">reference</span> or same <span class="hl">value</span>?</h2>
+      <div class="sec-head"><span class="slide-tag lab">🧪 Lab 3 · Slide 33</span></div>
+      <div class="duo">
+<pre class="code" data-java>String a = "abc";
+String b = "xyz";
+String c = "abc";
+String d = new String("abc");
+
+if (a == c)
+    System.out.println("A &amp; C have same reference");
+if (a.equals(c))
+    System.out.println("A &amp; C have same value");
+if (a == d)
+    System.out.println("A &amp; D have same reference");
+if (a.equals(d))
+    System.out.println("A &amp; D have same value");</pre>
+        <div><p class="out-label">Console output</p><pre class="out">A &amp; C have same reference
+A &amp; C have same value
+A &amp; D have same value</pre></div>
+      </div>
+      <div class="tablewrap"><table class="cmp">
+        <thead><tr><th>Check</th><th>Result</th><th>Why</th></tr></thead>
+        <tbody>
+          <tr><td><code>a == c</code></td><td><code>true</code></td><td>same pooled object</td></tr>
+          <tr><td><code>a.equals(c)</code></td><td><code>true</code></td><td>same text</td></tr>
+          <tr><td><code>a == d</code></td><td><code>false</code></td><td>d is a new object</td></tr>
+          <tr><td><code>a.equals(d)</code></td><td><code>true</code></td><td>same text</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <!-- 09 immutable -->
+    <section class="lec-sec" id="oop-lab03-immutable" data-nav="Immutable strings">
+      <p class="kicker">Section 09</p>
+      <h2><span class="hl">Immutable</span> strings</h2>
+      <div class="sec-head"><span class="slide-tag lab">🧪 Lab 3 · Slide 34</span></div>
+      <ul class="rules">
+        <li>In Java, string objects are <b>immutable</b>: unmodifiable, unchangeable.</li>
+        <li>Once a string object is created, its data can't be changed; instead, <b>a new string object is created</b>.</li>
+      </ul>
+      <div class="duo">
+<pre class="code" data-java>class TestImmutableString {
+    public static void main(String args[]) {
+        String s = "Hello";
+        s = s.concat("World");  // new object
+        System.out.println(s);
+    }
+}</pre>
+        <div>
+          <svg class="mini-diag" viewBox="0 0 360 130" role="img" aria-label="Before, s points to Hello; after concat, s points to a new HelloWorld object and Hello is no longer referenced">
+            <rect class="d-proc" x="14" y="48" width="60" height="34" rx="6"/><text class="d-t" x="44" y="70">s</text>
+            <rect class="d-hid" x="190" y="10" width="150" height="34" rx="8"/><text class="d-t" x="265" y="32">"Hello"</text>
+            <rect class="d-obj" x="190" y="86" width="150" height="34" rx="8"/><text class="d-t oi" x="265" y="108">"HelloWorld"</text>
+            <path class="d-line" d="M76 58 L186 30" stroke-dasharray="5 4"/><text class="d-s" x="130" y="34">before</text>
+            <path class="d-line" d="M76 72 L186 100" marker-end="url(#ah)"/><text class="d-s" x="130" y="112">after concat</text>
+          </svg>
+          <p class="out-label">Console output</p><pre class="out">HelloWorld</pre></div>
+      </div>
+      <p>"Hello" is unchanged; it is just no longer referenced by <code>s</code>.</p>
+    </section>
+
+    <!-- 10 comparison -->
+    <section class="lec-sec" id="oop-lab03-comparison" data-nav="Comparison &amp; compareTo">
+      <p class="kicker">Section 10</p>
+      <h2>String comparison and <span class="hl">compareTo()</span></h2>
+      <div class="sec-head"><span class="slide-tag lab">🧪 Lab 3 · Slides 35–36</span></div>
+      <p>We can compare strings by content or by reference using:</p>
+      <div class="uses">
+        <div><b>==</b><b style="font-size:.85rem;color:var(--muted)">Compares references</b>Are both variables pointing to the same object?</div>
+        <div><b>.equals()</b><b style="font-size:.85rem;color:var(--muted)">Compares content</b>Do both strings have the same characters?</div>
+        <div><b>.compareTo()</b><b style="font-size:.85rem;color:var(--muted)">Compares order</b>Which string comes first alphabetically (<i>lexicographically</i>, dictionary order)?</div>
+      </div>
+<pre class="code" data-java>String a = "Java";
+String b = "Java";
+System.out.println(a == b);       // true
+
+String c = new String("Java");
+String d = new String("Java");
+System.out.println(c == d);       // false
+System.out.println(c.equals(d));  // true</pre>
+      <div class="heads"><h4>Unlike C++</h4><p>In Java, <code>==</code> does not compare the values of two strings. It compares their references. Use <code>equals()</code> for the content.</p></div>
+      <h3>The compareTo() method</h3>
+      <p>Compares two strings lexicographically and returns an integer. For <code>s1.compareTo(s2)</code>: <b>0</b> if s1 equals s2, a <b>positive</b> value if s1 comes after s2, a <b>negative</b> value if s1 comes before s2.</p>
+<pre class="code" data-java>class TestStringComparison {
+    public static void main(String args[]) {
+        String s1 = "Sara";
+        String s2 = "Sara";
+        String s3 = "Rana";
+
+        System.out.println(s1.compareTo(s2)); // 0
+        System.out.println(s1.compareTo(s3)); // 1  (s1 &gt; s3)
+        System.out.println(s3.compareTo(s1)); // -1 (s3 &lt; s1)
+    }
+}</pre>
+      <p><b>Why 1?</b> The first letters differ: 'S' is 83 and 'R' is 82 in Unicode (the number code of every character). The result is their difference: 83 − 82 = 1.</p>
+      <div class="card">
+        <div class="card-h"><b>Live: s1.compareTo(s2)</b><span id="ctoMeta"></span></div>
+        <div class="row"><code>"</code><input id="ctoA" value="Sara" aria-label="s1" style="max-width:160px" spellcheck="false"><code>".compareTo("</code><input id="ctoB" value="Rana" aria-label="s2" style="max-width:160px" spellcheck="false"><code>")</code></div>
+        <pre class="out" id="ctoOut" aria-live="polite"></pre>
+        <p class="hint">Java compares character by character. At the first difference it returns the difference of the two codes; if one string is the start of the other, it returns the difference in length.</p>
+      </div>
+      <details class="more"><summary>Show more detail: from the speaker notes</summary><div class="more-in">
+        <ul class="rules">
+          <li><code>equals()</code> takes any Object as a parameter, but <code>compareTo()</code> only takes Strings.</li>
+          <li><code>equals()</code> only tells you whether they are equal; <code>compareTo()</code> tells you how they compare lexicographically, which is used when <b>sorting</b>.</li>
+        </ul>
+      </div></details>
+    </section>
+
+    <!-- 11 methods -->
+    <section class="lec-sec" id="oop-lab03-string-methods" data-nav="String methods">
+      <p class="kicker">Section 11</p>
+      <h2>String <span class="hl">methods</span></h2>
+      <div class="sec-head"><span class="slide-tag lab">🧪 Lab 3 · Slide 37</span></div>
+      <p>The String API provides methods to work with strings. The examples use <code>String s = "Hello World";</code></p>
+      <div class="tablewrap"><table class="cmp">
+        <thead><tr><th>Method</th><th>What it does</th><th>Example</th><th>Result</th></tr></thead>
+        <tbody>
+          <tr><th><code>length()</code></th><td>Number of characters</td><td><code>s.length()</code></td><td><code>11</code></td></tr>
+          <tr><th><code>charAt(int)</code></th><td>Character at a given position</td><td><code>s.charAt(4)</code></td><td><code>'o'</code></td></tr>
+          <tr><th><code>indexOf(String)</code></th><td>Position of a character/string (−1 if not found)</td><td><code>s.indexOf("World")</code></td><td><code>6</code></td></tr>
+          <tr><th><code>substring(int, int)</code></th><td>Extracts part of the string (end excluded)</td><td><code>s.substring(0, 5)</code></td><td><code>"Hello"</code></td></tr>
+          <tr><th><code>concat(String)</code></th><td>Joins two strings</td><td><code>s.concat("!")</code></td><td><code>"Hello World!"</code></td></tr>
+          <tr><th><code>startsWith</code> / <code>endsWith</code></th><td>Tests the beginning / end of the string</td><td><code>s.startsWith("He")</code></td><td><code>true</code></td></tr>
+          <tr><th><code>toLowerCase</code> / <code>toUpperCase</code></th><td>Converts all characters' case</td><td><code>s.toUpperCase()</code></td><td><code>"HELLO WORLD"</code></td></tr>
+          <tr><th><code>toCharArray()</code></th><td>Returns the characters as a char array</td><td><code>s.toCharArray()</code></td><td><code>{'H','e','l',…}</code></td></tr>
+        </tbody>
+      </table></div>
+      <p class="hint">Speaker notes: with <code>indexOf()</code>, if the string or character is not found, −1 is returned. Try them all in <a href="#oop-lec03:string-api">Lecture 3's live String demo</a>.</p>
+    </section>
+
+    <!-- 12 conversions -->
+    <section class="lec-sec" id="oop-lab03-conversions" data-nav="Numbers ⇄ strings">
+      <p class="kicker">Section 12</p>
+      <h2>Converting between <span class="hl">numbers and strings</span></h2>
+      <div class="sec-head"><span class="slide-tag lab">🧪 Lab 3 · Slide 38</span></div>
+      <div class="duo">
+<pre class="code" data-java>public class StringToIntExample {
+    public static void main(String args[]) {
+        String s = "200";
+        int i = Integer.parseInt(s);
+        System.out.println(s + 100);
+
+        float a = Float.valueOf("10.5").floatValue();
+        System.out.println(a);
+
+        String s1 = String.valueOf(i);
+        System.out.println(s1 + 10);
+    }
+}</pre>
+        <div><p class="out-label">Console output</p><pre class="out">200100
+10.5
+20010</pre>
+          <ul class="rules"><li>String → int: <code>Integer.parseInt(s)</code></li><li>String → float: <code>Float.valueOf(s).floatValue()</code></li><li>number → String: <code>String.valueOf(i)</code></li></ul></div>
+      </div>
+      <div class="heads"><h4>Watch out</h4><p><code>s + 100</code> prints <b>200100</b> because <code>s</code> is still a String, so <code>+</code> joins text. To add numbers, use the converted int: <code>i + 100</code> gives <b>300</b>.</p></div>
+      <details class="more"><summary>Show more detail: from the speaker notes</summary><div class="more-in">
+        <ul class="rules">
+          <li><code>valueOf()</code> returns a <code>Float</code> object for the given float or String value, while <code>floatValue()</code> returns the primitive <code>float</code>.</li>
+          <li><code>Float.parseFloat("10.5")</code> is a shorter way to get the primitive float directly.</li>
+        </ul>
+      </div></details>
+    </section>
+
+    <!-- 13 UML basics -->
+    <section class="lec-sec" id="oop-lab03-uml-basics" data-nav="UML class diagram">
+      <p class="kicker">Section 13</p>
+      <h2>UML – class <span class="hl">diagram</span></h2>
+      <div class="sec-head"><span class="slide-tag lab">🧪 Lab 3 · Slides 39–40</span></div>
+      <p>A class diagram in the <b>Unified Modeling Language (UML)</b> is a <b>static structure diagram</b>: it describes a system by showing its classes, their attributes, operations (methods), and the relationships among objects.</p>
+      <div class="uml-row">
+        <div class="uml" role="img" aria-label="UML class box: name, attributes, operations"><div>ClassName</div><div>- attribute : Datatype</div><div>+ method(p : Type) : ReturnType</div></div>
+        <ul class="uml-key"><li>← <b>name</b></li><li>← <b>attributes</b></li><li>← <b>operations</b></li></ul>
+        <div class="tablewrap" style="margin:0;min-width:220px"><table class="cmp narrow">
+          <thead><tr><th>Visibility</th><th>Symbol</th></tr></thead>
+          <tbody><tr><td>Public</td><td><code>+</code></td></tr><tr><td>Private</td><td><code>-</code></td></tr><tr><td>Protected</td><td><code>#</code></td></tr><tr><td>Default (package)</td><td><code>~</code></td></tr></tbody>
+        </table></div>
+      </div>
+      <h3>Rules</h3>
+      <ul class="rules">
+        <li>Operation format: <code>visibility name(parameters) : returnType</code></li>
+        <li>Parameters are listed as <code>(name : type)</code> or just the types.</li>
+        <li><u>Underline</u> static attributes and methods.</li>
+        <li>Constructors have no return type; <code>void</code> may be omitted.</li>
+      </ul>
+      <p class="hint">Compare with <a href="#oop-lec02:class-diagram">Lecture 2 · class diagrams</a>, which uses the same three-box layout.</p>
+    </section>
+
+    <!-- 14 generalization association -->
+    <section class="lec-sec" id="oop-lab03-relationships" data-nav="Generalization &amp; association">
+      <p class="kicker">Section 14</p>
+      <h2>Relationships: <span class="hl">generalization</span> and <span class="hl">association</span></h2>
+      <div class="sec-head"><span class="slide-tag lab">🧪 Lab 3 · Slides 41–42</span></div>
+      <h3 style="margin-top:.6em">Generalization</h3>
+      <div class="duo">
+        <div><ul class="rules">
+          <li>A generalization connects a <b>derived class</b> (subclass) to its <b>base class</b> (superclass).</li>
+          <li>It denotes <b>inheritance</b> of attributes and behavior from the superclass to the subclass.</li>
+          <li>It's an <b>"is a"</b> relationship: a Student is a Person.</li>
+        </ul>
+<pre class="code" data-java>class Student extends Person {
+    ...
+}</pre></div>
+        <svg class="mini-diag" viewBox="0 0 260 200" role="img" aria-label="Student connects to Person with a line ending in a hollow triangle at Person">
+          <rect class="d-proc" x="70" y="10" width="120" height="40" rx="4"/><text class="d-t" x="130" y="35">Person</text>
+          <polygon class="d-box" points="130,52 118,72 142,72"/>
+          <path class="d-line" d="M130 72 L130 140"/>
+          <rect class="d-box" x="70" y="140" width="120" height="40" rx="4"/><text class="d-t" x="130" y="165">Student</text>
+          <text class="d-s" x="200" y="100">hollow triangle</text><text class="d-s" x="200" y="114">points to the base</text>
+        </svg>
+      </div>
+      <h3>Association</h3>
+      <ul class="rules">
+        <li>Association is a relation between two <b>separate classes</b>, established through their objects.</li>
+        <li>It can be <b>one-to-one, one-to-many, many-to-one, or many-to-many</b>.</li>
+        <li>An object communicates with another object to use the functionality and services it provides.</li>
+        <li><b>Aggregation</b> and <b>composition</b> are the two special forms of association.</li>
+      </ul>
+      <svg class="mini-diag" style="max-width:560px" viewBox="0 0 520 90" role="img" aria-label="Instructor, 1, instructs, many, Student, joined by a plain line">
+        <rect class="d-proc" x="10" y="30" width="130" height="40" rx="4"/><text class="d-t" x="75" y="55">Instructor</text>
+        <path class="d-line" d="M140 50 L380 50"/>
+        <rect class="d-box" x="380" y="30" width="130" height="40" rx="4"/><text class="d-t" x="445" y="55">Student</text>
+        <text class="d-s" x="152" y="44">1</text><text class="d-s" x="368" y="44">*</text><text class="d-t" x="260" y="40">instructs ▸</text>
+      </svg>
+      <p class="hint">A plain line shows the link. Here the association is "instructs": one instructor instructs many (*) students.</p>
+    </section>
+
+    <!-- 15 aggregation composition -->
+    <section class="lec-sec" id="oop-lab03-aggregation-composition" data-nav="Aggregation vs composition">
+      <p class="kicker">Section 15</p>
+      <h2><span class="hl">Aggregation</span> vs <span class="hl">composition</span></h2>
+      <div class="sec-head"><span class="slide-tag lab">🧪 Lab 3 · Slides 43–45</span></div>
+      <div class="duo">
+        <div class="pane"><h4>Aggregation (has-a)</h4>
+          <ul class="rules">
+            <li>A special form of association that represents a <b>has-a</b> relationship.</li>
+            <li>It is <b>unidirectional</b> (one-way): a college has students, but not the other way around.</li>
+            <li><b>Both entities can survive individually</b>: ending one doesn't affect the other.</li>
+            <li>It is a <b>weak</b> association.</li>
+          </ul>
+          <svg class="mini-diag" viewBox="0 0 300 190" role="img" aria-label="College with hollow diamonds linking to Student and Teacher">
+            <rect class="d-proc" x="10" y="20" width="110" height="40" rx="4"/><text class="d-t" x="65" y="45">College</text>
+            <polygon class="d-box" points="120,40 134,33 148,40 134,47"/><path class="d-line" d="M148 40 L180 40"/>
+            <rect class="d-box" x="180" y="20" width="110" height="40" rx="4"/><text class="d-t" x="235" y="45">Student</text>
+            <polygon class="d-box" points="65,60 72,74 65,88 58,74"/><path class="d-line" d="M65 88 L65 130"/>
+            <rect class="d-box" x="10" y="130" width="110" height="40" rx="4"/><text class="d-t" x="65" y="155">Teacher</text>
+            <text class="d-s" x="200" y="110">hollow diamond on</text><text class="d-s" x="200" y="124">the "whole" side</text>
+          </svg></div>
+        <div class="pane"><h4>Composition (part-of)</h4>
+          <ul class="rules">
+            <li>A restricted form of aggregation where the two entities are <b>highly dependent</b> on each other.</li>
+            <li>It represents a <b>part-of</b> relationship.</li>
+            <li>The composed object <b>cannot exist without</b> the other entity.</li>
+            <li>It is a <b>strong</b> association.</li>
+          </ul>
+          <svg class="mini-diag" viewBox="0 0 300 190" role="img" aria-label="Vehicle with filled diamonds linking to Engine and Tyre">
+            <rect class="d-proc" x="10" y="20" width="110" height="40" rx="4"/><text class="d-t" x="65" y="45">Vehicle</text>
+            <polygon class="d-line" style="fill:var(--ink)" points="120,40 134,33 148,40 134,47"/><path class="d-line" d="M148 40 L180 40"/>
+            <rect class="d-box" x="180" y="20" width="110" height="40" rx="4"/><text class="d-t" x="235" y="45">Engine</text>
+            <polygon class="d-line" style="fill:var(--ink)" points="65,60 72,74 65,88 58,74"/><path class="d-line" d="M65 88 L65 130"/>
+            <rect class="d-box" x="10" y="130" width="110" height="40" rx="4"/><text class="d-t" x="65" y="155">Tyre</text>
+            <text class="d-s" x="200" y="110">filled diamond on</text><text class="d-s" x="200" y="124">the "whole" side</text>
+          </svg>
+          <p class="hint">A house has rooms: a room can't exist without the house. Human and heart: a heart doesn't exist separately from a human.</p></div>
+      </div>
+      <div class="tablewrap"><table class="cmp">
+        <thead><tr><th></th><th>Aggregation</th><th>Composition</th></tr></thead>
+        <tbody>
+          <tr><th>Dependency</th><td>The child can exist independently of the parent. Delete the Bank and the Employee still exists.</td><td>The child cannot exist without the parent. A heart doesn't exist separately from a Human.</td></tr>
+          <tr><th>Type of relationship</th><td>"has-a"</td><td>"part-of"</td></tr>
+          <tr><th>Type of association</th><td>Weak association</td><td>Strong association</td></tr>
+          <tr><th>UML symbol</th><td>◇ hollow diamond</td><td>◆ filled diamond</td></tr>
+          <tr><th>In Java code</th><td>The part is created outside and passed in (like Doctor → Clinic in Lab 2).</td><td>The part is created inside the whole, e.g. in its constructor.</td></tr>
+        </tbody>
+      </table></div>
+      <p class="hint">The slide's Java example (Doctor → Clinic) refers to Lab 2. That example is not in the Lab 2 file on this site, so it can't be linked here.</p>
+      <div class="callout"><p><b>Think of it like…</b> a team and its players (aggregation): if the team closes, the players still exist and join other teams. A book and its pages (composition): destroy the book and its pages go with it.</p></div>
+      <div class="flips">
+        <button class="flip" type="button" aria-pressed="false"><span class="flip-in"><span class="flip-f"><b>Aggregation ◇</b><small>tap to flip</small></span><span class="flip-b">"has-a", weak: the part can live on its own (College has Students).</span></span></button>
+        <button class="flip" type="button" aria-pressed="false"><span class="flip-in"><span class="flip-f"><b>Composition ◆</b><small>tap to flip</small></span><span class="flip-b">"part-of", strong: the part can't exist without the whole (Vehicle and Engine).</span></span></button>
+        <button class="flip" type="button" aria-pressed="false"><span class="flip-in"><span class="flip-f"><b>Generalization △</b><small>tap to flip</small></span><span class="flip-b">"is a": inheritance from a base class (Student is a Person).</span></span></button>
+      </div>
+    </section>
+
+    <!-- recap -->
+    <section class="lec-sec recap" id="oop-lab03-recap" data-nav="Lab recap" data-num="R">
+      <p class="kicker">Recap</p>
+      <h2>Lab <span class="hl">recap</span></h2>
+      <div class="sec-head"><span class="slide-tag lab">🧪 Lab 3 · Slides 4–45</span></div>
+      <h3 style="margin-top:.6em">Key points</h3>
+      <ul class="rules">
+        <li><code>this</code> is the current object: <code>this.x</code> (field), <code>this.m()</code> (method), <code>this()</code> (constructor, first statement only).</li>
+        <li>Without <code>this</code>, a parameter with the field's name hides the field, so the field keeps its default value.</li>
+        <li>Access: private (class) → default (package) → protected (+ subclasses) → public (everywhere). static = shared; final = assigned once.</li>
+        <li>String literals share one pooled object; <code>new String(...)</code> always makes a new object.</li>
+        <li>Strings are immutable: <code>concat</code> and friends return new strings.</li>
+        <li><code>==</code> compares references, <code>equals</code> compares text, <code>compareTo</code> gives the order (0, positive, negative).</li>
+        <li>UML: name / attributes / operations; <code>+ - # ~</code>; static underlined.</li>
+        <li>Relationships: generalization (△, is a), association (line), aggregation (◇, has-a, weak), composition (◆, part-of, strong).</li>
+      </ul>
+      <h3>Common exam traps</h3>
+      <ul class="rules traps">
+        <li><code>rollno = rollno;</code> in a constructor changes nothing; write <code>this.rollno = rollno;</code></li>
+        <li><code>this()</code> must be the first statement in the constructor.</li>
+        <li><code>"abc" == new String("abc")</code> is false, but <code>.equals</code> is true.</li>
+        <li><code>"200" + 100</code> is <code>"200100"</code>, not 300.</li>
+        <li><code>compareTo</code> returns the difference of the first different characters, not just 1 or −1.</li>
+        <li>The diamond goes on the "whole" side (College, Vehicle), not on the part.</li>
+        <li>An array of objects starts full of <code>null</code>; calling a method on <code>s[0]</code> throws a NullPointerException.</li>
+      </ul>
+    </section>
+
+    <!-- practice -->
+    <section class="lec-sec practice" id="oop-lab03-practice" data-nav="Practice (Lab 3)" data-num="P">
+      <p class="kicker">Practice</p>
+      <h2>Practice from <span class="hl">Lab 3</span></h2>
+      <div class="sec-head"><span class="slide-tag lab">🧪 Lab 3 · Slides 13–28, 46–57</span></div>
+      <p>These are the lab's own tasks, in the lab's words. Try each one before you open the solution. Every "find the mistake" task uses two files, <code>Citizen.java</code> and <code>MainClass.java</code>. The compiler messages in the solutions come from running the code with Java 21.</p>
+
+      <h3>Access &amp; field modifiers: find the mistake</h3>
+
+      <div class="q-card" id="oop-lab03-m1">
+        <div class="q-meta"><span class="q-num">Lab 3 · Find the Mistake #1 · Slide 13</span><span class="q-tests">Tests: <a href="#oop-lec02:creating">creating objects</a>, <a href="#oop-lec02:defaults">default values</a></span></div>
+        <h3>Find the Mistake #1</h3>
+        <div class="q-text">
+          <div class="duo">
+            <div><p class="out-label">Citizen.java</p>
+<pre class="code" data-java>package main_Package;
+class Citizen {
+    private String SSN;
+    protected String name;
+    public int ID;
+    public Citizen(String name, int ID) {
+        this.name = name;
+        this.ID = ID;
+    }
+    public Citizen(String name, int ID, String SSN) {
+        this.name = name;
+        this.ID = ID;
+        this.SSN = SSN;
+    }
+}</pre></div>
+            <div><p class="out-label">MainClass.java</p>
+<pre class="code" data-java>package main_Package;
+public class MainClass {
+    public static void main(String[] args) {
+        Citizen s;
+        s.ID = 10;
+        System.out.print(s.ID);
+    }
+}</pre></div>
+          </div>
+          <p>Find the mistake and try to solve it before moving to the next slide.</p>
+        </div>
+        <details class="sol"><summary>Show solution (Lab 3 · Slide 14)</summary><div class="more-in">
+          <p>The variable <code>s</code> is declared but never initialized: no object was created with <code>new</code>.</p>
+<pre class="code" data-java>Citizen s = new Citizen("Nada", 10);</pre>
+          <p class="out-label">Compiler message</p>
+          <pre class="out bad">MainClass.java:5: error: variable s might not have been initialized
+        s.ID = 10;
+        ^</pre>
+        </div></details>
+      </div>
+
+      <div class="q-card" id="oop-lab03-m2">
+        <div class="q-meta"><span class="q-num">Lab 3 · Find the Mistake #2 · Slide 15</span><span class="q-tests">Tests: <a href="#oop-lec02:reference">reference variables</a>, <a href="#oop-lec02:static">static fields</a></span></div>
+        <h3>Find the Mistake #2</h3>
+        <div class="q-text">
+          <div class="duo">
+            <div><p class="out-label">Citizen.java</p>
+<pre class="code" data-java>package new_Package;
+public class Citizen {
+    String SSN;
+    protected String name;
+    protected int ID;
+    public static int citizenNumber = 0;
+    public Citizen(String name, int ID, String SSN) {
+        this.name = name;
+        this.ID = ID;
+        this.SSN = SSN;
+        citizenNumber++;
+    }
+    public void setID(int id) {
+        this.ID = id;
+    }
+}</pre></div>
+            <div><p class="out-label">MainClass.java</p>
+<pre class="code" data-java>package main_Package;
+import new_Package.Citizen;
+public class MainClass {
+    public static void main(String[] args) {
+        Citizen s[] = new Citizen[3];
+        s[0].setID(15);
+    }
+}</pre></div>
+          </div>
+          <p>Find the mistake and try to solve it before moving to the next slide.</p>
+        </div>
+        <details class="sol"><summary>Show solution (Lab 3 · Slide 16)</summary><div class="more-in">
+          <p>Creating the array only creates 3 empty references. <code>s[0]</code> is <code>null</code>, so calling a method on it throws a <code>NullPointerException</code>.</p>
+<pre class="code" data-java>s[0] = new Citizen("Nada", 1, "123");
+s[0].setID(15);</pre>
+          <p class="out-label">Run-time error (it compiles, then crashes)</p>
+          <pre class="out bad">Exception in thread "main" java.lang.NullPointerException:
+Cannot invoke "new_Package.Citizen.setID(int)" because "&lt;local1&gt;[0]" is null</pre>
+        </div></details>
+      </div>
+
+      <div class="q-card" id="oop-lab03-m3">
+        <div class="q-meta"><span class="q-num">Lab 3 · Find the Mistake #3 · Slide 17</span><span class="q-tests">Tests: <a href="#oop-lec02:class-access">class access (public / default)</a>, <a href="#oop-lec02:packages">packages</a></span></div>
+        <h3>Find the Mistake #3</h3>
+        <div class="q-text">
+          <div class="duo">
+            <div><p class="out-label">Citizen.java</p>
+<pre class="code" data-java>package new_Package;
+class Citizen {
+    private String SSN;
+    protected String name;
+    public int ID;
+    public Citizen(String name, int ID) {
+        this.name = name;
+        this.ID = ID;
+    }
+    public Citizen(String name, int ID, String SSN) {
+        this.name = name;
+        this.ID = ID;
+        this.SSN = SSN;
+    }
+}</pre></div>
+            <div><p class="out-label">MainClass.java</p>
+<pre class="code" data-java>package main_Package;
+public class MainClass {
+    public static void main(String[] args) {
+        Citizen s = new Citizen("Nada", 1);
+    }
+}</pre></div>
+          </div>
+          <p>Find the mistake and try to solve it before moving to the next slide.</p>
+        </div>
+        <details class="sol"><summary>Show solution (Lab 3 · Slide 18)</summary><div class="more-in">
+          <p>The <code>Citizen</code> class has no modifier (default), so it can't be accessed from another package.</p>
+          <p><b>Fix:</b> put both classes in the same package, or declare <code>public class Citizen</code> and add <code>import new_Package.Citizen;</code></p>
+          <p class="out-label">Compiler message</p>
+          <pre class="out bad">MainClass.java:4: error: cannot find symbol
+        Citizen s = new Citizen("Nada", 1);
+        ^</pre>
+          <p class="hint">The compiler says "cannot find symbol" because <code>MainClass</code> has no import, so it looks for <code>Citizen</code> only in <code>main_Package</code>. If you add the import but keep the class default, the message becomes "Citizen is not public in new_Package; cannot be accessed from outside package". You need both fixes.</p>
+        </div></details>
+      </div>
+
+      <div class="q-card" id="oop-lab03-m4">
+        <div class="q-meta"><span class="q-num">Lab 3 · Find the Mistake #4 · Slide 19</span><span class="q-tests">Tests: <a href="#oop-lec02:access">private access</a>, <a href="#oop-lab03:modifiers">modifiers recap</a></span></div>
+        <h3>Find the Mistake #4</h3>
+        <div class="q-text">
+          <div class="duo">
+            <div><p class="out-label">Citizen.java</p>
+<pre class="code" data-java>package main_Package;
+class Citizen {
+    private String SSN;
+    protected String name;
+    public int ID;
+    public Citizen(String name, int ID, String SSN) {
+        this.name = name;
+        this.ID = ID;
+        this.SSN = SSN;
+    }
+}</pre></div>
+            <div><p class="out-label">MainClass.java</p>
+<pre class="code" data-java>package main_Package;
+public class MainClass {
+    public static void main(String[] args) {
+        Citizen s;
+        s = new Citizen("Nada", 1, "012345678");
+        System.out.print(s.SSN);
+    }
+}</pre></div>
+          </div>
+          <p>Find the mistake and try to solve it before moving to the next slide.</p>
+        </div>
+        <details class="sol"><summary>Show solution (Lab 3 · Slide 20)</summary><div class="more-in">
+          <p><code>SSN</code> is declared as a private attribute, so only the <code>Citizen</code> class itself can access it.</p>
+          <p><b>Fix:</b> add a getter in Citizen and print <code>s.getSSN()</code>:</p>
+<pre class="code" data-java>public String getSSN() { return SSN; }</pre>
+          <p class="out-label">Compiler message</p>
+          <pre class="out bad">MainClass.java:6: error: SSN has private access in Citizen
+        System.out.print(s.SSN);
+                          ^</pre>
+        </div></details>
+      </div>
+
+      <div class="q-card" id="oop-lab03-m5">
+        <div class="q-meta"><span class="q-num">Lab 3 · Find the Mistake #5 · Slide 21</span><span class="q-tests">Tests: <a href="#oop-lec02:access">protected access</a>, <a href="#oop-lab03:modifiers">modifiers recap</a></span></div>
+        <h3>Find the Mistake #5</h3>
+        <div class="q-text">
+          <div class="duo">
+            <div><p class="out-label">Citizen.java</p>
+<pre class="code" data-java>package new_Package;
+public class Citizen {
+    private String SSN;
+    protected String name;
+    public int ID;
+    public Citizen(String name, int ID) {
+        this.name = name;
+        this.ID = ID;
+    }
+    public Citizen(String name, int ID, String SSN) {
+        this.name = name;
+        this.ID = ID;
+        this.SSN = SSN;
+    }
+}</pre></div>
+            <div><p class="out-label">MainClass.java</p>
+<pre class="code" data-java>package main_Package;
+import new_Package.Citizen;
+import java.util.Scanner;
+public class MainClass {
+    public static void main(String[] args) {
+        Citizen s = new Citizen("Nada", 1);
+        Scanner x = new Scanner(System.in);
+        String n = x.next();
+        if (n.equals(s.name)) {
+            System.out.println(s.ID);
+        }
+    }
+}</pre></div>
+          </div>
+          <p>Find the mistake and try to solve it before moving to the next slide.</p>
+        </div>
+        <details class="sol"><summary>Show solution (Lab 3 · Slide 22)</summary><div class="more-in">
+          <p><code>name</code> is protected. Outside its package only subclasses can use it, and <code>MainClass</code> is not a subclass of <code>Citizen</code>.</p>
+          <p><b>Fix:</b> put both classes in the same package, or add <code>public String getName()</code> and use <code>s.getName()</code>.</p>
+          <p class="out-label">Compiler message</p>
+          <pre class="out bad">MainClass.java:9: error: name has protected access in Citizen
+        if (n.equals(s.name)) {
+                      ^</pre>
+        </div></details>
+      </div>
+
+      <div class="q-card" id="oop-lab03-m6">
+        <div class="q-meta"><span class="q-num">Lab 3 · Find the Mistake #6 · Slide 23</span><span class="q-tests">Tests: <a href="#oop-lec02:final">final fields</a>, <a href="#oop-lec02:static">static fields</a></span></div>
+        <h3>Find the Mistake #6</h3>
+        <div class="q-text">
+          <div class="duo">
+            <div><p class="out-label">Citizen.java</p>
+<pre class="code" data-java>package main_Package;
+public class Citizen {
+    private String SSN;
+    protected String name;
+    public int ID;
+    public static final int citizenNumber = 0;
+    public Citizen(String name, int ID, String SSN) {
+        this.name = name;
+        this.ID = ID;
+        this.SSN = SSN;
+        citizenNumber++;
+    }
+}</pre></div>
+            <div><p class="out-label">MainClass.java</p>
+<pre class="code" data-java>package main_Package;
+import java.util.Scanner;
+public class MainClass {
+    public static void main(String[] args) {
+        Citizen s = new Citizen("Nada", 1, "123");
+        Scanner x = new Scanner(System.in);
+        String n = x.next();
+        if (n.equals(s.name)) {
+            System.out.println(s.ID);
+        }
+    }
+}</pre></div>
+          </div>
+          <p>Find the mistake and try to solve it before moving to the next slide.</p>
+        </div>
+        <details class="sol"><summary>Show solution (Lab 3 · Slide 24)</summary><div class="more-in">
+          <p><code>citizenNumber</code> is declared <code>final</code>, so <code>citizenNumber++</code> can't change its value (compile error).</p>
+          <p><b>Fix:</b> remove the <code>final</code> keyword, or remove <code>citizenNumber++</code> from the constructor.</p>
+          <p class="out-label">Compiler message</p>
+          <pre class="out bad">Citizen.java:11: error: cannot assign a value to static final variable citizenNumber
+        citizenNumber++;
+        ^</pre>
+        </div></details>
+      </div>
+
+      <div class="q-card" id="oop-lab03-m7">
+        <div class="q-meta"><span class="q-num">Lab 3 · Find the Mistake #7 · Slide 25</span><span class="q-tests">Tests: <a href="#oop-lec02:constructor">constructors</a>, <a href="#oop-lec03:overloading">overloading</a></span></div>
+        <h3>Find the Mistake #7</h3>
+        <div class="q-text">
+          <div class="duo">
+            <div><p class="out-label">Citizen.java</p>
+<pre class="code" data-java>package main_Package;
+public class Citizen {
+    private String SSN;
+    protected String name;
+    public int ID;
+    public static int citizenNumber = 0;
+    public Citizen(String name, int ID, String SSN) {
+        this.name = name;
+        this.ID = ID;
+        this.SSN = SSN;
+        citizenNumber++;
+    }
+}</pre></div>
+            <div><p class="out-label">MainClass.java</p>
+<pre class="code" data-java>package main_Package;
+import java.util.Scanner;
+public class MainClass {
+    public static void main(String[] args) {
+        Citizen s = new Citizen("Nada", 1);
+        Scanner x = new Scanner(System.in);
+        String n = x.next();
+        if (n.equals(s.name)) {
+            System.out.println(s.ID);
+        }
+    }
+}</pre></div>
+          </div>
+          <p>Find the mistake and try to solve it before moving to the next slide.</p>
+        </div>
+        <details class="sol"><summary>Show solution (Lab 3 · Slide 26)</summary><div class="more-in">
+          <p><code>Citizen</code> has only one constructor, with 3 parameters, but <code>main</code> calls a constructor with 2 parameters.</p>
+          <p><b>Fix:</b> add another constructor:</p>
+<pre class="code" data-java>public Citizen(String name, int ID) {
+    this.name = name;
+    this.ID = ID;
+}</pre>
+          <p class="out-label">Compiler message</p>
+          <pre class="out bad">MainClass.java:5: error: constructor Citizen in class Citizen cannot be applied to given types;
+        Citizen s = new Citizen("Nada", 1);
+                    ^</pre>
+        </div></details>
+      </div>
+
+      <div class="q-card" id="oop-lab03-m8">
+        <div class="q-meta"><span class="q-num">Lab 3 · Find the Mistake #8 · Slide 27</span><span class="q-tests">Tests: <a href="#oop-lec02:final">final fields</a>, <a href="#oop-lab03:modifiers">modifiers recap</a></span></div>
+        <h3>Find the Mistake #8</h3>
+        <div class="q-text">
+          <div class="duo">
+            <div><p class="out-label">Citizen.java</p>
+<pre class="code" data-java>package main_Package;
+public class Citizen {
+    String SSN;
+    protected String name;
+    protected final int ID;
+    public static int citizenNumber = 0;
+    public Citizen(String name, int ID, String SSN) {
+        this.name = name;
+        this.ID = ID;
+        this.SSN = SSN;
+        citizenNumber++;
+    }
+    public void setID(int id) {
+        this.ID = id;
+    }
+}</pre></div>
+            <div><p class="out-label">MainClass.java</p>
+<pre class="code" data-java>package main_Package;
+import java.util.Scanner;
+public class MainClass {
+    public static void main(String[] args) {
+        Citizen s = new Citizen("Nada", 1, "123");
+        Scanner x = new Scanner(System.in);
+        String n = x.next();
+        int id = x.nextInt();
+        if (n.equals(s.name)) {
+            s.setID(id);
+            System.out.println(s.ID);
+        }
+    }
+}</pre></div>
+          </div>
+          <p>Find the mistake and try to solve it before moving to the next slide.</p>
+        </div>
+        <details class="sol"><summary>Show solution (Lab 3 · Slide 28)</summary><div class="more-in">
+          <p><code>ID</code> is <code>final</code>, so <code>setID</code> is not allowed to change it after the constructor (compile error).</p>
+          <p><b>Fix:</b> remove <code>final</code>, or remove <code>setID()</code> from Citizen and <code>s.setID(id)</code> from main.</p>
+          <p class="out-label">Compiler message</p>
+          <pre class="out bad">Citizen.java:14: error: cannot assign a value to final variable ID
+        this.ID = id;
+            ^</pre>
+          <p class="hint">Setting <code>this.ID = ID;</code> inside the constructor is fine: a final field may be assigned once, and the constructor is where that happens.</p>
+        </div></details>
+      </div>
+
+      <h3>UML: practice on class diagrams</h3>
+
+      <div class="q-card" id="oop-lab03-uml1">
+        <div class="q-meta"><span class="q-num">Lab 3 · Practice on Class Diagrams #1 · Slide 46</span><span class="q-tests">Tests: <a href="#oop-lab03:uml-basics">UML class diagram</a>, <a href="#oop-lec02:class-diagram">class diagrams</a></span></div>
+        <h3>Practice on Class Diagrams #1</h3>
+        <div class="q-text">
+          <p>Draw a class diagram for a <b>Book</b> class where the book has:</p>
+          <ol>
+            <li>Book id as an integer number.</li>
+            <li>Book name as a string.</li>
+            <li>Author name as a string.</li>
+            <li>The price of the book as a float number.</li>
+            <li>A parameterized constructor that fills all the attributes.</li>
+            <li>Setter and getter functions for the id attribute.</li>
+            <li>All attributes are public except the book id.</li>
+            <li>The constructor and methods can be accessed outside the class.</li>
+          </ol>
+        </div>
+        <details class="sol"><summary>Show solution (Lab 3 · Slide 47)</summary><div class="more-in">
+          <div class="uml-row">
+            <div class="uml" role="img" aria-label="UML class Book"><div>Book</div><div>- id : int<br>+ bookName : String<br>+ bookAuthor : String<br>+ price : float</div><div>+ Book(int, String, String, float)<br>+ setId(int) : void<br>+ getId() : int</div></div>
+            <ul class="uml-key">
+              <li><b>- id : int</b>: private, because it's the only non-public attribute</li>
+              <li><b>+ bookName, bookAuthor, price</b>: public attributes with their types</li>
+              <li><b>+ Book(int, String, String, float)</b>: parameterized constructor, no return type</li>
+              <li><b>+ setId(int) : void / + getId() : int</b>: setter takes an int; getter returns an int</li>
+            </ul>
+          </div>
+        </div></details>
+      </div>
+
+      <div class="q-card" id="oop-lab03-uml2">
+        <div class="q-meta"><span class="q-num">Lab 3 · Practice on Class Diagrams #2 · Slide 48</span><span class="q-tests">Tests: <a href="#oop-lab03:aggregation-composition">aggregation vs composition</a>, <a href="#oop-lab03:relationships">association</a></span></div>
+        <h3>Practice on Class Diagrams #2</h3>
+        <div class="q-text">
+          <p>Update the previous class diagram by adding a new class called <b>Reader</b>. The Reader class has:</p>
+          <ol>
+            <li>A reader name as a string.</li>
+            <li>An array of books.</li>
+            <li>A parameterized constructor with one parameter: the reader name.</li>
+            <li>An <code>insertBook</code> function that takes a Book object as a parameter and adds it to the array.</li>
+            <li>All attributes and methods can be accessed outside the class.</li>
+          </ol>
+          <div class="callout"><p><b>Think about it:</b> What is the relationship between Reader and Book? Can a book exist without the reader?</p></div>
+        </div>
+        <details class="sol"><summary>Show solution (Lab 3 · Slide 49)</summary><div class="more-in">
+          <div class="uml-row uml-pair">
+            <div class="uml" role="img" aria-label="UML class Reader"><div>Reader</div><div>+ name : String<br>+ books : Book[ ]</div><div>+ Reader(String)<br>+ insertBook(Book) : void</div></div>
+            <svg class="uml-link h" viewBox="0 0 120 40" role="img" aria-label="Aggregation: hollow diamond on the Reader side, line to Book">
+              <polygon class="d-box" points="2,20 16,13 30,20 16,27"/><path class="d-line" d="M30 20 L120 20"/>
+              <text class="d-s" x="74" y="12">Aggregation</text>
+            </svg>
+            <svg class="uml-link v" viewBox="0 0 160 64" role="img" aria-label="Aggregation: hollow diamond on the Reader side, line to Book">
+              <polygon class="d-box" points="20,2 27,16 20,30 13,16"/><path class="d-line" d="M20 30 L20 64"/>
+              <text class="d-s" x="34" y="44" style="text-anchor:start">Aggregation</text>
+            </svg>
+            <div class="uml" role="img" aria-label="UML class Book"><div>Book</div><div>- id : int<br>+ bookName : String<br>+ bookAuthor : String<br>+ price : float</div><div>+ Book(int, String, String, float)<br>+ setId(int) : void<br>+ getId() : int</div></div>
+          </div>
+          <p><b>Aggregation relationship.</b> One object has or owns another object: a Reader has Books. A book can still exist without the reader.</p>
+        </div></details>
+      </div>
+
+      <h3>Hands-on: convert a class diagram to code</h3>
+
+      <div class="q-card" id="oop-lab03-hands-on">
+        <div class="q-meta"><span class="q-num">Lab 3 · Hands-on · Slides 51–52</span><span class="q-tests">Tests: <a href="#oop-lab03:uml-basics">UML</a>, <a href="#oop-lab03:aggregation-composition">aggregation</a>, <a href="#oop-lab03:this-fields">this</a>, <a href="#oop-lec02:final">final</a>, <a href="#oop-lec03:overloading">overloaded constructors</a>, <a href="#oop-lab03:comparison">equals()</a></span></div>
+        <h3>Hands-on: Convert the Class Diagram to Code</h3>
+        <div class="q-text">
+          <div class="uml-row uml-pair">
+            <div class="uml" role="img" aria-label="UML class Author"><div>Author</div><div>- name : final String<br>- books : Book[3]</div><div>+ Author(String)<br>+ getName() : String<br>+ addBook(Book, int) : void<br>+ searchBook(String) : Book<br>+ displayBooksData() : void</div></div>
+            <svg class="uml-link h" viewBox="0 0 120 40" role="img" aria-label="Aggregation from Author to Book, multiplicity 0..3">
+              <polygon class="d-box" points="2,20 16,13 30,20 16,27"/><path class="d-line" d="M30 20 L120 20"/>
+              <text class="d-s" x="100" y="12">0..3</text>
+            </svg>
+            <svg class="uml-link v" viewBox="0 0 160 64" role="img" aria-label="Aggregation from Author to Book, multiplicity 0..3">
+              <polygon class="d-box" points="20,2 27,16 20,30 13,16"/><path class="d-line" d="M20 30 L20 64"/>
+              <text class="d-s" x="34" y="58" style="text-anchor:start">0..3</text>
+            </svg>
+            <div class="uml" role="img" aria-label="UML class Book"><div>Book</div><div>- name : String<br>- numberOfPages : final int<br>- price : float</div><div>+ Book(int)<br>+ Book(String, int)<br>+ Book(String, int, float)<br>+ setPrice(float) : void<br>+ getPrice() : float<br>+ getNumberOfPages() : int<br>+ getName() : String<br>+ setName(String) : void<br>+ displayBookinfo() : void</div></div>
+          </div>
+          <ul class="rules">
+            <li><b>addBook:</b> Takes a Book object and an index, and puts the book in the array at that index.</li>
+            <li><b>searchBook:</b> Takes a book name. If the book exists, return it; otherwise return null.</li>
+            <li><b>displayBooksData:</b> Displays the name, number of pages and price of each book.</li>
+            <li>An Author has up to 3 Books (aggregation).</li>
+          </ul>
+          <p><b>Hands-on: Main Class.</b> Create a MainClass with a main function that:</p>
+          <ol>
+            <li>Creates an Author object.</li>
+            <li>Creates 3 Book objects:
+              <ul><li>The first has only the number of pages.</li><li>The second has the number of pages and the name.</li><li>The third has the number of pages, name and price.</li></ul></li>
+            <li>Sets a value for all the missing data in the books.</li>
+            <li>Adds the books to the author.</li>
+            <li>Searches for a book by its name. If found, displays its info.</li>
+            <li>Displays all the author's books.</li>
+          </ol>
+          <div class="heads"><h4>Hint</h4><p><code>numberOfPages</code> is final with no setter, so every constructor must set it. Use <code>setName()</code> and <code>setPrice()</code> for the missing data.</p></div>
+        </div>
+        <details class="sol"><summary>Show solution: Book class (Lab 3 · Slides 53–54)</summary><div class="more-in">
+          <p class="out-label">Book.java</p>
+<pre class="code" data-java>public class Book {
+    private String name;
+    private final int numberOfPages;
+    private float price;
+
+    public Book(int numberOfPages) {
+        this.numberOfPages = numberOfPages;
+    }
+    public Book(String name, int numberOfPages) {
+        this.name = name;
+        this.numberOfPages = numberOfPages;
+    }
+    public Book(String name, int numberOfPages, float price) {
+        this.name = name;
+        this.numberOfPages = numberOfPages;
+        this.price = price;
+    }
+
+    public String getName() { return name; }
+    public int getNumberOfPages() { return numberOfPages; }
+    public float getPrice() { return price; }
+    public void setName(String name) { this.name = name; }
+    public void setPrice(float price) { this.price = price; }
+
+    public void displayBookinfo() {
+        System.out.println("The book name is " + name);
+        System.out.println("Number of pages " + numberOfPages);
+        System.out.println("The book price is " + price + " $");
+    }
+}</pre>
+        </div></details>
+        <details class="sol"><summary>Show solution: Author class (Lab 3 · Slides 55–56)</summary><div class="more-in">
+          <p class="out-label">Author.java</p>
+<pre class="code" data-java>public class Author {
+    private final String name;
+    private Book books[] = new Book[3];   // elements start as null
+
+    public Author(String name) {
+        this.name = name;
+    }
+    public String getName() {
+        return name;
+    }
+    public void addBook(Book newBook, int index) {
+        if (index &gt;= 0 &amp;&amp; index &lt; 3)
+            books[index] = newBook;
+        else
+            System.out.println("Please enter an index between 0 and 2");
+    }
+    public Book searchBook(String name) {
+        for (int i = 0; i &lt; 3; i++) {
+            if (books[i] != null &amp;&amp; books[i].getName().equals(name))
+                return books[i];
+        }
+        return null;   // not found
+    }
+    public void displayBooksData() {
+        for (int i = 0; i &lt; 3; i++) {
+            if (books[i] != null)
+                books[i].displayBookinfo();
+        }
+    }
+}</pre>
+        </div></details>
+        <details class="sol"><summary>Show solution: Main class and output (Lab 3 · Slide 57)</summary><div class="more-in">
+          <div class="duo">
+            <div><p class="out-label">MainClass.java</p>
+<pre class="code" data-java>public class MainClass {
+    public static void main(String[] args) {
+        Author author1 = new Author("Mary");
+
+        Book book1 = new Book(50);
+        book1.setName("ABC");
+        book1.setPrice(50.5f);
+
+        Book book2 = new Book("Hello", 60);
+        book2.setPrice(60.5f);
+
+        Book book3 = new Book("New World", 60, 70.6f);
+
+        author1.addBook(book1, 0);
+        author1.addBook(book2, 1);
+        author1.addBook(book3, 2);
+
+        Book b = author1.searchBook("Hello");
+        if (b != null)
+            b.displayBookinfo();
+
+        author1.displayBooksData();
+    }
+}</pre></div>
+            <div><p class="out-label">Console output</p>
+<pre class="out">The book name is Hello
+Number of pages 60
+The book price is 60.5 $
+The book name is ABC
+Number of pages 50
+The book price is 50.5 $
+The book name is Hello
+Number of pages 60
+The book price is 60.5 $
+The book name is New World
+Number of pages 60
+The book price is 70.6 $</pre>
+              <p class="hint">The first 3 lines come from <code>searchBook("Hello")</code>; the other 9 come from <code>displayBooksData()</code>.</p></div>
+          </div>
+        </div></details>
+      </div>
+    </section>
+
+    <script>
+    /* ---------- Lab 3 (oop-lab03): live widgets ---------- */
+    (()=>{
+      /* 10 compareTo, the way Java's String.compareTo works */
+      function cto(){
+        const a=$('#ctoA').value,b=$('#ctoB').value,n=Math.min(a.length,b.length);
+        let i=0;while(i<n&&a.charCodeAt(i)===b.charCodeAt(i))i++;
+        let r,why;
+        if(i<n){
+          const x=a.charCodeAt(i),y=b.charCodeAt(i);r=x-y;
+          why=`First difference at index ${i}: '${a[i]}' (${x}) − '${b[i]}' (${y}) = ${r}`;
+        }else{
+          r=a.length-b.length;
+          why=r===0?'Same characters and same length':`No different character; length ${a.length} − ${b.length} = ${r}`;
+        }
+        const word=r===0?'equal':r>0?'s1 comes after s2':'s1 comes before s2';
+        $('#ctoOut').textContent=`${r}\n${why}`;
+        $('#ctoMeta').textContent=word;
+      }
+      ['#ctoA','#ctoB'].forEach(s=>$(s).addEventListener('input',cto));cto();
+    })();
+    </script>
+  </article>
+
   <!-- LECTURES:END -->
 
   <article class="view summary" data-view="summary" data-title="Summary &amp; Exam Review" data-short="Summary &amp; Exam Review" hidden>
@@ -3080,6 +5606,164 @@ if (tempType.equals("c")) {
           </tbody>
         </table></div>
         <p class="hint">Lab 2 has no hands-on tasks in the file, so there are no practice questions for it.</p>
+      </div>
+      <div class="sum-block" id="sum-oop-lec02">
+        <div class="sum-top"><h3>Lecture 2 · Classes and Objects</h3><a class="btn small" href="#oop-lec02">Open the lecture</a></div>
+        <h4>Must-know points</h4>
+        <ol class="must">
+          <li>A class is a blueprint (an abstract data type); an object is an instance of it with its own values. <span class="ref">📄 Slides 2–3</span></li>
+          <li>Class members: fields (state), methods (behavior), and nested classes and interfaces. <span class="ref">📄 Slide 4</span></li>
+          <li><code>new</code> creates the object and calls a constructor. A constructor has the class's name and no return type. With no constructor written, the compiler adds a default one. <span class="ref">📄 Slides 5–7</span></li>
+          <li><code>Rectangle r = new Rectangle(15, 10);</code> does three jobs: declaration, instantiation, initialization. Constructors can be overloaded. <span class="ref">📄 Slides 8–10</span></li>
+          <li>UML class diagram: one box with name, attributes and operations; <code>+</code> public, <code>#</code> protected, <code>-</code> private. <span class="ref">📄 Slides 11–16</span></li>
+          <li>A variable of a class type holds a reference. <code>new GradeBook[6]</code> makes 6 <code>null</code> references; each still needs <code>new</code>. <span class="ref">📄 Slides 17–18</span></li>
+          <li>A package groups related classes; <code>import</code> brings them in. Only one public class per <code>.java</code> file, named after it. <span class="ref">📄 Slides 23–25</span></li>
+          <li>Access: public (anywhere) → protected (package + subclasses) → default (package) → private (class only). <span class="ref">📄 Slides 27–29</span></li>
+          <li><code>static</code> fields have one copy shared by all objects; <code>final</code> fields are assigned once (a blank final is set in the constructor). <span class="ref">📄 Slides 30–35</span></li>
+          <li>Fields get default values (0, 0.0, false, '\u0000', null); local variables do not. <span class="ref">📄 Slide 36</span></li>
+        </ol>
+        <h4>Definitions and syntax</h4>
+        <div class="tablewrap"><table class="cmp">
+          <thead><tr><th>Term</th><th>Meaning / syntax</th><th>Ref</th></tr></thead>
+          <tbody>
+            <tr><th>Class / object</th><td>Blueprint / an instance built from it.</td><td>📄 2–3</td></tr>
+            <tr><th>Class members</th><td>Fields, methods, nested classes and interfaces.</td><td>📄 4</td></tr>
+            <tr><th>Constructor</th><td>Same name as the class, no return type, runs on <code>new</code>.</td><td>📄 5–7</td></tr>
+            <tr><th>Create an object</th><td><code>Rectangle myRectangle = new Rectangle(15, 10);</code></td><td>📄 8</td></tr>
+            <tr><th>UML</th><td>Unified Modeling Language: a standard picture language for designing software.</td><td>📄 11–13</td></tr>
+            <tr><th>UML attribute / operation</th><td><code>-coursename: String</code> · <code>+getCourseName(): String</code></td><td>📄 15–16</td></tr>
+            <tr><th>Reference variable</th><td>Holds the address of an object, not the object itself.</td><td>📄 17</td></tr>
+            <tr><th>Array of references</th><td><code>GradeBook[] t = new GradeBook[6];</code> (all <code>null</code>)</td><td>📄 18</td></tr>
+            <tr><th>Package / import</th><td><code>package myPackage;</code> · <code>import java.util.*;</code></td><td>📄 23–24</td></tr>
+            <tr><th>Access modifiers</th><td>public · protected · default (none) · private</td><td>📄 27–28</td></tr>
+            <tr><th>Static field</th><td>One shared copy: <code>Pencil.nextID</code></td><td>📄 30–31</td></tr>
+            <tr><th>final</th><td>Constant: <code>final int numDoors = 4;</code></td><td>📄 32–35</td></tr>
+            <tr><th>Default values</th><td><code>boolean</code> false · <code>char</code> '\u0000' · numbers 0 / 0.0 · references null</td><td>📄 36</td></tr>
+          </tbody>
+        </table></div>
+        <p class="hint">Practice for this lecture comes from Lab 3 (Find the Mistake #1–8 and the UML tasks): see the Lab 3 block below, or the <a href="#oop-lab03:practice">Lab 3 practice section</a>.</p>
+      </div>
+      <div class="sum-block" id="sum-oop-lec03">
+        <div class="sum-top"><h3>Lecture 3 · Methods and Strings</h3><a class="btn small" href="#oop-lec03">Open the lecture</a></div>
+        <h4>Must-know points</h4>
+        <ol class="must">
+          <li>Method types: instance methods, class (static) methods, constructors, and <code>main</code>. <span class="ref">📄 Slides 2–3</span></li>
+          <li>A method header = modifiers + return type + name + parameters, e.g. <code>public static int Add(int x, int y)</code>. <span class="ref">📄 Slides 4–5</span></li>
+          <li>A static method can use only its parameters, local variables, static fields and other static methods. Call it with the class name. <span class="ref">📄 Slides 6, 9</span></li>
+          <li>Overloading: same name, different parameter lists (number or types). <span class="ref">📄 Slide 10</span></li>
+          <li>Java always passes arguments by value. For objects the copied value is the reference: changing a field is seen by the caller, reassigning the parameter is not. <span class="ref">📄 Slides 11–18</span></li>
+          <li><code>this</code> is the current object; <code>this(...)</code> calls another constructor of the same class. <span class="ref">📄 Slides 19–20</span></li>
+          <li><code>main</code> is <code>public static void main(String[] args)</code>; command-line arguments arrive in <code>args</code> as strings. <span class="ref">📄 Slides 22–23</span></li>
+          <li>An object with no references left is garbage; the garbage collector frees it (<code>System.gc()</code> only asks). <span class="ref">📄 Slides 24–29</span></li>
+          <li>Strings are immutable objects with methods like <code>length</code>, <code>charAt</code>, <code>indexOf</code>, <code>substring</code>; <code>toString()</code> turns an object into text. <span class="ref">📄 Slides 30–37</span></li>
+          <li>Convert with <code>Integer.parseInt</code> / <code>String.valueOf</code>. Compare text with <code>equals</code>, not <code>==</code>; watch out for <code>null</code>. <span class="ref">📄 Slides 38–42</span></li>
+        </ol>
+        <h4>Definitions and syntax</h4>
+        <div class="tablewrap"><table class="cmp">
+          <thead><tr><th>Term</th><th>Meaning / syntax</th><th>Ref</th></tr></thead>
+          <tbody>
+            <tr><th>Method header</th><td><code>public static int Add(int x, int y)</code></td><td>📄 4</td></tr>
+            <tr><th>Static method</th><td>Belongs to the class; called as <code>ClassName.method()</code>.</td><td>📄 6</td></tr>
+            <tr><th>Call a method</th><td><code>reference.method(arguments);</code></td><td>📄 9</td></tr>
+            <tr><th>Overloading</th><td>Same name, different parameter list.</td><td>📄 10</td></tr>
+            <tr><th>Parameter / argument</th><td>The variable in the declaration / the value passed in the call.</td><td>📄 11–12</td></tr>
+            <tr><th>Pass by value</th><td>The method gets a copy; for objects, a copy of the reference.</td><td>📄 13–18</td></tr>
+            <tr><th>Constructor chaining</th><td><code>public Rectangle() { this(0, 0, 0, 0); }</code></td><td>📄 20</td></tr>
+            <tr><th>Command-line argument</th><td><code>String name1 = args[0];</code></td><td>📄 23</td></tr>
+            <tr><th>Garbage collection</th><td>Automatic freeing of unreachable objects; <code>System.gc();</code></td><td>📄 26–28</td></tr>
+            <tr><th>String constructors</th><td><code>new String(charArray, 3, 2)</code> → <code>"Th"</code></td><td>📄 31–32</td></tr>
+            <tr><th>String → number</th><td><code>Integer.parseInt(s)</code> · <code>Float.valueOf(s).floatValue()</code></td><td>📄 38</td></tr>
+            <tr><th>Number → String</th><td><code>String.valueOf(age)</code> · <code>Integer.toString(i)</code> · <code>"He is " + age</code></td><td>📄 39</td></tr>
+            <tr><th>Compare text</th><td><code>s1.equals(s2)</code> · <code>equalsIgnoreCase</code> · <code>compareTo</code></td><td>📄 40</td></tr>
+          </tbody>
+        </table></div>
+        <p class="hint">Lab 3 practises <code>this</code> and strings: see the Lab 3 block below, or the lab's notes on <a href="#oop-lab03:this">this</a> and <a href="#oop-lab03:strings">strings</a>.</p>
+      </div>
+      <div class="sum-block" id="sum-oop-lab03">
+        <div class="sum-top"><h3>Lab 3 · this Keyword, Modifiers, Strings &amp; UML Class Diagrams</h3><a class="btn small" href="#oop-lab03">Open the lab</a></div>
+        <h4>Must-know points</h4>
+        <ol class="must">
+          <li><code>this</code> is the current object: <code>this.x</code> (field), <code>this.m()</code> (method), <code>this()</code> (constructor, first statement only). <span class="ref">🧪 Slides 4–9</span></li>
+          <li>Without <code>this</code>, a parameter with the field's name hides the field: <code>rollno = rollno;</code> leaves the field at its default (0, null). <span class="ref">🧪 Slides 5–6</span></li>
+          <li>Access: private (class) → default (package) → protected (+ subclasses outside) → public (everywhere). <code>static</code> = shared; <code>final</code> = assigned once. <span class="ref">🧪 Slides 10–12</span></li>
+          <li>String literals are stored once in the string constant pool; <code>new String(...)</code> always makes a new object on the heap. <span class="ref">🧪 Slides 29–33</span></li>
+          <li>Strings are immutable: <code>s.concat("World")</code> returns a new string. <span class="ref">🧪 Slide 34</span></li>
+          <li><code>==</code> compares references, <code>equals()</code> compares content, <code>compareTo()</code> compares order (0, positive, negative). <span class="ref">🧪 Slides 35–36</span></li>
+          <li><code>"200" + 100</code> is <code>"200100"</code>; convert first with <code>Integer.parseInt</code>. <span class="ref">🧪 Slide 38</span></li>
+          <li>UML class box: name / attributes / operations; <code>+ - # ~</code>; static members underlined; constructors have no return type. <span class="ref">🧪 Slide 40</span></li>
+          <li>Relationships: generalization (hollow triangle, "is a"), association (plain line), aggregation (hollow diamond, "has-a", weak), composition (filled diamond, "part-of", strong). <span class="ref">🧪 Slides 41–45</span></li>
+        </ol>
+        <h4>Definitions and syntax</h4>
+        <div class="tablewrap"><table class="cmp">
+          <thead><tr><th>Term</th><th>Meaning / syntax</th><th>Ref</th></tr></thead>
+          <tbody>
+            <tr><th>this</th><td>Reference variable to the current object.</td><td>🧪 3–4</td></tr>
+            <tr><th>Constructor chaining</th><td><code>this()</code> calls another constructor; must be the first statement.</td><td>🧪 9</td></tr>
+            <tr><th>Static field (class variable)</th><td><code>static int citizenNumber = 0;</code></td><td>🧪 12</td></tr>
+            <tr><th>Final field</th><td><code>final String name = "Nada";</code></td><td>🧪 12</td></tr>
+            <tr><th>String constant pool</th><td>Heap area where literals are stored once and shared.</td><td>🧪 31</td></tr>
+            <tr><th>Immutable</th><td>Can't be changed after creation.</td><td>🧪 34</td></tr>
+            <tr><th>compareTo</th><td>0 if equal, positive if s1 comes after s2, negative if before.</td><td>🧪 36</td></tr>
+            <tr><th>String methods</th><td><code>length</code> · <code>charAt</code> · <code>indexOf</code> · <code>substring</code> · <code>concat</code> · <code>startsWith</code>/<code>endsWith</code> · <code>toLowerCase</code>/<code>toUpperCase</code> · <code>toCharArray</code></td><td>🧪 37</td></tr>
+            <tr><th>Conversions</th><td><code>Integer.parseInt(s)</code> · <code>Float.valueOf(s).floatValue()</code> · <code>String.valueOf(i)</code></td><td>🧪 38</td></tr>
+            <tr><th>UML visibility</th><td><code>+</code> public · <code>-</code> private · <code>#</code> protected · <code>~</code> default</td><td>🧪 40</td></tr>
+            <tr><th>Generalization</th><td>Inheritance, "is a": <code>class Student extends Person</code></td><td>🧪 41</td></tr>
+            <tr><th>Association</th><td>Link between two separate classes through their objects (1-1, 1-*, *-1, *-*).</td><td>🧪 42</td></tr>
+            <tr><th>Aggregation / composition</th><td>"has-a", weak, ◇ / "part-of", strong, ◆</td><td>🧪 43–45</td></tr>
+          </tbody>
+        </table></div>
+        <h4>Practice from Lab 3</h4>
+        <div class="sum-q">
+          <p><b>Find the Mistake #1</b> <span class="ref">🧪 Lab 3 · Slide 13</span><br>In <code>main</code>: <code>Citizen s; s.ID = 10; System.out.print(s.ID);</code></p>
+          <details class="sol"><summary>Show solution (Slide 14)</summary><div class="more-in"><p><code>s</code> is declared but never initialized: no object was created with <code>new</code>. Fix: <code>Citizen s = new Citizen("Nada", 10);</code></p></div></details>
+        </div>
+        <div class="sum-q">
+          <p><b>Find the Mistake #2</b> <span class="ref">🧪 Lab 3 · Slide 15</span><br>In <code>main</code>: <code>Citizen s[] = new Citizen[3]; s[0].setID(15);</code></p>
+          <details class="sol"><summary>Show solution (Slide 16)</summary><div class="more-in"><p>The array holds 3 empty references; <code>s[0]</code> is <code>null</code>, so the call throws a <code>NullPointerException</code>. Fix: <code>s[0] = new Citizen("Nada", 1, "123");</code> then <code>s[0].setID(15);</code></p></div></details>
+        </div>
+        <div class="sum-q">
+          <p><b>Find the Mistake #3</b> <span class="ref">🧪 Lab 3 · Slide 17</span><br><code>class Citizen</code> (no modifier) is in <code>new_Package</code>; <code>MainClass</code> in <code>main_Package</code> does <code>new Citizen("Nada", 1)</code>.</p>
+          <details class="sol"><summary>Show solution (Slide 18)</summary><div class="more-in"><p>A default class can't be accessed from another package. Fix: put both classes in the same package, or declare <code>public class Citizen</code> and add <code>import new_Package.Citizen;</code></p></div></details>
+        </div>
+        <div class="sum-q">
+          <p><b>Find the Mistake #4</b> <span class="ref">🧪 Lab 3 · Slide 19</span><br><code>private String SSN;</code> in Citizen; <code>main</code> prints <code>s.SSN</code>.</p>
+          <details class="sol"><summary>Show solution (Slide 20)</summary><div class="more-in"><p>SSN is private, so only Citizen can access it. Fix: add <code>public String getSSN() { return SSN; }</code> and print <code>s.getSSN()</code>.</p></div></details>
+        </div>
+        <div class="sum-q">
+          <p><b>Find the Mistake #5</b> <span class="ref">🧪 Lab 3 · Slide 21</span><br><code>protected String name;</code> in <code>new_Package.Citizen</code>; <code>main_Package.MainClass</code> reads <code>s.name</code>.</p>
+          <details class="sol"><summary>Show solution (Slide 22)</summary><div class="more-in"><p>Outside its package, protected is only for subclasses, and MainClass is not a subclass. Fix: same package, or add <code>public String getName()</code> and use <code>s.getName()</code>.</p></div></details>
+        </div>
+        <div class="sum-q">
+          <p><b>Find the Mistake #6</b> <span class="ref">🧪 Lab 3 · Slide 23</span><br><code>public static final int citizenNumber = 0;</code> and the constructor does <code>citizenNumber++;</code></p>
+          <details class="sol"><summary>Show solution (Slide 24)</summary><div class="more-in"><p>A final value can't be changed (compile error). Fix: remove <code>final</code>, or remove <code>citizenNumber++</code>.</p></div></details>
+        </div>
+        <div class="sum-q">
+          <p><b>Find the Mistake #7</b> <span class="ref">🧪 Lab 3 · Slide 25</span><br>Citizen has only <code>Citizen(String name, int ID, String SSN)</code>; <code>main</code> calls <code>new Citizen("Nada", 1)</code>.</p>
+          <details class="sol"><summary>Show solution (Slide 26)</summary><div class="more-in"><p>No constructor takes 2 parameters. Fix: add <code>public Citizen(String name, int ID)</code>.</p></div></details>
+        </div>
+        <div class="sum-q">
+          <p><b>Find the Mistake #8</b> <span class="ref">🧪 Lab 3 · Slide 27</span><br><code>protected final int ID;</code> and <code>public void setID(int id) { this.ID = id; }</code></p>
+          <details class="sol"><summary>Show solution (Slide 28)</summary><div class="more-in"><p>ID is final, so setID can't change it after the constructor (compile error). Fix: remove <code>final</code>, or remove <code>setID()</code> and <code>s.setID(id)</code>.</p></div></details>
+        </div>
+        <div class="sum-q">
+          <p><b>Practice on Class Diagrams #1</b> <span class="ref">🧪 Lab 3 · Slide 46</span><br>Draw a class diagram for a Book class: book id (integer), book name (string), author name (string), price (float), a parameterized constructor that fills all the attributes, setter and getter for the id. All attributes are public except the book id; the constructor and methods can be accessed outside the class.</p>
+          <details class="sol"><summary>Show solution (Slide 47)</summary><div class="more-in"><p><b>Book</b> · <code>- id : int</code>, <code>+ bookName : String</code>, <code>+ bookAuthor : String</code>, <code>+ price : float</code> · <code>+ Book(int, String, String, float)</code>, <code>+ setId(int) : void</code>, <code>+ getId() : int</code></p></div></details>
+        </div>
+        <div class="sum-q">
+          <p><b>Practice on Class Diagrams #2</b> <span class="ref">🧪 Lab 3 · Slide 48</span><br>Add a Reader class: reader name (string), an array of books, a constructor with the reader name, and <code>insertBook</code> that takes a Book and adds it to the array. All public. What is the relationship between Reader and Book? Can a book exist without the reader?</p>
+          <details class="sol"><summary>Show solution (Slide 49)</summary><div class="more-in"><p><b>Reader</b> · <code>+ name : String</code>, <code>+ books : Book[ ]</code> · <code>+ Reader(String)</code>, <code>+ insertBook(Book) : void</code>. <b>Aggregation</b> (hollow diamond on Reader): a Reader has Books, and a book can still exist without the reader.</p></div></details>
+        </div>
+        <div class="sum-q">
+          <p><b>Hands-on: Convert the Class Diagram to Code</b> <span class="ref">🧪 Lab 3 · Slides 51–52</span><br>Write <code>Book</code> (final <code>numberOfPages</code>, 3 constructors, getters/setters, <code>displayBookinfo</code>) and <code>Author</code> (final name, <code>Book[3]</code>, <code>addBook</code>, <code>searchBook</code>, <code>displayBooksData</code>), then a MainClass that creates an author and 3 books, fills the missing data, adds the books, searches by name and displays all books.</p>
+          <details class="sol"><summary>Show solution (Slides 53–57)</summary><div class="more-in"><p>The full code is on the lab page: <a href="#oop-lab03:hands-on">Lab 3 · Hands-on</a>. Key parts:</p>
+<pre class="code" data-java>public Book searchBook(String name) {
+    for (int i = 0; i &lt; 3; i++) {
+        if (books[i] != null &amp;&amp; books[i].getName().equals(name))
+            return books[i];
+    }
+    return null;   // not found
+}</pre></div></details>
+        </div>
       </div>
       <!-- SUMMARY:oop:END -->
     </section>

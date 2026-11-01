@@ -94,6 +94,9 @@ The site shell is in place. Lectures so far (course id `oop`):
 | `#oop-lec01` | Lecture 1 - Introduction to OOP | Older page with its own script; its 9 parts are paged with Back/Next |
 | `#oop-lec01p2` | Lecture 1 (Part 2) - Introduction to Java Basics | Uses the shared components below; Lab 1 notes and practice at the end |
 | `#oop-lab02` | Lab 2 - Arrays, Control Flow, Classes & Encapsulation | A lab file added on its own page (no lecture file); built with the same lecture page rules. The lab has no hands-on tasks, so no Practice section |
+| `#oop-lec02` | Lecture 2 - Classes and Objects | The slides' own design tasks (Practice 1–3, "What do you think?") are shown as "from the slides", with no answers. Its practice is in Lab 3 |
+| `#oop-lec03` | Lecture 3 - Methods and Strings | The slides' GradeBook task and slide 37 Exercise are shown as "from the slides"; the Exercise answers were worked out by running Java. Live String-methods widget |
+| `#oop-lab03` | Lab 3 - this Keyword, Modifiers, Strings & UML Class Diagrams | A lab for Lectures 2 and 3, on its own page. Practice section: Find the Mistake #1–8 (ids `oop-lab03-m1`…`m8`), UML practice (`uml1`, `uml2`) and the hands-on task (`hands-on`); Lectures 2 and 3 link to these |
 | `#summary` | Summary & Exam Review | One `.sum-block` per lecture |
 
 **Where things go in `index.html`:**
@@ -110,7 +113,8 @@ The site shell is in place. Lectures so far (course id `oop`):
 - Step-by-step reveal: `<div class="reveal card" data-reveal><ol class="rv-steps"><li>…</li></ol></div>` (buttons are added automatically).
 - Code: `<pre class="code" data-java>` is colored automatically (escape `<` as `&lt;` and `&` as `&amp;`). Console output: `<pre class="out">`.
 - Code anatomy: `[data-anat]` with `.part[data-part]` spans in the code and one `<template data-part data-label>` per explanation.
-- Lab or tutorial pages: `<span class="slide-tag lab">🧪 Lab 1 · p. 25</span>` (Lab 2 uses `🧪 Lab 2 · Slide 6`; its .pptx slide numbers match the numbers printed on the slides). Lab 1 references use PDF page numbers (the number printed on each lab slide is one higher).
+- UML class box: `<div class="uml-row"><div class="uml" role="img" aria-label="…"><div>Name</div><div>attributes</div><div>operations</div></div><ul class="uml-key">…</ul></div>` (use `<u>` for static members). Two linked classes: `.uml-row.uml-pair` with a horizontal `svg.uml-link.h` and a vertical `svg.uml-link.v` (shown on phones) between the boxes; see Lab 3's practice.
+- Lab or tutorial pages: `<span class="slide-tag lab">🧪 Lab 1 · p. 25</span>` (Labs 2 and 3 use `🧪 Lab 2 · Slide 6`; their .pptx slide numbers match the numbers printed on the slides). Lab 1 references use PDF page numbers (the number printed on each lab slide is one higher).
 - A lecture's own widgets go in one inline `<script>` at the end of its `<article>`. It can use the helpers defined in the `<head>` script: `$`, `$$`, `esc`, `store`, `hlj`. Do not redeclare them.
 
 **Things to know:**
